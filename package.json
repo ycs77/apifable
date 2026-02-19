@@ -3,26 +3,28 @@
   "type": "module",
   "version": "0.0.1",
   "packageManager": "pnpm@10.28.2",
-  "description": "",
+  "description": "OpenAPI tools built for AI agents.",
   "license": "MIT",
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json"
   },
-  "files": [
-    "dist"
-  ],
   "bin": {
     "openapi-agent": "./bin/openapi-agent.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsdown",
-    "inspect": "npx -y @modelcontextprotocol/inspector npx strencoderkit-mcp",
+    "inspect": "npx -y @modelcontextprotocol/inspector node bin/openapi-agent.js",
     "lint": "eslint . --cache --concurrency auto",
     "prepack": "pnpm build"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.26.0",
+    "cac": "^6.7.14",
+    "yaml": "^2.8.2",
     "zod": "^4.3.6"
   },
   "devDependencies": {

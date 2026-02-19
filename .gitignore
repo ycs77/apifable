@@ -27,3 +27,6 @@ test-results
 *.njsproj
 *.sln
 *.sw?
+
+# OpenAPI agent cache
+.openapi-cache/
