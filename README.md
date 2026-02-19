@@ -1,8 +1,8 @@
 <div align="center">
 
-# OpenAPI Agent
+# OpenAPI Explorer for AI Agents
 
-**OpenAPI tools built for AI agents.**
+**Give your AI agent eyes on your OpenAPI spec.**
 
 [![NPM version][ico-version]][link-npm]
 [![Software License][ico-license]](LICENSE)
