@@ -5,11 +5,31 @@
   "packageManager": "pnpm@10.28.2",
   "description": "",
   "license": "MIT",
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "bin": {
+    "openapi-agent": "./bin/openapi-agent.js"
   },
-  "dependencies": {}
+  "scripts": {
+    "build": "tsdown",
+    "inspect": "npx -y @modelcontextprotocol/inspector npx strencoderkit-mcp",
+    "lint": "eslint . --cache --concurrency auto",
+    "prepack": "pnpm build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.13",
+    "@ycs77/eslint-config": "^7.0.0",
+    "eslint": "^9.39.2",
+    "tsdown": "^0.20.3",
+    "typescript": "~5.9.3"
+  }
 }
