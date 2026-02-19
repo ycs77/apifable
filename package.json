@@ -1,0 +1,15 @@
+{
+  "name": "openapi-agent",
+  "type": "module",
+  "version": "0.0.1",
+  "packageManager": "pnpm@10.28.2",
+  "description": "",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {}
+}
