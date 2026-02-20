@@ -18,6 +18,7 @@
 
 - `pnpm build` — production build
 - `pnpm inspect` — launch MCP Inspector for interactive tool testing
+- `pnpm type-check` — TypeScript type checking
 - `pnpm lint --fix` — ESLint for TypeScript files with auto-fix (uses `@ycs77/eslint-config`)
 - `pnpm eslint [...files] --fix` — ESLint for specific files with auto-fix
 

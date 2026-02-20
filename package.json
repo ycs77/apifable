@@ -19,6 +19,7 @@
     "build": "tsdown",
     "inspect": "npx -y @modelcontextprotocol/inspector node bin/apifable.js mcp --spec fixtures/openapi.yaml",
     "lint": "eslint . --cache --concurrency auto",
+    "type-check": "tsc --noEmit",
     "prepack": "pnpm build"
   },
   "dependencies": {
