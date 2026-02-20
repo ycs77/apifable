@@ -1,0 +1,219 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI Agent - MCP Testing Artifact
+  version: 1.0.0
+servers:
+  - url: http://localhost/api
+tags:
+  - name: '[ 1 - 身分驗證 ]'
+security:
+  - http: []
+paths:
+  /login:
+    post:
+      operationId: auth.login
+      summary: '[ 1 - 001 ] 登入'
+      tags:
+        - '[ 1 - 身分驗證 ]'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 使用者 Email
+                  example: test@example.com
+                password:
+                  type: string
+                  description: 使用者密碼
+                  example: password
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    examples:
+                      - api_token_1234567890
+                  token_type:
+                    type: string
+                    enum:
+                      - bearer
+                    examples:
+                      - bearer
+                  expires_in:
+                    type: integer
+                    examples:
+                      - 3600
+                required:
+                  - access_token
+                  - token_type
+                  - expires_in
+        '422':
+          $ref: '#/components/responses/ValidationException'
+      security: []
+  /logout:
+    post:
+      operationId: auth.logout
+      summary: '[ 1 - 002 ] 登出'
+      tags:
+        - '[ 1 - 身分驗證 ]'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                      - Successfully logged out
+                required:
+                  - message
+        '401':
+          $ref: '#/components/responses/AuthenticationException'
+  /me:
+    get:
+      operationId: auth.me
+      summary: '[ 1 - 003 ] 取得使用者資訊'
+      tags:
+        - '[ 1 - 身分驗證 ]'
+      responses:
+        '200':
+          description: '`UserResource`'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/User'
+                required:
+                  - data
+        '401':
+          $ref: '#/components/responses/AuthenticationException'
+  /refresh:
+    post:
+      operationId: auth.refresh
+      summary: '[ 1 - 004 ] 刷新 Token'
+      tags:
+        - '[ 1 - 身分驗證 ]'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    examples:
+                      - api_token_1234567890
+                  token_type:
+                    type: string
+                    enum:
+                      - bearer
+                    examples:
+                      - bearer
+                  expires_in:
+                    type: integer
+                    examples:
+                      - 3600
+                required:
+                  - access_token
+                  - token_type
+                  - expires_in
+        '401':
+          $ref: '#/components/responses/AuthenticationException'
+components:
+  securitySchemes:
+    http:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID
+          examples:
+            - 1
+        name:
+          type: string
+          description: 使用者名稱
+          examples:
+            - John Doe
+        email:
+          type: string
+          description: 使用者 Email
+          examples:
+            - test@example.com
+        created_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          examples:
+            - '2026-01-01 00:00:00'
+        updated_at:
+          type:
+            - string
+            - 'null'
+          format: date-time
+          examples:
+            - '2026-01-01 00:00:00'
+      required:
+        - id
+        - name
+        - email
+        - created_at
+        - updated_at
+      title: User
+  responses:
+    ValidationException:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Errors overview.
+              errors:
+                type: object
+                description: A detailed description of each field that failed validation.
+                additionalProperties:
+                  type: array
+                  items:
+                    type: string
+            required:
+              - message
+              - errors
+    AuthenticationException:
+      description: Unauthenticated
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error overview.
+            required:
+              - message

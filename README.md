@@ -84,7 +84,7 @@ Add the following to your `claude_desktop_config.json`:
 }
 ```
 
-Replace `/absolute/path/to/your/openapi.yaml` with the path to your OpenAPI spec file.
+Replace `/absolute/path/to/your/openapi.yaml` with the path to your OpenAPI spec file in the Claude Desktop directory.
 
 ## License
 

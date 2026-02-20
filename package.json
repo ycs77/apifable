@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "build": "tsdown",
-    "inspect": "npx -y @modelcontextprotocol/inspector node bin/openapi-agent.js",
+    "inspect": "npx -y @modelcontextprotocol/inspector node bin/openapi-agent.js mcp --spec fixtures/openapi.yaml",
     "lint": "eslint . --cache --concurrency auto",
     "prepack": "pnpm build"
   },
