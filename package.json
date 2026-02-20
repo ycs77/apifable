@@ -15,6 +15,9 @@
   "files": [
     "dist"
   ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "build": "tsdown",
     "inspect": "npx -y @modelcontextprotocol/inspector node bin/apifable.js mcp --spec fixtures/openapi.yaml",
