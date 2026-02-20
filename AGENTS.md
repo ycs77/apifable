@@ -25,13 +25,7 @@
 
 ```bash
 pnpm build
-node bin/apifable.js mcp --spec ./path/to/api.yaml
-```
-
-For interactive testing via MCP Inspector:
-
-```bash
-pnpm inspect -- mcp --spec ./path/to/api.yaml
+node bin/apifable.js mcp --spec ./path/to/openapi.yaml
 ```
 
 ## Architecture
@@ -47,7 +41,7 @@ src/
 │   ├── parser.ts             # Build ParsedSpec index from raw OpenAPI object
 │   └── ref-resolver.ts       # Recursive $ref expansion with cycle detection
 ├── cache/
-│   └── cache.ts              # Read/write .openapi-cache/cache.json
+│   └── cache.ts              # Read/write .apifable/cache/cache.json
 └── tools/
     ├── get-spec-info.ts
     ├── list-endpoints-by-tag.ts
@@ -58,7 +52,7 @@ src/
 
 ## Cache
 
-- Location: `<spec-dir>/.openapi-cache/cache.json`
+- Location: `<cwd>/.apifable/cache/cache.json`
 - Key: SHA-256 hash of the YAML file content
 - Invalidated automatically when the file changes
 - Also invalidated when `CACHE_VERSION` constant in `src/types.ts` is bumped

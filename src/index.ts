@@ -44,12 +44,12 @@ cli
     const { hash, parsed } = await loadSpecFile(specPath)
 
     let spec: ParsedSpec
-    const cached = await readCache(specPath, hash)
+    const cached = await readCache(hash)
     if (cached) {
       spec = cached
     } else {
       spec = buildParsedSpec(parsed)
-      writeCache(specPath, hash, spec).catch(err => console.warn('Cache write failed:', err))
+      writeCache(hash, spec).catch(err => console.warn('Cache write failed:', err))
     }
 
     const server = new McpServer({
