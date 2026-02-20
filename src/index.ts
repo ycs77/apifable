@@ -19,7 +19,6 @@ cli
   .command('')
   .action(() => {
     cli.outputHelp()
-    process.exit(0)
   })
 
 cli
