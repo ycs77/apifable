@@ -68,6 +68,7 @@ src/
 - Spec loader only supports **YAML** files (not JSON)
 - `search_endpoints` defaults to `limit: 10`; max is 100
 - To force-invalidate all caches (e.g. after `ParsedSpec` shape changes), bump `CACHE_VERSION` in `src/types.ts`
+- `--spec` accepts both relative paths (resolved from CWD) and absolute paths. In MCP client config files (e.g. Claude Desktop), use absolute paths to avoid CWD ambiguity. If the file is not found, the server prints `Error: Spec file not found: <path>` and exits.
 
 ## MCP Tools
 

@@ -1,4 +1,5 @@
 import type { ParsedSpec } from './types'
+import { access } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
@@ -32,6 +33,13 @@ cli
     }
 
     const specPath = resolve(specOption)
+
+    try {
+      await access(specPath)
+    } catch {
+      console.error(`Error: Spec file not found: ${specPath}`)
+      process.exit(1)
+    }
 
     const { hash, parsed } = await loadSpecFile(specPath)
 
