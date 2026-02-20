@@ -4,7 +4,7 @@
 
 - Node.js v24+
 - TypeScript
-- MCP SDK (`@modelcontextprotocol/sdk`) v1.26.0+, protocol version 2025-11-25
+- MCP SDK (`@modelcontextprotocol/sdk`), protocol version 2025-11-25
 - Zod v4 (schema validation for MCP tool inputs)
 - `cac` (CLI argument parsing)
 - `minisearch` (fuzzy search fallback in search_endpoints)
@@ -18,7 +18,6 @@
 ## Commands
 
 - `pnpm build` — production build
-- `pnpm inspect` — launch MCP Inspector for interactive tool testing
 - `pnpm type-check` — TypeScript type checking
 - `pnpm lint --fix` — ESLint for TypeScript files with auto-fix (uses `@ycs77/eslint-config`)
 - `pnpm eslint [...files] --fix` — ESLint for specific files with auto-fix
@@ -27,8 +26,7 @@
 
 ```bash
 pnpm build
-node bin/apifable.js mcp --spec ./path/to/openapi.yaml
-node bin/apifable.js mcp --spec ./path/to/openapi.json
+node bin/apifable.js mcp --spec ./path/to/openapi.yaml  # also accepts .json
 ```
 
 ## Architecture
@@ -64,7 +62,7 @@ src/
 
 - `search_endpoints` defaults to `limit: 10`; max is 100
 - To force-invalidate all caches (e.g. after `ParsedSpec` shape changes), bump `CACHE_VERSION` in `src/types.ts`
-- `--spec` accepts both relative paths (resolved from CWD) and absolute paths. In MCP client config files (e.g. Claude Desktop), use absolute paths to avoid CWD ambiguity. If the file is not found, the server prints `Error: Spec file not found: <path>` and exits.
+- `--spec` resolves relative paths from CWD; use absolute paths in MCP client configs (e.g. Claude Desktop). Missing file → prints `Error: Spec file not found: <path>` and exits.
 - `search_endpoints` fuzzy fallback (`minisearch`, fuzzy: `0.2`, prefix matching): response includes `matchType: "exact" | "fuzzy"`, fuzzy results include `score`.
 
 ## MCP Tools
