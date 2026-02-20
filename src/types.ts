@@ -11,6 +11,15 @@ export interface TagInfo {
   endpointCount: number
 }
 
+export interface SearchResultItem {
+  method: string
+  path: string
+  operationId: string
+  summary: string
+  tags: string[]
+  score?: number
+}
+
 export interface EndpointEntry {
   method: string
   path: string

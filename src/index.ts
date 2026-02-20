@@ -94,7 +94,7 @@ cli
     server.registerTool(
       'search_endpoints',
       {
-        description: 'Search endpoints by keyword across operationId, path, summary, and description. Results are ranked by relevance.',
+        description: 'Search endpoints by keyword across operationId, path, summary, and description. Results are ranked by relevance. If no exact matches are found, automatically falls back to fuzzy search. The response includes a matchType field ("exact" or "fuzzy"); fuzzy results also include a score field per result.',
         inputSchema: {
           query: z.string().describe('Search keyword'),
           tag: z.string().optional().describe('Optional tag to filter results'),

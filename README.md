@@ -46,7 +46,7 @@ Returns all endpoints belonging to the given tag. Includes a warning when result
 - `tag` (string, optional): Restrict search to a specific tag
 - `limit` (number, optional): Max results to return (default: 10)
 
-Keyword search across operationId, path, summary, and description. Results are ranked by relevance.
+Keyword search across operationId, path, summary, and description. Results are ranked by relevance. If no exact matches are found, automatically falls back to fuzzy search. The response includes a `matchType` field (`"exact"` or `"fuzzy"`); fuzzy results also include a `score` field per result.
 
 ### `get_endpoint`
 

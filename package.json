@@ -25,6 +25,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.26.0",
     "cac": "^6.7.14",
+    "minisearch": "^7.2.0",
     "yaml": "^2.8.2",
     "zod": "^4.3.6"
   },

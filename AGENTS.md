@@ -6,9 +6,10 @@
 - TypeScript
 - MCP SDK (`@modelcontextprotocol/sdk`) v1.26.0+, protocol version 2025-11-25
 - Zod v4 (schema validation for MCP tool inputs)
-- `yaml` (YAML parsing)
 - `cac` (CLI argument parsing)
+- `minisearch` (fuzzy search fallback in search_endpoints)
 - `tsdown` (bundler, not tsc)
+- `yaml` (YAML parsing)
 
 ## TypeScript Formatting
 
@@ -64,6 +65,7 @@ src/
 - `search_endpoints` defaults to `limit: 10`; max is 100
 - To force-invalidate all caches (e.g. after `ParsedSpec` shape changes), bump `CACHE_VERSION` in `src/types.ts`
 - `--spec` accepts both relative paths (resolved from CWD) and absolute paths. In MCP client config files (e.g. Claude Desktop), use absolute paths to avoid CWD ambiguity. If the file is not found, the server prints `Error: Spec file not found: <path>` and exits.
+- `search_endpoints` fuzzy fallback (`minisearch`, fuzzy: `0.2`, prefix matching): response includes `matchType: "exact" | "fuzzy"`, fuzzy results include `score`.
 
 ## MCP Tools
 
@@ -71,6 +73,6 @@ src/
 |------|-------------|
 | `get_spec_info` | API title, version, servers, and tag summary |
 | `list_endpoints_by_tag` | All endpoints for a given tag |
-| `search_endpoints` | Keyword search ranked by relevance |
+| `search_endpoints` | Keyword search ranked by relevance; fuzzy fallback when no exact matches found |
 | `get_endpoint` | Full endpoint details with resolved $refs |
 | `get_schema` | Full schema with resolved $refs |
