@@ -27,6 +27,7 @@
 ```bash
 pnpm build
 node bin/apifable.js mcp --spec ./path/to/openapi.yaml
+node bin/apifable.js mcp --spec ./path/to/openapi.json
 ```
 
 ## Architecture
@@ -38,7 +39,7 @@ src/
 ├── index.ts                  # CLI (cac), spec loading, cache check, MCP server setup
 ├── types.ts                  # Shared types: ParsedSpec, EndpointEntry, SpecCache, etc.
 ├── spec/
-│   ├── loader.ts             # Read YAML file, compute SHA-256 hash
+│   ├── loader.ts             # Read YAML/JSON file, compute SHA-256 hash
 │   ├── parser.ts             # Build ParsedSpec index from raw OpenAPI object
 │   └── ref-resolver.ts       # Recursive $ref expansion with cycle detection
 ├── cache/
@@ -60,7 +61,6 @@ src/
 
 ## Gotchas
 
-- Spec loader only supports **YAML** files (not JSON)
 - `search_endpoints` defaults to `limit: 10`; max is 100
 - To force-invalidate all caches (e.g. after `ParsedSpec` shape changes), bump `CACHE_VERSION` in `src/types.ts`
 - `--spec` accepts both relative paths (resolved from CWD) and absolute paths. In MCP client config files (e.g. Claude Desktop), use absolute paths to avoid CWD ambiguity. If the file is not found, the server prints `Error: Spec file not found: <path>` and exits.

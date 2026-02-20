@@ -1,4 +1,4 @@
-import type { ParsedSpec } from './types'
+import type { OpenAPIObject, ParsedSpec } from './types'
 import { access } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
@@ -24,7 +24,7 @@ cli
 
 cli
   .command('mcp', 'Start MCP server for an OpenAPI spec')
-  .option('--spec <path>', 'Path to OpenAPI YAML file')
+  .option('--spec <path>', 'Path to OpenAPI spec file (.yaml, .yml, or .json)')
   .action(async options => {
     const specOption = options.spec as string | undefined
     if (!specOption) {
@@ -37,11 +37,20 @@ cli
     try {
       await access(specPath)
     } catch {
-      console.error(`Error: Spec file not found: ${specPath}`)
+      console.error(`Spec file not found: ${specPath}`)
       process.exit(1)
     }
 
-    const { hash, parsed } = await loadSpecFile(specPath)
+    let hash: string
+    let parsed: OpenAPIObject
+    try {
+      const result = await loadSpecFile(specPath)
+      hash = result.hash
+      parsed = result.parsed
+    } catch (err) {
+      console.error(`Failed to load spec file: ${(err as Error).message}`)
+      process.exit(1)
+    }
 
     let spec: ParsedSpec
     const cached = await readCache(hash)
