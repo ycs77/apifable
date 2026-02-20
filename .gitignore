@@ -28,5 +28,8 @@ test-results
 *.sln
 *.sw?
 
-# OpenAPI agent cache
-.openapi-cache/
+# Claude Code
+.claude/settings.local.json
+
+# apifable cache
+.apifable/cache/
