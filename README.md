@@ -74,22 +74,31 @@ Returns the full schema with all `$ref`s resolved. Lists available schema names 
 
 ## Installation
 
-### Using Claude Desktop
+### Using Claude Code
 
-Add the following to your `claude_desktop_config.json`:
+Add the following to your `.mcp.json`:
 
 ```json
 {
   "mcpServers": {
     "apifable": {
       "command": "npx",
-      "args": ["-y", "apifable", "mcp", "--spec", "/absolute/path/to/your/openapi.yaml"]
+      "args": ["-y", "apifable@latest", "mcp", "--spec", "path/to/your/openapi.yaml"]
     }
   }
 }
 ```
 
-Replace `/absolute/path/to/your/openapi.yaml` with the path to your OpenAPI spec file in the Claude Desktop directory.
+Replace `path/to/your/openapi.yaml` with the path to your OpenAPI spec file.
+
+## Ignoring Cache Files
+
+apifable stores parsed spec cache under `.apifable/cache/`. Add the following to your `.gitignore` to avoid committing it:
+
+```
+# apifable cache
+.apifable/cache/
+```
 
 ## License
 
