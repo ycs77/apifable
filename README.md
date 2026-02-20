@@ -1,6 +1,6 @@
 <div align="center">
 
-![](banner.jpg)
+![](https://raw.githubusercontent.com/ycs77/apifable/main/banner.jpg)
 
 # apifable
 
