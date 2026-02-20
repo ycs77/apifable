@@ -1,8 +1,8 @@
 <div align="center">
 
-# OpenAPI Explorer for AI Agents
+# apifable
 
-**Give your AI agent eyes on your OpenAPI spec.**
+**Read the spec. Understand the story. Generate the code.**
 
 [![NPM version][ico-version]][link-npm]
 [![Software License][ico-license]](LICENSE)
@@ -11,6 +11,10 @@
 </div>
 
 ---
+
+## Overview
+
+apifable is a toolkit for deeply exploring OpenAPI specs and generating code from them. Built as an MCP server, it gives AI agents the tools to read, search, and understand any OpenAPI spec — then turn that knowledge into working code.
 
 ## ✨ Features
 
@@ -76,9 +80,9 @@ Add the following to your `claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "openapi-agent": {
+    "apifable": {
       "command": "npx",
-      "args": ["-y", "openapi-agent", "mcp", "--spec", "/absolute/path/to/your/openapi.yaml"]
+      "args": ["-y", "apifable", "mcp", "--spec", "/absolute/path/to/your/openapi.yaml"]
     }
   }
 }
@@ -90,9 +94,9 @@ Replace `/absolute/path/to/your/openapi.yaml` with the path to your OpenAPI spec
 
 [MIT LICENSE](LICENSE.md)
 
-[ico-version]: https://img.shields.io/npm/v/openapi-agent?style=flat-square
+[ico-version]: https://img.shields.io/npm/v/apifable?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square
-[ico-downloads]: https://img.shields.io/npm/dt/openapi-agent?style=flat-square
+[ico-downloads]: https://img.shields.io/npm/dt/apifable?style=flat-square
 
-[link-npm]: https://www.npmjs.com/package/openapi-agent
-[link-downloads]: https://www.npmjs.com/package/openapi-agent
+[link-npm]: https://www.npmjs.com/package/apifable
+[link-downloads]: https://www.npmjs.com/package/apifable

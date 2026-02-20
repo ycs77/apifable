@@ -25,7 +25,7 @@
 
 ```bash
 pnpm build
-node bin/openapi-agent.js mcp --spec ./path/to/api.yaml
+node bin/apifable.js mcp --spec ./path/to/api.yaml
 ```
 
 For interactive testing via MCP Inspector:
@@ -38,7 +38,7 @@ pnpm inspect -- mcp --spec ./path/to/api.yaml
 
 ```
 bin/
-└── openapi-agent.js          # CLI entry point (loads dist/index.js)
+└── apifable.js               # CLI entry point (loads dist/index.js)
 src/
 ├── index.ts                  # CLI (cac), spec loading, cache check, MCP server setup
 ├── types.ts                  # Shared types: ParsedSpec, EndpointEntry, SpecCache, etc.

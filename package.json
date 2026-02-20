@@ -1,23 +1,23 @@
 {
-  "name": "openapi-agent",
+  "name": "apifable",
   "type": "module",
   "version": "0.0.1",
   "packageManager": "pnpm@10.28.2",
-  "description": "OpenAPI tools built for AI agents.",
+  "description": "Explore any OpenAPI spec and generate code from it. Built for AI agents.",
   "license": "MIT",
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json"
   },
   "bin": {
-    "openapi-agent": "./bin/openapi-agent.js"
+    "apifable": "./bin/apifable.js"
   },
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "tsdown",
-    "inspect": "npx -y @modelcontextprotocol/inspector node bin/openapi-agent.js mcp --spec fixtures/openapi.yaml",
+    "inspect": "npx -y @modelcontextprotocol/inspector node bin/apifable.js mcp --spec fixtures/openapi.yaml",
     "lint": "eslint . --cache --concurrency auto",
     "prepack": "pnpm build"
   },

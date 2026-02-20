@@ -14,7 +14,7 @@ import { getSpecInfo } from './tools/get-spec-info'
 import { listEndpointsByTag } from './tools/list-endpoints-by-tag'
 import { searchEndpoints } from './tools/search-endpoints'
 
-const cli = cac('openapi-agent')
+const cli = cac('apifable')
 
 cli
   .command('')
@@ -53,7 +53,7 @@ cli
     }
 
     const server = new McpServer({
-      name: 'openapi-agent',
+      name: 'apifable',
       version: '0.0.1',
     })
 
