@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Bash(pnpm build)",
+      "Bash(pnpm lint --fix)",
+      "Bash(pnpm eslint *)",
+      "Bash(pnpm type-check)"
+    ]
+  }
+}
