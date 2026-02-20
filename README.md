@@ -20,12 +20,11 @@ apifable is a toolkit for deeply exploring OpenAPI specs and generating code fro
 
 ## ✨ Features
 
-- 🗺️ Explore API structure, tags, and endpoints
-- 🔍 Search endpoints by keyword
-- 📋 Retrieve full endpoint details — parameters, request bodies, and responses
-- 🧩 Fetch fully resolved schemas
-- 🔗 Resolve all `$ref`s inline, including circular references
-- ⚡ Cache parsed specs to disk for fast startup
+- 🤖 **MCP server** — plug into AI agents like Claude out of the box
+- 🗺️ Get a clear overview of any API's structure and available endpoints
+- 🔍 Find relevant endpoints fast with keyword search
+- 📋 Inspect any endpoint in full detail
+- 🧩 Browse schemas with all references fully resolved
 
 ## Tools
 
