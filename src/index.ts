@@ -6,6 +6,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { cac } from 'cac'
 import { z } from 'zod'
 import { readCache, writeCache } from './cache/cache'
+import { recipeAdd, recipeList } from './commands/recipe'
 import { loadSpecFile } from './spec/loader'
 import { buildParsedSpec } from './spec/parser'
 import { getEndpoint } from './tools/get-endpoint'
@@ -146,6 +147,23 @@ cli
 
     const transport = new StdioServerTransport()
     await server.connect(transport)
+  })
+
+cli
+  .command('recipe <action> [name]', 'Manage recipes (actions: list, add <name>)')
+  .action(async (action: string, name?: string) => {
+    if (action === 'list') {
+      await recipeList()
+    } else if (action === 'add') {
+      if (!name) {
+        console.error('Usage: apifable recipe add <name>')
+        process.exit(1)
+      }
+      await recipeAdd(name)
+    } else {
+      console.error(`Unknown recipe action: "${action}". Available actions: list, add`)
+      process.exit(1)
+    }
   })
 
 cli.help()

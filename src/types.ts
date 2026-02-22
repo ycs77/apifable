@@ -61,6 +61,12 @@ export interface OpenAPIObject {
   }
 }
 
+export interface RecipeMeta {
+  name: string
+  type: 'fetch-snippet' | 'form' | 'api-types' | 'backend-handler'
+  description: string
+}
+
 export type HttpMethod = 'get' | 'post' | 'put' | 'patch' | 'delete' | 'head' | 'options' | 'trace'
 
 export interface OperationObject {

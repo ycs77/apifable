@@ -16,17 +16,19 @@
 
 ## Overview
 
-apifable is a toolkit for deeply exploring OpenAPI specs and generating code from them. Built as an MCP server, it gives AI agents the tools to read, search, and understand any OpenAPI spec — then turn that knowledge into working code.
+apifable is a toolkit for deeply exploring OpenAPI specs and generating code from them. Built as an MCP server, it gives AI agents the tools to read, search, and understand any OpenAPI spec. Pair it with a recipe — a style-guide `.md` file that defines your project's coding conventions — and the included `apifable-codegen` skill will turn spec data into working, properly typed code.
 
 ## ✨ Features
 
 - 🤖 **MCP server** — plug into AI agents like Claude out of the box
-- 🗺️ Get a clear overview of any API's structure and available endpoints
-- 🔍 Find relevant endpoints fast with keyword search
-- 📋 Inspect any endpoint in full detail
-- 🧩 Browse schemas with all references fully resolved
+- 🗺️ **Spec overview** — get a clear summary of any API's structure and available endpoints
+- 🔍 **Endpoint search** — find relevant endpoints fast with keyword search and fuzzy fallback
+- 📋 **Full endpoint details** — inspect any endpoint in full detail with all `$ref`s resolved
+- 🧩 **Schema browser** — explore schemas with all references fully resolved
+- 📦 **Recipes** — install style guides that tell AI exactly how to generate your code
+- ✨ **Codegen skill** — generate typed fetch functions, React hooks, forms, and route handlers from spec data
 
-## Tools
+## MCP Tools
 
 ### `get_spec_info`
 
@@ -72,9 +74,60 @@ Returns the full schema with all `$ref`s resolved. Lists available schema names 
 4. get_schema             → fetch a schema referenced in the endpoint
 ```
 
+## Recipes
+
+Recipes are style-guide `.md` files that tell the AI how to generate code for your project. Each recipe contains naming conventions, structural rules, and concrete code examples for a specific pattern.
+
+apifable ships with 6 built-in recipes covering the most common use cases:
+
+| Name | Type | Description |
+|------|------|-------------|
+| `fetch-ts` | `fetch-snippet` | TypeScript fetch function with typed response |
+| `fetch-react-hook` | `fetch-snippet` | React custom hook with loading/error state |
+| `form-react` | `form` | React form with react-hook-form and zod validation |
+| `api-types` | `api-types` | TypeScript interface and type definitions from OpenAPI schemas |
+| `backend-express` | `backend-handler` | Express route handler with typed request and response |
+| `backend-hono` | `backend-handler` | Hono route handler with Zod validation |
+
+### Recipe Commands
+
+```bash
+# List all available built-in recipes
+apifable recipe list
+
+# Install a recipe into your project
+apifable recipe add fetch-ts
+# → writes .apifable/recipes/fetch-ts.md
+```
+
+Installed recipes live in `.apifable/recipes/`. You can edit them freely to match your project's conventions — variable naming, error handling style, import paths, and so on.
+
+## Code Generation with Agent
+
+apifable includes an Agent Skill — `apifable-codegen` — that ties the MCP server and recipes together into a full code generation workflow:
+
+1. **Find a recipe** — reads `.apifable/recipes/` for an installed style guide; suggests `recipe add` if none fits
+2. **Fetch spec data** — calls `get_endpoint` or `get_schema` to get the exact types and structure needed
+3. **Generate code** — follows the recipe's rules and examples, using real spec data for accurate types and names
+4. **Write to file** — asks where to save the output, then writes it to your project
+
+### Example prompts
+
+```
+Generate TypeScript types for all schemas in the Users tag
+```
+
+```
+Create a React hook for `GET /posts/{id}`
+```
+
+```
+Add an Express route handler for `POST /orders`
+```
+
 ## Installation
 
-### Using Claude Code
+### Claude Code
 
 Add the following to your `.mcp.json`:
 
@@ -83,17 +136,17 @@ Add the following to your `.mcp.json`:
   "mcpServers": {
     "apifable": {
       "command": "npx",
-      "args": ["-y", "apifable@latest", "mcp", "--spec", "path/to/your/openapi.yaml"]
+      "args": ["-y", "apifable@latest", "mcp", "--spec", "openapi.yaml"]
     }
   }
 }
 ```
 
-Replace `path/to/your/openapi.yaml` with the path to your OpenAPI spec file.
+Replace `openapi.yaml` with the path to your OpenAPI spec file.
 
-## Ignoring Cache Files
+## .gitignore
 
-apifable stores parsed spec cache under `.apifable/cache/`. Add the following to your `.gitignore` to avoid committing it:
+apifable stores parsed spec cache under `.apifable/cache/`. Installed recipes under `.apifable/recipes/` are project files you'll want to commit. Add only the cache to your `.gitignore`:
 
 ```
 # apifable cache
