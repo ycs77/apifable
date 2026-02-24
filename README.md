@@ -1,6 +1,6 @@
 <div align="center">
 
-![](https://raw.githubusercontent.com/ycs77/apifable/main/banner.jpg)
+![apifable banner](https://raw.githubusercontent.com/ycs77/apifable/main/banner.jpg)
 
 # apifable
 
@@ -20,12 +20,6 @@ English | [繁體中文](README-zh-TW.md)
 
 apifable helps AI agents work with OpenAPI specifications and generate code that matches your project's conventions. It streamlines the workflow from reading API specs to producing typed, production-ready code — so you spend less time on repetitive boilerplate and more time building features.
 
-## Why
-
-I was working on a frontend project, using AI agents like Claude Code to help me generate code — but the backend API part didn't work so well with the agent. Whenever I needed to generate the corresponding API code, copy and paste seemed to be the only option, and that was both tedious and inelegant.
-
-So I turned my attention to the OpenAPI specification. I realized it was a great format for collaborating with agents, but at the time no existing MCP tool met my standards. Some came close, but couldn't properly handle openapi.yaml files as large as 2 MB, and lacked the ability to customize code templates. So I teamed up with Claude Code to build apifable, making it easy to query API specs through AI agents and generate code that matches your project's standards.
-
 ## ✨ Features
 
 - 🤖 **MCP server** — plug into AI agents like Claude out of the box
@@ -37,51 +31,41 @@ So I turned my attention to the OpenAPI specification. I realized it was a great
 - ✨ **Codegen skill** — generate typed fetch functions, React hooks, forms, and route handlers from spec data
 - 🧑‍🍳 **Recipe creator skill** — create custom recipes tailored to your framework and conventions
 
-## MCP Tools
+## Installation
 
-### `get_spec_info`
+### Claude Code
 
-Returns the API title, version, description, servers, and all tags with their endpoint counts. Start here to understand the shape of an unfamiliar spec.
+Add the following to your `.mcp.json`:
 
-### `list_endpoints_by_tag`
+```json
+{
+  "mcpServers": {
+    "apifable": {
+      "command": "npx",
+      "args": ["-y", "apifable@latest", "mcp", "--spec", "openapi.yaml"]
+    }
+  }
+}
+```
 
-**Inputs:**
-- `tag` (string): The tag name to filter by
+Replace `openapi.yaml` with the path to your OpenAPI spec file.
 
-Returns all endpoints belonging to the given tag. Includes a warning when results exceed 30 items.
+For other AI agents such as Cursor and Windsurf, you can follow the same approach to configure apifable as an MCP server.
 
-### `search_endpoints`
+### .gitignore
 
-**Inputs:**
-- `query` (string): Keyword to search for
-- `tag` (string, optional): Restrict search to a specific tag
-- `limit` (number, optional): Max results to return (default: 10)
-
-Keyword search across operationId, path, summary, and description. Results are ranked by relevance. If no exact matches are found, automatically falls back to fuzzy search. The response includes a `matchType` field (`"exact"` or `"fuzzy"`); fuzzy results also include a `score` field per result.
-
-### `get_endpoint`
-
-**Inputs:**
-- `method` (string): HTTP method (e.g. `get`, `post`)
-- `path` (string): Endpoint path (e.g. `/users/{id}`)
-
-Returns the full endpoint object — parameters, requestBody, responses — with all `$ref`s resolved inline.
-
-### `get_schema`
-
-**Inputs:**
-- `name` (string): Schema name from `components/schemas`
-
-Returns the full schema with all `$ref`s resolved. Lists available schema names on error.
-
-## Recommended Query Pattern
+apifable stores parsed spec cache under `.apifable/cache/`. Installed recipes under `.apifable/recipes/` are project files you'll want to commit. Add only the cache to your `.gitignore`:
 
 ```
-1. get_spec_info          → understand tags and structure
-2. search_endpoints       → find relevant endpoints by keyword
-3. get_endpoint           → fetch full details for a specific endpoint
-4. get_schema             → fetch a schema referenced in the endpoint
+# apifable cache
+.apifable/cache/
 ```
+
+<!-- ## Quick Start
+
+1. Add apifable to `.mcp.json` (see [Installation](#installation))
+2. Install a recipe: `apifable recipe add fetch-ts`
+3. Ask your AI agent: "Create a fetch function for `GET /users`" -->
 
 ## Recipes
 
@@ -143,33 +127,57 @@ Add an Express route handler for `POST /orders`
 Create a recipe for Axios fetch functions
 ```
 
-## Installation
+## MCP Tools
 
-### Claude Code
+### `get_spec_info`
 
-Add the following to your `.mcp.json`:
+Returns the API title, version, description, servers, and all tags with their endpoint counts. Start here to understand the shape of an unfamiliar spec.
 
-```json
-{
-  "mcpServers": {
-    "apifable": {
-      "command": "npx",
-      "args": ["-y", "apifable@latest", "mcp", "--spec", "openapi.yaml"]
-    }
-  }
-}
+### `list_endpoints_by_tag`
+
+**Inputs:**
+- `tag` (string): The tag name to filter by
+
+Returns all endpoints belonging to the given tag. Includes a warning when results exceed 30 items.
+
+### `search_endpoints`
+
+**Inputs:**
+- `query` (string): Keyword to search for
+- `tag` (string, optional): Restrict search to a specific tag
+- `limit` (number, optional): Max results to return (default: 10)
+
+Keyword search across operationId, path, summary, and description. Results are ranked by relevance. If no exact matches are found, automatically falls back to fuzzy search. The response includes a `matchType` field (`"exact"` or `"fuzzy"`); fuzzy results also include a `score` field per result.
+
+### `get_endpoint`
+
+**Inputs:**
+- `method` (string): HTTP method (e.g. `get`, `post`)
+- `path` (string): Endpoint path (e.g. `/users/{id}`)
+
+Returns the full endpoint object — parameters, requestBody, responses — with all `$ref`s resolved inline.
+
+### `get_schema`
+
+**Inputs:**
+- `name` (string): Schema name from `components/schemas`
+
+Returns the full schema with all `$ref`s resolved. Lists available schema names on error.
+
+## Recommended Query Pattern
+
+```
+1. get_spec_info          → understand tags and structure
+2. search_endpoints       → find relevant endpoints by keyword
+3. get_endpoint           → fetch full details for a specific endpoint
+4. get_schema             → fetch a schema referenced in the endpoint
 ```
 
-Replace `openapi.yaml` with the path to your OpenAPI spec file.
+## Why
 
-## .gitignore
+I was working on a frontend project, using AI agents like Claude Code to help me generate code — but the backend API part didn't work so well with the agent. Whenever I needed to generate the corresponding API code, copy and paste seemed to be the only option, and that was both tedious and inelegant.
 
-apifable stores parsed spec cache under `.apifable/cache/`. Installed recipes under `.apifable/recipes/` are project files you'll want to commit. Add only the cache to your `.gitignore`:
-
-```
-# apifable cache
-.apifable/cache/
-```
+So I turned my attention to the OpenAPI specification. I realized it was a great format for collaborating with agents, but at the time no existing MCP tool met my standards. Some came close, but couldn't properly handle openapi.yaml files as large as 2 MB, and lacked the ability to customize code templates. So I teamed up with Claude Code to build apifable, making it easy to query API specs through AI agents and generate code that matches your project's standards.
 
 ## License
 
