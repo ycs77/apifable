@@ -173,7 +173,7 @@ apifable 將已解析的規格快取存放於 `.apifable/cache/`。已安裝的 
 
 ## License
 
-[MIT LICENSE](LICENSE.md)
+[MIT LICENSE](LICENSE)
 
 [ico-version]: https://img.shields.io/npm/v/apifable?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square

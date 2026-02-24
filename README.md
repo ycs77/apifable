@@ -173,7 +173,7 @@ apifable stores parsed spec cache under `.apifable/cache/`. Installed recipes un
 
 ## License
 
-[MIT LICENSE](LICENSE.md)
+[MIT LICENSE](LICENSE)
 
 [ico-version]: https://img.shields.io/npm/v/apifable?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square
