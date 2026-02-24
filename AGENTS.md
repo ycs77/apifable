@@ -69,8 +69,10 @@ src/
     └── get-schema.ts
 
 skills/
-└── apifable-codegen/
-    └── SKILL.md              # Claude Code skill for AI-driven code generation from spec
+├── apifable-codegen/
+│   └── SKILL.md              # Claude Code skill for AI-driven code generation from spec
+└── apifable-recipe-creator/
+    └── SKILL.md              # Claude Code skill for creating custom recipes
 
 .apifable/
 └── recipes/                  # User-installed recipes (via recipe add)
@@ -92,6 +94,7 @@ skills/
 - Recipe frontmatter fields: `name`, `type`, `description` (parsed with `yaml` package)
 - Recipe types: `fetch-snippet`, `form`, `api-types`, `backend-handler`
 - The `skills/apifable-codegen/SKILL.md` skill handles AI-driven code generation using recipes + MCP tools
+- The `skills/apifable-recipe-creator/SKILL.md` skill handles creating custom recipes from scratch
 
 ## Gotchas
 

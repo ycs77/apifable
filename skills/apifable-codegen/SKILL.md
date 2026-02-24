@@ -42,29 +42,7 @@ If a suitable built-in recipe exists, offer to install it:
 npx apifable@latest recipe add <name>
 ```
 
-If the user declines, or if no built-in recipe fits the user's needs, generate a custom recipe `.md` file and write it to `.apifable/recipes/<name>.md`. Use the following format (frontmatter + `## Rules` + `## Example`):
-
-````
----
-name: <name>
-type: <type>  # fetch-snippet | form | api-types | backend-handler
-description: <description>
----
-
-## Rules
-
-- <Rule describing naming conventions>
-- <Rule describing code structure>
-- <Rule describing types or imports>
-
-## Example
-
-Given <context (e.g. endpoint or schema)>:
-
-```<language>
-// example code
-```
-````
+If the user declines, or if no built-in recipe fits the user's needs, suggest using `/apifable-recipe-creator` to create a custom recipe. Once the recipe is created in `.apifable/recipes/`, the user can return here to continue the codegen workflow.
 
 ## Step 3: Fetch spec data
 

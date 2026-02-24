@@ -35,6 +35,7 @@ So I turned my attention to the OpenAPI specification. I realized it was a great
 - 🧩 **Schema browser** — explore schemas with all references fully resolved
 - 📦 **Recipes** — install style guides that tell AI exactly how to generate your code
 - ✨ **Codegen skill** — generate typed fetch functions, React hooks, forms, and route handlers from spec data
+- 🧑‍🍳 **Recipe creator skill** — create custom recipes tailored to your framework and conventions
 
 ## MCP Tools
 
@@ -112,9 +113,14 @@ Installed recipes live in `.apifable/recipes/`. You can edit them freely to matc
 
 ## Code Generation with Agent
 
-apifable includes an Agent Skill — `apifable-codegen` — that ties the MCP server and recipes together into a full code generation workflow:
+apifable includes two Agent Skills that work together:
 
-1. **Find a recipe** — reads `.apifable/recipes/` for an installed style guide; suggests `recipe add` if none fits
+- **`apifable-codegen`** — ties the MCP server and recipes together into a full code generation workflow
+- **`apifable-recipe-creator`** — creates custom recipes tailored to your framework and conventions
+
+### Codegen workflow
+
+1. **Find a recipe** — reads `.apifable/recipes/` for an installed style guide; suggests `recipe add` if none fits, or `/apifable-recipe-creator` to create a custom one
 2. **Fetch spec data** — calls `get_endpoint` or `get_schema` to get the exact types and structure needed
 3. **Generate code** — follows the recipe's rules and examples, using real spec data for accurate types and names
 4. **Write to file** — asks where to save the output, then writes it to your project
@@ -131,6 +137,10 @@ Create a React hook for `GET /posts/{id}`
 
 ```
 Add an Express route handler for `POST /orders`
+```
+
+```
+Create a recipe for Axios fetch functions
 ```
 
 ## Installation
