@@ -179,9 +179,27 @@ I was working on a frontend project, using AI agents like Claude Code to help me
 
 So I turned my attention to the OpenAPI specification. I realized it was a great format for collaborating with agents, but at the time no existing MCP tool met my standards. Some came close, but couldn't properly handle openapi.yaml files as large as 2 MB, and lacked the ability to customize code templates. So I teamed up with Claude Code to build apifable, making it easy to query API specs through AI agents and generate code that matches your project's standards.
 
+## Sponsor
+
+If you think this package has helped you, please consider [Becoming a sponsor](https://www.patreon.com/ycs77) to support my work~ and your avatar will be visible on my major projects.
+
+<p align="center">
+  <a href="https://www.patreon.com/ycs77">
+    <img src="https://cdn.jsdelivr.net/gh/ycs77/static/sponsors.svg"/>
+  </a>
+</p>
+
+<a href="https://www.patreon.com/ycs77">
+  <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patron" />
+</a>
+
 ## License
 
 [MIT LICENSE](LICENSE)
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=ycs77/apifable&type=date)](https://www.star-history.com/#ycs77/apifable&type=date)
 
 [ico-version]: https://img.shields.io/npm/v/apifable?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square

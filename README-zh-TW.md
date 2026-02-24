@@ -179,9 +179,27 @@ Create a recipe for Axios fetch functions
 
 於是我把注意力轉向了 OpenAPI 協定，我發現這是一個很適合和 Agent 協作的格式，但當時都沒有一個 MCP 工具可以達到我的標準。有些工具接近我的需求，但無法正常讀取高達 2MB 的 openapi.yaml 檔案，也缺少了自訂程式碼模板的功能。因此我和 Claude Code 合作，打造了 apifable，可以輕鬆地透過 AI Agent 查詢 API 規格，並產生符合專案標準的程式碼。
 
+## 贊助
+
+如果我製作的套件對你有幫助，歡迎考慮[贊助我](https://www.patreon.com/ycs77)來支持我的工作~ 我會很感謝你~ 而且您的大頭貼還可以顯示在我的主要專案中。
+
+<p align="center">
+  <a href="https://www.patreon.com/ycs77">
+    <img src="https://cdn.jsdelivr.net/gh/ycs77/static/sponsors.svg"/>
+  </a>
+</p>
+
+<a href="https://www.patreon.com/ycs77">
+  <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patron" />
+</a>
+
 ## License
 
 [MIT LICENSE](LICENSE)
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=ycs77/apifable&type=date)](https://www.star-history.com/#ycs77/apifable&type=date)
 
 [ico-version]: https://img.shields.io/npm/v/apifable?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square
