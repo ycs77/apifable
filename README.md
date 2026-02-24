@@ -10,6 +10,8 @@
 [![Software License][ico-license]](LICENSE)
 [![Total Downloads][ico-downloads]][link-downloads]
 
+English | [繁體中文](README-zh-TW.md)
+
 </div>
 
 ---
@@ -17,6 +19,12 @@
 ## Overview
 
 apifable is a toolkit for deeply exploring OpenAPI specs and generating code from them. Built as an MCP server, it gives AI agents the tools to read, search, and understand any OpenAPI spec. Pair it with a recipe — a style-guide `.md` file that defines your project's coding conventions — and the included `apifable-codegen` skill will turn spec data into working, properly typed code.
+
+## Why
+
+I was working on a frontend project, using AI agents like Claude Code to help me generate code — but the backend API part didn't work so well with the agent. Whenever I needed to generate the corresponding API code, copy and paste seemed to be the only option, and that was both tedious and inelegant.
+
+So I turned my attention to the OpenAPI specification. I realized it was a great format for collaborating with agents, but at the time no existing MCP tool met my standards. Some came close, but couldn't properly handle openapi.yaml files as large as 2 MB, and lacked the ability to customize code templates. So I teamed up with Claude Code to build apifable, making it easy to query API specs through AI agents and generate code that matches your project's standards.
 
 ## ✨ Features
 
