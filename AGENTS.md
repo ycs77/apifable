@@ -6,6 +6,7 @@
 - TypeScript
 - MCP SDK (`@modelcontextprotocol/sdk`), protocol version 2025-11-25
 - Zod v4 (schema validation for MCP tool inputs)
+- `@clack/prompts` (CLI interactive prompts and styled output)
 - `cac` (CLI argument parsing)
 - `minisearch` (fuzzy search fallback in search_endpoints)
 - `tsdown` (bundler, not tsc)

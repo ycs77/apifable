@@ -1,6 +1,7 @@
 import type { OpenAPIObject, ParsedSpec } from './types'
 import { access } from 'node:fs/promises'
 import { resolve } from 'node:path'
+import { log } from '@clack/prompts'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { cac } from 'cac'
@@ -156,12 +157,12 @@ cli
       await recipeList()
     } else if (action === 'add') {
       if (!name) {
-        console.error('Usage: apifable recipe add <name>')
+        log.error('Usage: apifable recipe add <name>')
         process.exit(1)
       }
       await recipeAdd(name)
     } else {
-      console.error(`Unknown recipe action: "${action}". Available actions: list, add`)
+      log.error(`Unknown recipe action: "${action}". Available actions: list, add`)
       process.exit(1)
     }
   })
