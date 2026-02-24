@@ -18,7 +18,7 @@ English | [繁體中文](README-zh-TW.md)
 
 ## Overview
 
-apifable is a toolkit for deeply exploring OpenAPI specs and generating code from them. Built as an MCP server, it gives AI agents the tools to read, search, and understand any OpenAPI spec. Pair it with a recipe — a style-guide `.md` file that defines your project's coding conventions — and the included `apifable-codegen` skill will turn spec data into working, properly typed code.
+apifable helps AI agents work with OpenAPI specifications and generate code that matches your project's conventions. It streamlines the workflow from reading API specs to producing typed, production-ready code — so you spend less time on repetitive boilerplate and more time building features.
 
 ## Why
 
