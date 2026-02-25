@@ -30,6 +30,12 @@ pnpm build
 node bin/apifable.js mcp --spec ./path/to/openapi.yaml  # also accepts .json
 ```
 
+## Init Command
+
+```bash
+node bin/apifable.js init                      # initialize apifable project
+```
+
 ## Recipe Commands
 
 ```bash
@@ -45,6 +51,7 @@ bin/
 src/
 ├── index.ts                  # CLI (cac), spec loading, cache check, MCP server setup
 ├── types.ts                  # Shared types: ParsedSpec, EndpointEntry, SpecCache, RecipeMeta, etc.
+├── logo.ts                   # ASCII Art logo with gradient color themes
 ├── spec/
 │   ├── loader.ts             # Read YAML/JSON file, compute SHA-256 hash
 │   ├── parser.ts             # Build ParsedSpec index from raw OpenAPI object
@@ -61,6 +68,7 @@ src/
 │       ├── backend-express.md
 │       └── backend-hono.md
 ├── commands/
+│   ├── init.ts               # initProject() — init command handler
 │   └── recipe.ts             # recipeList() / recipeAdd(name) — CLI handlers
 └── tools/
     ├── get-spec-info.ts

@@ -7,6 +7,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { cac } from 'cac'
 import { z } from 'zod'
 import { readCache, writeCache } from './cache/cache'
+import { initProject } from './commands/init'
 import { recipeAdd, recipeList } from './commands/recipe'
 import { loadSpecFile } from './spec/loader'
 import { buildParsedSpec } from './spec/parser'
@@ -148,6 +149,12 @@ cli
 
     const transport = new StdioServerTransport()
     await server.connect(transport)
+  })
+
+cli
+  .command('init', 'Initialize apifable project')
+  .action(async () => {
+    await initProject()
   })
 
 cli
