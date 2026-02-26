@@ -14,12 +14,13 @@ function parseFrontmatter(content: string): { meta: RecipeMeta, body: string } {
   return { meta, body }
 }
 
-function getBuiltinDir(): string {
-  return join(import.meta.dirname, 'recipes', 'built-in')
+function getRecipesDir(): string {
+  // Bundled as dist/index.js → import.meta.dirname is dist/, so .. reaches the project root
+  return join(import.meta.dirname, '..', 'recipes')
 }
 
-export async function listBuiltinRecipes(): Promise<RecipeMeta[]> {
-  const dir = getBuiltinDir()
+export async function listRecipes(): Promise<RecipeMeta[]> {
+  const dir = getRecipesDir()
   const files = await readdir(dir)
   const mdFiles = files.filter(f => f.endsWith('.md')).sort()
   const recipes: RecipeMeta[] = []
@@ -31,9 +32,9 @@ export async function listBuiltinRecipes(): Promise<RecipeMeta[]> {
   return recipes
 }
 
-export async function getBuiltinRecipe(name: string): Promise<string | null> {
+export async function getRecipe(name: string): Promise<string | null> {
   if (!isValidRecipeName(name)) return null
-  const filePath = join(getBuiltinDir(), `${name}.md`)
+  const filePath = join(getRecipesDir(), `${name}.md`)
   try {
     return await readFile(filePath, 'utf-8')
   } catch {

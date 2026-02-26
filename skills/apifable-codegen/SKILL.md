@@ -19,30 +19,15 @@ If successful, show the user a brief summary (title, version, available tags).
 
 First, determine which recipe type is needed based on the user's request:
 
-| Request type | Recipe name | `type` value |
-|---|---|---|
-| TypeScript types/interfaces | `api-types` | `api-types` |
-| Fetch functions | `fetch-ts` | `fetch-snippet` |
-| React hooks | `fetch-react-hook` | `fetch-snippet` |
-| React forms | `form-react` | `form` |
-| Express handlers | `backend-express` | `backend-handler` |
-| Hono handlers | `backend-hono` | `backend-handler` |
+| Request type | Recipe type |
+|--------------|-------------|
+| TypeScript types/interfaces | `api-types` |
+| Fetch functions | `fetch-snippet` |
+| React hooks | `fetch-snippet` |
+| React forms | `form` |
+| Express/Hono handlers | `backend-handler` |
 
 Check `.apifable/recipes/` in the project root for an installed recipe matching the needed type. If found, use it.
-
-If no matching recipe is installed, check available built-in recipes:
-
-```bash
-npx apifable@latest recipe list
-```
-
-If a suitable built-in recipe exists, offer to install it:
-
-```bash
-npx apifable@latest recipe add <name>
-```
-
-If the user declines, or if no built-in recipe fits the user's needs, suggest using `/apifable-recipe-creator` to create a custom recipe. Once the recipe is created in `.apifable/recipes/`, the user can return here to continue the codegen workflow.
 
 ## Step 3: Fetch spec data
 

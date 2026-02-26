@@ -34,14 +34,13 @@ node bin/apifable.js mcp                 # uses spec from apifable.config.json
 ## Init Command
 
 ```bash
-node bin/apifable.js init                # initialize apifable configuration
+node bin/apifable.js init                # initialize apifable configuration (includes recipe selection)
 ```
 
-## Recipe Commands
+## Add Command
 
 ```bash
-node bin/apifable.js recipe list         # list all built-in recipes
-node bin/apifable.js recipe add <name>   # install a built-in recipe to .apifable/recipes/
+node bin/apifable.js add <name>          # install a recipe to .apifable/recipes/
 ```
 
 ## Architecture
@@ -62,17 +61,11 @@ src/
 ├── cache/
 │   └── cache.ts              # Read/write .apifable/cache/cache.json
 ├── recipes/
-│   ├── loader.ts             # listBuiltinRecipes / getBuiltinRecipe / listUserRecipes / getUserRecipe
-│   └── built-in/             # Built-in style guide .md files (copied to dist/recipes/built-in/ at build)
-│       ├── fetch-ts.md
-│       ├── fetch-react-hook.md
-│       ├── form-react.md
-│       ├── api-types.md
-│       ├── backend-express.md
-│       └── backend-hono.md
+│   ├── loader.ts             # listRecipes / getRecipe / listUserRecipes / getUserRecipe
+│   └── utils.ts              # isValidRecipeName
 ├── commands/
-│   ├── init.ts               # initialize() — init command handler
-│   └── recipe.ts             # recipeList() / recipeAdd(name) — CLI handlers
+│   ├── init.ts               # initialize() — init command handler (includes recipe selection)
+│   └── add.ts                # add(name) — install a recipe to .apifable/recipes/
 └── tools/
     ├── get-spec-info.ts
     ├── list-endpoints-by-tag.ts
@@ -86,8 +79,10 @@ skills/
 └── apifable-recipe-creator/
     └── SKILL.md              # Claude Code skill for creating custom recipes
 
+recipes/                      # Built-in recipe .md files (top-level, included in package via `files`)
+
 .apifable/
-└── recipes/                  # User-installed recipes (via recipe add)
+└── recipes/                  # User-installed recipes (via init or add)
 
 apifable.config.json          # Project-level config (spec path)
 ```
@@ -97,7 +92,7 @@ apifable.config.json          # Project-level config (spec path)
 - Location: `<cwd>/apifable.config.json`
 - Format: `{ "spec": "openapi.yaml" }`
 - Created by `apifable init`; should be committed to version control
-- `configExists()` is used as a guard in `mcp` and `recipe` commands — both exit with an error if the file is missing
+- `configExists()` is used as a guard in the `mcp` command — exits with an error if the file is missing
 - `--spec` in the `mcp` command overrides the config value when provided
 
 ## Cache
@@ -109,10 +104,9 @@ apifable.config.json          # Project-level config (spec path)
 
 ## Recipes
 
-- Built-in recipes live in `src/recipes/built-in/*.md`; tsdown copies the `built-in/` directory to `dist/recipes/` at build time, resulting in `dist/recipes/built-in/`
-- At runtime, `src/recipes/loader.ts` resolves built-in recipes via `join(import.meta.dirname, 'recipes', 'built-in')` — since everything is bundled into `dist/index.js`, `import.meta.dirname` = `dist/`
-- User recipes are stored in `<cwd>/.apifable/recipes/` after running `recipe add <name>`; files with invalid frontmatter are silently skipped when listing
-- `recipe list` displays built-in recipes only (Name, Type, Description columns); user recipes are not listed
+- Built-in recipes live in the top-level `recipes/` directory (no longer copied by tsdown)
+- At runtime, `src/recipes/loader.ts` resolves recipes via `join(import.meta.dirname, '..', 'recipes')` — since the bundle is at `dist/index.js`, this resolves to the top-level `recipes/`
+- User recipes are stored in `<cwd>/.apifable/recipes/` after running `apifable init` (multiselect) or `apifable add <name>`; files with invalid frontmatter are silently skipped when listing
 - Recipe frontmatter fields: `name`, `type`, `description` (parsed with `yaml` package)
 - Recipe types: `fetch-snippet`, `form`, `api-types`, `backend-handler`
 - The `skills/apifable-codegen/SKILL.md` skill handles AI-driven code generation using recipes + MCP tools

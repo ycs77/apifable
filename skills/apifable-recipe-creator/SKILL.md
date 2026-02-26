@@ -17,28 +17,15 @@ Ask the user for:
 
 2. **Recipe name** — must be kebab-case (e.g. `fetch-axios`, `form-shadcn`). Must match the pattern `/^[a-z0-9][\w-]*$/i` (starts with alphanumeric, then word chars or hyphens).
 
-3. **Target framework/library** — e.g. Axios, SWR, TanStack Query, shadcn/ui, Fastify, etc.
-
-4. **Any specific conventions** — naming patterns, error handling style, import preferences, etc.
+3. **Any specific conventions** — naming patterns, error handling style, import preferences, etc.
 
 ## Step 2: Check for conflicts
 
 Read the `.apifable/recipes/` directory in the project root.
 
 - If a recipe with the **same name** already exists, ask the user whether to overwrite it or choose a different name.
-- If a recipe with the **same type** already exists, inform the user. Multiple recipes of the same type can coexist — the codegen skill will let the user pick which one to use.
 
-## Step 3: Reference a built-in recipe (optional)
-
-If a built-in recipe of the same type exists, read it as a format reference. List the built-in recipes by running:
-
-```bash
-npx apifable@latest recipe list
-```
-
-If a matching type is found, read the installed or built-in recipe file to understand the expected structure (frontmatter + `## Rules` + `## Example`).
-
-## Step 4: Generate recipe content
+## Step 3: Generate recipe content
 
 Create the recipe following this exact format:
 
@@ -71,7 +58,7 @@ Guidelines for writing good recipes:
 - **Examples** must use realistic OpenAPI context (e.g. `GET /users/{id}` with operationId `getUserById` returning `User`). Include at least 2 examples covering different HTTP methods or patterns (e.g. GET + POST, or a simple endpoint + one with query params).
 - **Frontmatter** must use exactly three fields: `name`, `type`, `description`. The `type` field must be one of: `fetch-snippet`, `form`, `api-types`, `backend-handler`.
 
-## Step 5: Write the recipe file
+## Step 4: Write the recipe file
 
 Write the generated content to `.apifable/recipes/<name>.md`.
 

@@ -1,8 +1,9 @@
-import { readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { cancel, confirm, intro, isCancel, log, outro, text } from '@clack/prompts'
+import { cancel, confirm, intro, isCancel, log, multiselect, outro, text } from '@clack/prompts'
 import { configExists, writeConfig } from '../config/config'
 import { showLogo } from '../logo'
+import { getRecipe, listRecipes } from '../recipes/loader'
 
 export async function initialize(): Promise<void> {
   console.log()
@@ -33,6 +34,33 @@ export async function initialize(): Promise<void> {
   }
 
   await writeConfig({ spec })
+
+  const recipes = await listRecipes()
+  if (recipes.length > 0) {
+    const selected = await multiselect({
+      message: 'Select recipes to install:',
+      options: recipes.map(r => ({
+        value: r.name,
+        label: r.name,
+        hint: r.description,
+      })),
+      required: false,
+    })
+
+    if (!isCancel(selected) && selected.length > 0) {
+      const recipesDir = join(process.cwd(), '.apifable', 'recipes')
+      await mkdir(recipesDir, { recursive: true })
+
+      for (const name of selected) {
+        const content = await getRecipe(name)
+        if (content) {
+          await writeFile(join(recipesDir, `${name}.md`), content, 'utf-8')
+        }
+      }
+
+      log.success(`Installed ${selected.length} recipe${selected.length > 1 ? 's' : ''} to .apifable/recipes/`)
+    }
+  }
 
   const gitignorePath = join(process.cwd(), '.gitignore')
   const gitignoreEntry = '.apifable/cache/'

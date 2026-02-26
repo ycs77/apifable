@@ -1,14 +1,13 @@
 import type { OpenAPIObject, ParsedSpec } from './types'
 import { access } from 'node:fs/promises'
 import { resolve } from 'node:path'
-import { log } from '@clack/prompts'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { cac } from 'cac'
 import { z } from 'zod'
 import { readCache, writeCache } from './cache/cache'
+import { add } from './commands/add'
 import { initialize } from './commands/init'
-import { recipeAdd, recipeList } from './commands/recipe'
 import { readConfig } from './config/config'
 import { loadSpecFile } from './spec/loader'
 import { buildParsedSpec } from './spec/parser'
@@ -160,20 +159,9 @@ cli
   })
 
 cli
-  .command('recipe <action> [name]', 'Manage recipes (actions: list, add <name>)')
-  .action(async (action: string, name?: string) => {
-    if (action === 'list') {
-      await recipeList()
-    } else if (action === 'add') {
-      if (!name) {
-        log.error('Usage: apifable recipe add <name>')
-        process.exit(1)
-      }
-      await recipeAdd(name)
-    } else {
-      log.error(`Unknown recipe action: "${action}". Available actions: list, add`)
-      process.exit(1)
-    }
+  .command('add <name>', 'Install a recipe to .apifable/recipes/')
+  .action(async (name: string) => {
+    await add(name)
   })
 
 cli.help()

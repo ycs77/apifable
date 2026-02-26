@@ -81,9 +81,6 @@ apifable ships with 6 built-in recipes covering the most common use cases:
 ### Recipe Commands
 
 ```bash
-# List all available built-in recipes
-apifable recipe list
-
 # Install a recipe into your project
 apifable recipe add fetch-ts
 # → writes .apifable/recipes/fetch-ts.md
