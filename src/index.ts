@@ -7,8 +7,9 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { cac } from 'cac'
 import { z } from 'zod'
 import { readCache, writeCache } from './cache/cache'
-import { initProject } from './commands/init'
+import { initialize } from './commands/init'
 import { recipeAdd, recipeList } from './commands/recipe'
+import { readConfig } from './config/config'
 import { loadSpecFile } from './spec/loader'
 import { buildParsedSpec } from './spec/parser'
 import { getEndpoint } from './tools/get-endpoint'
@@ -26,16 +27,23 @@ cli
   })
 
 cli
+  .command('init', 'Initialize apifable configuration')
+  .action(async () => {
+    await initialize()
+  })
+
+cli
   .command('mcp', 'Start MCP server for an OpenAPI spec')
   .option('--spec <path>', 'Path to OpenAPI spec file (.yaml, .yml, or .json)')
   .action(async options => {
-    const specOption = options.spec as string | undefined
-    if (!specOption) {
-      cli.outputHelp()
+    const config = await readConfig()
+    if (!config) {
+      console.error('No apifable.config.json found. Run "apifable init" to initialize.')
       process.exit(1)
     }
 
-    const specPath = resolve(specOption)
+    const specOption = options.spec as string | undefined
+    const specPath = resolve(specOption ?? config.spec)
 
     try {
       await access(specPath)
@@ -149,12 +157,6 @@ cli
 
     const transport = new StdioServerTransport()
     await server.connect(transport)
-  })
-
-cli
-  .command('init', 'Initialize apifable project')
-  .action(async () => {
-    await initProject()
   })
 
 cli

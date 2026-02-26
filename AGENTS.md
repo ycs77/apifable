@@ -27,20 +27,21 @@
 
 ```bash
 pnpm build
-node bin/apifable.js mcp --spec ./path/to/openapi.yaml  # also accepts .json
+node bin/apifable.js init                # create apifable.config.json
+node bin/apifable.js mcp                 # uses spec from apifable.config.json
 ```
 
 ## Init Command
 
 ```bash
-node bin/apifable.js init                      # initialize apifable project
+node bin/apifable.js init                # initialize apifable configuration
 ```
 
 ## Recipe Commands
 
 ```bash
-node bin/apifable.js recipe list               # list all built-in recipes
-node bin/apifable.js recipe add <name>         # install a built-in recipe to .apifable/recipes/
+node bin/apifable.js recipe list         # list all built-in recipes
+node bin/apifable.js recipe add <name>   # install a built-in recipe to .apifable/recipes/
 ```
 
 ## Architecture
@@ -50,8 +51,10 @@ bin/
 └── apifable.js               # CLI entry point (loads dist/index.js)
 src/
 ├── index.ts                  # CLI (cac), spec loading, cache check, MCP server setup
-├── types.ts                  # Shared types: ParsedSpec, EndpointEntry, SpecCache, RecipeMeta, etc.
+├── types.ts                  # Shared types: ParsedSpec, EndpointEntry, SpecCache, RecipeMeta, ApifableConfig, etc.
 ├── logo.ts                   # ASCII Art logo with gradient color themes
+├── config/
+│   └── config.ts             # getConfigPath / readConfig / writeConfig / configExists
 ├── spec/
 │   ├── loader.ts             # Read YAML/JSON file, compute SHA-256 hash
 │   ├── parser.ts             # Build ParsedSpec index from raw OpenAPI object
@@ -68,7 +71,7 @@ src/
 │       ├── backend-express.md
 │       └── backend-hono.md
 ├── commands/
-│   ├── init.ts               # initProject() — init command handler
+│   ├── init.ts               # initialize() — init command handler
 │   └── recipe.ts             # recipeList() / recipeAdd(name) — CLI handlers
 └── tools/
     ├── get-spec-info.ts
@@ -85,7 +88,17 @@ skills/
 
 .apifable/
 └── recipes/                  # User-installed recipes (via recipe add)
+
+apifable.config.json          # Project-level config (spec path)
 ```
+
+## Config
+
+- Location: `<cwd>/apifable.config.json`
+- Format: `{ "spec": "openapi.yaml" }`
+- Created by `apifable init`; should be committed to version control
+- `configExists()` is used as a guard in `mcp` and `recipe` commands — both exit with an error if the file is missing
+- `--spec` in the `mcp` command overrides the config value when provided
 
 ## Cache
 

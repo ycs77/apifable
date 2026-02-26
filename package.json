@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "tsdown",
-    "inspect": "npx -y @modelcontextprotocol/inspector node bin/apifable.js mcp --spec fixtures/openapi.yaml",
+    "inspect": "npx -y @modelcontextprotocol/inspector node bin/apifable.js mcp",
     "lint": "eslint . --cache --concurrency auto",
     "type-check": "tsc --noEmit",
     "release": "bumpp --commit \"Release v%s\"",

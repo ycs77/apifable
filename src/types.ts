@@ -67,6 +67,10 @@ export interface RecipeMeta {
   description: string
 }
 
+export interface ApifableConfig {
+  spec: string
+}
+
 export type HttpMethod = 'get' | 'post' | 'put' | 'patch' | 'delete' | 'head' | 'options' | 'trace'
 
 export interface OperationObject {

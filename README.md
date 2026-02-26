@@ -33,6 +33,14 @@ apifable helps AI agents work with OpenAPI specifications and generate code that
 
 ## Installation
 
+Run `apifable init` to set up your project configuration:
+
+```bash
+npx apifable@latest init
+```
+
+This creates `apifable.config.json` in your project root. The config file should be committed to version control so the spec path is shared with your team.
+
 ### Claude Code
 
 Add the following to your `.mcp.json`:
@@ -42,30 +50,18 @@ Add the following to your `.mcp.json`:
   "mcpServers": {
     "apifable": {
       "command": "npx",
-      "args": ["-y", "apifable@latest", "mcp", "--spec", "openapi.yaml"]
+      "args": ["-y", "apifable@latest", "mcp"]
     }
   }
 }
 ```
 
-Replace `openapi.yaml` with the path to your OpenAPI spec file.
-
 For other AI agents such as Cursor and Windsurf, you can follow the same approach to configure apifable as an MCP server.
 
-### .gitignore
+## Getting Started
 
-apifable stores parsed spec cache under `.apifable/cache/`. Installed recipes under `.apifable/recipes/` are project files you'll want to commit. Add only the cache to your `.gitignore`:
-
-```
-# apifable cache
-.apifable/cache/
-```
-
-<!-- ## Quick Start
-
-1. Add apifable to `.mcp.json` (see [Installation](#installation))
-2. Install a recipe: `apifable recipe add fetch-ts`
-3. Ask your AI agent: "Create a fetch function for `GET /users`" -->
+1. Install a recipe: `apifable recipe add fetch-ts`
+2. Ask your AI agent: "Create a fetch function for `GET /users`"
 
 ## Recipes
 

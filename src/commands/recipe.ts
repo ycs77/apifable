@@ -1,11 +1,18 @@
 import { access, mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { confirm, intro, isCancel, log, outro } from '@clack/prompts'
+import { readConfig } from '../config/config'
 import { getBuiltinRecipe, listBuiltinRecipes } from '../recipes/loader'
 import { isValidRecipeName } from '../recipes/utils'
 
 export async function recipeList(): Promise<void> {
   intro('apifable')
+
+  const config = await readConfig()
+  if (!config) {
+    log.error('No apifable.config.json found. Run "apifable init" to initialize.')
+    process.exit(1)
+  }
 
   const recipes = await listBuiltinRecipes()
   if (recipes.length === 0) {
@@ -27,6 +34,12 @@ export async function recipeList(): Promise<void> {
 
 export async function recipeAdd(name: string): Promise<void> {
   intro('apifable')
+
+  const config = await readConfig()
+  if (!config) {
+    log.error('No apifable.config.json found. Run "apifable init" to initialize.')
+    process.exit(1)
+  }
 
   if (!isValidRecipeName(name)) {
     log.error(`Invalid recipe name: "${name}"`)
