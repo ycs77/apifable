@@ -12,7 +12,7 @@
    - Type definitions and interfaces (`api-types`)
    - API call functions and React hooks (`fetch-snippet`)
    - Frontend forms with validation (`form`)
-   - Backend for Frontend route handlers (`backend-handler`)
+   - Backend for Frontend route handlers (`bff`)
 
 3. **Customizable Recipes** — Define custom code generation templates (recipes) that encode team conventions, framework choices, and style preferences. Built-in recipes cover common patterns; user recipes extend them for any workflow.
 
@@ -145,7 +145,7 @@ apifable.config.json          # Project-level config (spec path)
 - At runtime, `src/recipes/loader.ts` resolves recipes via `join(import.meta.dirname, '..', 'recipes')` — since the bundle is at `dist/index.js`, this resolves to the top-level `recipes/`
 - User recipes are stored in `<cwd>/.apifable/recipes/` after running `apifable init` (multiselect) or `apifable add <name>`; files with invalid frontmatter are silently skipped when listing
 - Recipe frontmatter fields: `name`, `type`, `description` (parsed with `yaml` package)
-- Recipe types: `fetch-snippet`, `form`, `api-types`, `backend-handler`
+- Recipe types: `fetch-snippet`, `form`, `api-types`, `bff`
 - The `skills/apifable-codegen/SKILL.md` skill handles AI-driven code generation using recipes + MCP tools
 - The `skills/apifable-recipe-creator/SKILL.md` skill handles creating custom recipes from scratch
 

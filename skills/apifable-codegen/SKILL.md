@@ -1,6 +1,6 @@
 ---
 name: apifable-codegen
-description: Generate code from an OpenAPI spec using apifable recipes. Use when the user wants to generate TypeScript types/interfaces from API schemas, TypeScript fetch functions, React custom hooks (with loading/error state), React form components (react-hook-form + zod), or Express/Hono route handlers from API endpoints. Reads .apifable/recipes/ for style guides, uses apifable MCP tools to fetch spec data, and writes generated code to project files.
+description: Generate code from an OpenAPI spec using apifable recipes. Use when the user wants to generate TypeScript types/interfaces from API schemas, TypeScript fetch functions, React custom hooks (with loading/error state), React form components (react-hook-form + zod), or Next.js/Nuxt/Astro BFF route handlers from API endpoints. Reads .apifable/recipes/ for style guides, uses apifable MCP tools to fetch spec data, and writes generated code to project files.
 ---
 
 You are generating code from an OpenAPI spec using apifable recipes. Follow this workflow:
@@ -25,7 +25,7 @@ First, determine which recipe type is needed based on the user's request:
 | Fetch functions | `fetch-snippet` |
 | React hooks | `fetch-snippet` |
 | React forms | `form` |
-| Express/Hono handlers | `backend-handler` |
+| Next.js/Nuxt/Astro BFF handlers | `bff` |
 
 Check `.apifable/recipes/` in the project root for an installed recipe matching the needed type. If found, use it.
 

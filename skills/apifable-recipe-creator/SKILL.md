@@ -1,6 +1,6 @@
 ---
 name: apifable-recipe-creator
-description: Create a custom apifable recipe for code generation. Use when the user wants to define a new style guide recipe for generating TypeScript fetch functions, React hooks, React forms, TypeScript API types, or backend route handlers from OpenAPI specs. Writes the recipe to .apifable/recipes/ for use with /apifable-codegen.
+description: Create a custom apifable recipe for code generation. Use when the user wants to define a new style guide recipe for generating TypeScript fetch functions, React hooks, React forms, TypeScript API types, or BFF route handlers from OpenAPI specs. Writes the recipe to .apifable/recipes/ for use with /apifable-codegen.
 ---
 
 You are creating a custom apifable recipe. Follow this workflow:
@@ -13,7 +13,7 @@ Ask the user for:
    - `fetch-snippet` — fetch functions or React hooks
    - `form` — form components
    - `api-types` — TypeScript types/interfaces
-   - `backend-handler` — Express/Hono/other backend route handlers
+   - `bff` — Next.js/Nuxt/Astro BFF route handlers
 
 2. **Recipe name** — must be kebab-case (e.g. `fetch-axios`, `form-shadcn`). Must match the pattern `/^[a-z0-9][\w-]*$/i` (starts with alphanumeric, then word chars or hyphens).
 
@@ -56,7 +56,7 @@ Guidelines for writing good recipes:
 
 - **Rules** must be specific and actionable — avoid vague statements like "write clean code". Each rule should directly guide code generation (e.g. "Function name uses the operationId converted to camelCase").
 - **Examples** must use realistic OpenAPI context (e.g. `GET /users/{id}` with operationId `getUserById` returning `User`). Include at least 2 examples covering different HTTP methods or patterns (e.g. GET + POST, or a simple endpoint + one with query params).
-- **Frontmatter** must use exactly three fields: `name`, `type`, `description`. The `type` field must be one of: `fetch-snippet`, `form`, `api-types`, `backend-handler`.
+- **Frontmatter** must use exactly three fields: `name`, `type`, `description`. The `type` field must be one of: `fetch-snippet`, `form`, `api-types`, `bff`.
 
 ## Step 4: Write the recipe file
 

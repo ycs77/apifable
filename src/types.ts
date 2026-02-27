@@ -63,7 +63,7 @@ export interface OpenAPIObject {
 
 export interface RecipeMeta {
   name: string
-  type: 'fetch-snippet' | 'form' | 'api-types' | 'backend-handler'
+  type: 'fetch-snippet' | 'form' | 'api-types' | 'bff'
   description: string
 }
 

@@ -28,7 +28,7 @@ apifable helps AI agents work with OpenAPI specifications and generate code that
 - 📋 **Full endpoint details** — inspect any endpoint in full detail with all `$ref`s resolved
 - 🧩 **Schema browser** — explore schemas with all references fully resolved
 - 📦 **Recipes** — install style guides that tell AI exactly how to generate your code
-- ✨ **Codegen skill** — generate typed fetch functions, React hooks, forms, and route handlers from spec data
+- ✨ **Codegen skill** — generate typed fetch functions, React hooks, forms, and BFF route handlers from spec data
 - 🧑‍🍳 **Recipe creator skill** — create custom recipes tailored to your framework and conventions
 
 ## Installation
@@ -67,7 +67,7 @@ For other AI agents such as Cursor and Windsurf, you can follow the same approac
 
 Recipes are style-guide `.md` files that tell the AI how to generate code for your project. Each recipe contains naming conventions, structural rules, and concrete code examples for a specific pattern.
 
-apifable ships with 6 built-in recipes covering the most common use cases:
+apifable ships with 7 built-in recipes covering the most common use cases:
 
 | Name | Type | Description |
 |------|------|-------------|
@@ -75,8 +75,9 @@ apifable ships with 6 built-in recipes covering the most common use cases:
 | `fetch-react-hook` | `fetch-snippet` | React custom hook with loading/error state |
 | `form-react` | `form` | React form with react-hook-form and zod validation |
 | `api-types` | `api-types` | TypeScript interface and type definitions from OpenAPI schemas |
-| `backend-express` | `backend-handler` | Express route handler with typed request and response |
-| `backend-hono` | `backend-handler` | Hono route handler with Zod validation |
+| `nextjs-api` | `bff` | Next.js App Router API route handler with typed request and response |
+| `nuxt-api` | `bff` | Nuxt server API route with event handler and validation |
+| `astro-api` | `bff` | Astro API endpoint with typed params and response |
 
 ### Recipe Commands
 
@@ -113,7 +114,7 @@ Create a React hook for `GET /posts/{id}`
 ```
 
 ```
-Add an Express route handler for `POST /orders`
+Create a Next.js API route for `POST /orders`
 ```
 
 ```
