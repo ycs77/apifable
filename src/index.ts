@@ -7,6 +7,7 @@ import { cac } from 'cac'
 import { z } from 'zod'
 import { readCache, writeCache } from './cache/cache'
 import { add } from './commands/add'
+import { generateTypes } from './commands/generate-types'
 import { initialize } from './commands/init'
 import { readConfig } from './config/config'
 import { loadSpecFile } from './spec/loader'
@@ -34,15 +35,14 @@ cli
 cli
   .command('mcp', 'Start MCP server for an OpenAPI spec')
   .option('--spec <path>', 'Path to OpenAPI spec file (.yaml, .yml, or .json)')
-  .action(async options => {
+  .action(async (options: { spec?: string }) => {
     const config = await readConfig()
     if (!config) {
       console.error('No apifable.config.json found. Run "apifable init" to initialize.')
       process.exit(1)
     }
 
-    const specOption = options.spec as string | undefined
-    const specPath = resolve(specOption ?? config.spec)
+    const specPath = resolve(options.spec ?? config.spec)
 
     try {
       await access(specPath)
@@ -156,6 +156,14 @@ cli
 
     const transport = new StdioServerTransport()
     await server.connect(transport)
+  })
+
+cli
+  .command('generate-types', 'Generate TypeScript types from OpenAPI spec')
+  .option('--spec <path>', 'Path to OpenAPI spec file')
+  .option('--output <path>', 'Output directory (default: src/types/)')
+  .action(async (options: { spec?: string, output?: string }) => {
+    await generateTypes(options)
   })
 
 cli

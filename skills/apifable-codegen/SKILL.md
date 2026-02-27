@@ -1,6 +1,6 @@
 ---
 name: apifable-codegen
-description: Generate code from an OpenAPI spec using apifable recipes. Use when the user wants to generate TypeScript types/interfaces from API schemas, TypeScript fetch functions, React custom hooks (with loading/error state), React form components (react-hook-form + zod), or Next.js/Nuxt/Astro BFF route handlers from API endpoints. Reads .apifable/recipes/ for style guides, uses apifable MCP tools to fetch spec data, and writes generated code to project files.
+description: Generate code from an OpenAPI spec using apifable recipes. Use when the user wants to generate TypeScript fetch functions, React custom hooks (with loading/error state), React form components (react-hook-form + zod), or Next.js/Nuxt/Astro BFF route handlers from API endpoints. Reads .apifable/recipes/ for style guides, uses apifable MCP tools to fetch spec data, and writes generated code to project files.
 ---
 
 You are generating code from an OpenAPI spec using apifable recipes. Follow this workflow:
@@ -15,13 +15,14 @@ npx apifable@latest mcp --spec ./path/to/openapi.yaml
 
 If successful, show the user a brief summary (title, version, available tags).
 
+> **Note:** For generating TypeScript types from schemas, use the CLI command `apifable generate-types` instead — it produces deterministic output without AI tokens.
+
 ## Step 2: Find the right recipe
 
 First, determine which recipe type is needed based on the user's request:
 
 | Request type | Recipe type |
 |--------------|-------------|
-| TypeScript types/interfaces | `api-types` |
 | Fetch functions | `fetch-snippet` |
 | React hooks | `fetch-snippet` |
 | React forms | `form` |
@@ -33,18 +34,6 @@ Check `.apifable/recipes/` in the project root for an installed recipe matching 
 
 Use the appropriate MCP tools to get the data needed for code generation:
 
-- **For types from schemas (api-types)**:
-  1. Use the schema list returned by `get_spec_info` in Step 1.
-  2. If total schemas ≤ 20, call `get_schema` for all of them, then proceed to Step 4.
-  3. If total schemas > 20, show the list to the user and ask before proceeding:
-     > Found N schemas. How would you like to proceed?
-     > - All schemas (one file per tag)
-     > - Specific tags only
-     > - Specific schemas only
-  4. Depending on the chosen option:
-     - **All schemas or Specific tags only**: use `list_endpoints_by_tag` for each tag to identify which schemas are referenced by that tag's endpoints. Schemas not tied to any tag go into a shared file (e.g. `common.ts`). If a schema is referenced by multiple tags, ask the user which file it should go into.
-     - **Specific schemas only**: call `get_schema` directly for the specified schemas. No tag grouping needed.
-  5. Proceed to Step 4 to confirm the output path before generating.
 - **For endpoint handlers/hooks/fetch functions**: Use `search_endpoints` or `list_endpoints_by_tag` to discover relevant endpoints, then call `get_endpoint` for **each** endpoint individually to get its full request/response schema.
 
 Always resolve all `$ref` references — the MCP tools do this automatically.
@@ -55,11 +44,7 @@ Always resolve all `$ref` references — the MCP tools do this automatically.
 
 If the user has not specified an output path, ask before generating.
 
-- For a **single file** (most cases, including api-types "Specific schemas only"):
-  > Where should I write the generated code? (e.g., `src/api/users.ts`)
-
-- For **api-types split by tag** ("All schemas" or "Specific tags only"):
-  > Where should I write the generated files? (e.g., `src/types/` — each tag will be written as `<tag>.ts`)
+> Where should I write the generated code? (e.g., `src/api/users.ts`)
 
 ## Step 5: Generate and write code
 
@@ -71,17 +56,6 @@ Generate code by following the recipe's rules and examples exactly:
 - Use the exact types derived from the spec data
 - Generate one function/component/type per endpoint or schema unless the user requests otherwise
 
-**For api-types — single file** (≤ 20 schemas, or "Specific schemas only"):
-All schemas were already fetched in Step 3. Generate all types, then write to the confirmed file. If the file already exists, show the user the content that will be added and confirm before overwriting or appending.
-
-**For api-types — batch mode** ("All schemas" or "Specific tags only" with > 20 schemas):
-For each tag in the confirmed scope:
-1. Fetch the tag's schemas in **fixed batches of 15 in declaration order** using `get_schema`.
-2. Generate types for the batch.
-3. Append to `<output-dir>/<tag>.ts` (write on first batch of each file, append after).
-4. Confirm progress with the user before moving to the next tag.
-
-**For all other recipe types** (fetch functions, hooks, forms, handlers):
-Generate and write to the confirmed file. If the file already exists, show the user the content that will be added and confirm before overwriting or appending.
+Write to the confirmed file. If the file already exists, show the user the content that will be added and confirm before overwriting or appending.
 
 After all writing is done, briefly confirm what was generated and where it was saved.

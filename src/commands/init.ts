@@ -22,7 +22,8 @@ export async function initialize(): Promise<void> {
 
   const spec = await text({
     message: 'Path to OpenAPI spec file:',
-    defaultValue: 'openapi.yaml',
+    initialValue: 'openapi.yaml',
+    placeholder: 'e.g. openapi.yaml',
     validate: value => {
       if (!value) return 'Spec path is required'
     },

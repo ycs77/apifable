@@ -58,23 +58,17 @@ Add the following to your `.mcp.json`:
 
 For other AI agents such as Cursor and Windsurf, you can follow the same approach to configure apifable as an MCP server.
 
-## Getting Started
-
-1. Install a recipe: `apifable recipe add fetch-ts`
-2. Ask your AI agent: "Create a fetch function for `GET /users`"
-
 ## Recipes
 
 Recipes are style-guide `.md` files that tell the AI how to generate code for your project. Each recipe contains naming conventions, structural rules, and concrete code examples for a specific pattern.
 
-apifable ships with 7 built-in recipes covering the most common use cases:
+apifable ships with 6 built-in recipes covering the most common use cases:
 
 | Name | Type | Description |
 |------|------|-------------|
 | `fetch-ts` | `fetch-snippet` | TypeScript fetch function with typed response |
 | `fetch-react-hook` | `fetch-snippet` | React custom hook with loading/error state |
 | `form-react` | `form` | React form with react-hook-form and zod validation |
-| `api-types` | `api-types` | TypeScript interface and type definitions from OpenAPI schemas |
 | `nextjs-api` | `bff` | Next.js App Router API route handler with typed request and response |
 | `nuxt-api` | `bff` | Nuxt server API route with event handler and validation |
 | `astro-api` | `bff` | Astro API endpoint with typed params and response |
@@ -88,6 +82,14 @@ apifable recipe add fetch-ts
 ```
 
 Installed recipes live in `.apifable/recipes/`. You can edit them freely to match your project's conventions — variable naming, error handling style, import paths, and so on.
+
+### Generate Types
+
+Generate TypeScript types directly from your OpenAPI spec:
+
+```bash
+apifable generate-types
+```
 
 ## Code Generation with Agent
 
@@ -104,10 +106,6 @@ apifable includes two Agent Skills that work together:
 4. **Write to file** — asks where to save the output, then writes it to your project
 
 ### Example prompts
-
-```
-Generate TypeScript types for all schemas in the Users tag
-```
 
 ```
 Create a React hook for `GET /posts/{id}`

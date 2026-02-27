@@ -53,8 +53,14 @@ export interface OpenAPIObject {
     version?: string
     description?: string
   }
-  servers?: Array<{ url?: string, description?: string }>
-  tags?: Array<{ name?: string, description?: string }>
+  servers?: {
+    url?: string
+    description?: string
+  }[]
+  tags?: {
+    name?: string
+    description?: string
+  }[]
   paths?: Record<string, PathItemObject>
   components?: {
     schemas?: Record<string, unknown>
@@ -63,13 +69,23 @@ export interface OpenAPIObject {
 
 export interface RecipeMeta {
   name: string
-  type: 'fetch-snippet' | 'form' | 'api-types' | 'bff'
+  type: 'fetch-snippet' | 'form' | 'bff'
   description: string
+}
+
+export type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K]
 }
 
 export interface ApifableConfig {
   spec: string
+  types: {
+    output: string
+    commonFileName: string
+  }
 }
+
+export type ApifableUserConfig = DeepPartial<ApifableConfig>
 
 export type HttpMethod = 'get' | 'post' | 'put' | 'patch' | 'delete' | 'head' | 'options' | 'trace'
 

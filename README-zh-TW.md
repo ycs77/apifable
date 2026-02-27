@@ -58,23 +58,17 @@ npx apifable@latest init
 
 其他 AI Agent 如 Cursor、Windsurf 等，可以參考上述方式將 apifable 設定為 MCP 伺服器。
 
-## 開始使用
-
-1. 安裝 Recipe：`apifable recipe add fetch-ts`
-2. 對 AI Agent 說：「幫 `GET /users` 建立一個 fetch 函式」
-
 ## Recipes
 
 Recipes 是風格指南 `.md` 檔案，告訴 AI 如何為你的專案生成程式碼。每個 Recipe 針對特定的使用模式，包含命名慣例、結構規則，以及具體的程式碼範例。
 
-apifable 內建 7 個 Recipe，涵蓋最常見的使用情境：
+apifable 內建 6 個 Recipe，涵蓋最常見的使用情境：
 
 | 名稱 | 類型 | 說明 |
 |------|------|------|
 | `fetch-ts` | `fetch-snippet` | 帶型別回應的 TypeScript fetch 函式 |
 | `fetch-react-hook` | `fetch-snippet` | 含 loading/error 狀態的 React 自訂 Hook |
 | `form-react` | `form` | 搭配 react-hook-form 與 zod 驗證的 React 表單 |
-| `api-types` | `api-types` | 從 OpenAPI Schema 生成 TypeScript 介面與型別定義 |
 | `nextjs-api` | `bff` | 帶型別請求與回應的 Next.js App Router API 路由處理器 |
 | `nuxt-api` | `bff` | 搭配事件處理器與驗證的 Nuxt Server API 路由 |
 | `astro-api` | `bff` | 帶型別參數與回應的 Astro API 端點 |
@@ -82,15 +76,20 @@ apifable 內建 7 個 Recipe，涵蓋最常見的使用情境：
 ### Recipe 指令
 
 ```bash
-# 列出所有內建 Recipe
-apifable recipe list
-
 # 將 Recipe 安裝至專案
 apifable recipe add fetch-ts
 # → 寫入 .apifable/recipes/fetch-ts.md
 ```
 
 已安裝的 Recipe 存放於 `.apifable/recipes/`。你可以自由編輯，以符合專案的慣例——變數命名、錯誤處理風格、import 路徑等。
+
+### 產生型別
+
+直接從 OpenAPI 規格產生 TypeScript 型別：
+
+```bash
+apifable generate-types
+```
 
 ## 透過 Agent 生成程式碼
 
@@ -107,10 +106,6 @@ apifable 內建兩個 Agent Skill，彼此搭配使用：
 4. **寫入檔案** — 詢問存放位置，然後將輸出寫入你的專案
 
 ### 範例提示詞
-
-```
-Generate TypeScript types for all schemas in the Users tag
-```
 
 ```
 Create a React hook for `GET /posts/{id}`

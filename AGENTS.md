@@ -9,7 +9,7 @@
 1. **Spec Exploration** — Query and search OpenAPI endpoints, schemas, and metadata through MCP tools. Developers can ask natural-language questions about any API and get structured answers instantly.
 
 2. **Code Generation** — Generate production-ready TypeScript code from endpoint and schema definitions, including:
-   - Type definitions and interfaces (`api-types`)
+   - Type definitions and interfaces (`generate-types` CLI command)
    - API call functions and React hooks (`fetch-snippet`)
    - Frontend forms with validation (`form`)
    - Backend for Frontend route handlers (`bff`)
@@ -23,7 +23,7 @@
 "Show me the CreateCourse schema"
 
 > Generate TypeScript types from schemas
-"Generate TypeScript interfaces for all Course schemas"
+`apifable generate-types`
 
 > Generate API call functions
 "Create a fetch function for the Create Course endpoint"
@@ -80,6 +80,12 @@ node bin/apifable.js init                # initialize apifable configuration (in
 node bin/apifable.js add <name>          # install a recipe to .apifable/recipes/
 ```
 
+## Generate Types Command
+
+```bash
+node bin/apifable.js generate-types      # generate TypeScript types from spec
+```
+
 ## Architecture
 
 ```
@@ -100,9 +106,14 @@ src/
 ├── recipes/
 │   ├── loader.ts             # listRecipes / getRecipe / listUserRecipes / getUserRecipe
 │   └── utils.ts              # isValidRecipeName
+├── codegen/
+│   ├── schema-to-ts.ts       # OpenAPI schema → TypeScript string conversion
+│   ├── tag-classifier.ts     # Schema-to-tag classification logic
+│   └── generate.ts           # Generator: classify → sort → convert → write files
 ├── commands/
 │   ├── init.ts               # initialize() — init command handler (includes recipe selection)
-│   └── add.ts                # add(name) — install a recipe to .apifable/recipes/
+│   ├── add.ts                # add(name) — install a recipe to .apifable/recipes/
+│   └── generate-types.ts     # generateTypes() — generate TypeScript types from spec
 └── tools/
     ├── get-spec-info.ts
     ├── list-endpoints-by-tag.ts
@@ -127,10 +138,15 @@ apifable.config.json          # Project-level config (spec path)
 ## Config
 
 - Location: `<cwd>/apifable.config.json`
-- Format: `{ "spec": "openapi.yaml" }`
+- Format: `{ "spec": "openapi.yaml", "types": { "output": "src/types/", "commonFileName": "common" } }`
 - Created by `apifable init`; should be committed to version control
+- `readConfig()` merges user config with defaults and returns `ApifableConfig`
 - `configExists()` is used as a guard in the `mcp` command — exits with an error if the file is missing
 - `--spec` in the `mcp` command overrides the config value when provided
+- `types` (optional): settings for the `generate-types` command
+  - `output` (optional): output directory for generated type files (default: `src/types/`); CLI `--output` flag takes precedence
+  - `commonFileName` (optional): filename prefix for the shared types file (default: `common`, produces `common.ts`)
+- Priority: CLI flag > config > default value
 
 ## Cache
 
@@ -145,7 +161,7 @@ apifable.config.json          # Project-level config (spec path)
 - At runtime, `src/recipes/loader.ts` resolves recipes via `join(import.meta.dirname, '..', 'recipes')` — since the bundle is at `dist/index.js`, this resolves to the top-level `recipes/`
 - User recipes are stored in `<cwd>/.apifable/recipes/` after running `apifable init` (multiselect) or `apifable add <name>`; files with invalid frontmatter are silently skipped when listing
 - Recipe frontmatter fields: `name`, `type`, `description` (parsed with `yaml` package)
-- Recipe types: `fetch-snippet`, `form`, `api-types`, `bff`
+- Recipe types: `fetch-snippet`, `form`, `bff`
 - The `skills/apifable-codegen/SKILL.md` skill handles AI-driven code generation using recipes + MCP tools
 - The `skills/apifable-recipe-creator/SKILL.md` skill handles creating custom recipes from scratch
 
