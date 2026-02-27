@@ -13,7 +13,7 @@ Ask the user for:
    - `fetch-snippet` — fetch functions or React hooks
    - `form` — form components
    - `api-types` — TypeScript types/interfaces
-   - `bff` — Next.js/Nuxt/Astro BFF route handlers
+   - `bff` — BFF route handlers (e.g. Next.js API routes, Nuxt server routes, Astro endpoints)
 
 2. **Recipe name** — must be kebab-case (e.g. `fetch-axios`, `form-shadcn`). Must match the pattern `/^[a-z0-9][\w-]*$/i` (starts with alphanumeric, then word chars or hyphens).
 
