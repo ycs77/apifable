@@ -1,6 +1,6 @@
 ---
 name: apifable-recipe-creator
-description: Create a custom apifable recipe for code generation. Use when the user wants to define a new style guide recipe for generating TypeScript fetch functions, React hooks, React forms, or BFF route handlers from OpenAPI specs. Writes the recipe to .apifable/recipes/ for use with /apifable-codegen.
+description: Create a custom apifable recipe skill for code generation. Use when the user wants to define a new style guide recipe for generating TypeScript fetch functions, React hooks, React forms, or BFF route handlers from OpenAPI specs. Writes the recipe skill to .apifable/recipes/<name>/SKILL.md for use with /apifable-codegen.
 ---
 
 You are creating a custom apifable recipe. Follow this workflow:
@@ -22,11 +22,11 @@ Ask the user for:
 
 Read the `.apifable/recipes/` directory in the project root.
 
-- If a recipe with the **same name** already exists, ask the user whether to overwrite it or choose a different name.
+- If a recipe skill folder with the **same name** already exists (`.apifable/recipes/<name>/SKILL.md`), ask the user whether to overwrite it or choose a different name.
 
 ## Step 3: Generate recipe content
 
-Create the recipe following this exact format:
+Create the recipe skill file following this exact format:
 
 ```
 ---
@@ -55,11 +55,12 @@ Guidelines for writing good recipes:
 
 - **Rules** must be specific and actionable — avoid vague statements like "write clean code". Each rule should directly guide code generation (e.g. "Function name uses the operationId converted to camelCase").
 - **Examples** must use realistic OpenAPI context (e.g. `GET /users/{id}` with operationId `getUserById` returning `User`). Include at least 2 examples covering different HTTP methods or patterns (e.g. GET + POST, or a simple endpoint + one with query params).
-- **Frontmatter** must use exactly three fields: `name`, `type`, `description`. The `type` field must be one of: `fetch-snippet`, `form`, `bff`.
+- **Frontmatter** must use exactly three fields: `name`, `type`, `description`.
+- **Type values** must be one of: `fetch-snippet`, `form`, `bff`.
 
-## Step 4: Write the recipe file
+## Step 4: Write the recipe skill file
 
-Write the generated content to `.apifable/recipes/<name>.md`.
+Write the generated content to `.apifable/recipes/<name>/SKILL.md`.
 
 After writing, confirm:
 - The file path where the recipe was saved

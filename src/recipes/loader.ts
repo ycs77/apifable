@@ -1,5 +1,5 @@
 import type { RecipeMeta } from '../types'
-import { readdir, readFile } from 'node:fs/promises'
+import { access, readdir, readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { parse as parseYaml } from 'yaml'
 import { isValidRecipeName } from './utils'
@@ -21,22 +21,42 @@ function getRecipesDir(): string {
 
 export async function listRecipes(): Promise<RecipeMeta[]> {
   const dir = getRecipesDir()
-  const files = await readdir(dir)
-  const mdFiles = files.filter(f => f.endsWith('.md')).sort()
+  const entries = await readdir(dir, { withFileTypes: true })
+  const recipeDirs = entries
+    .filter(entry => entry.isDirectory())
+    .map(entry => entry.name)
+    .sort()
   const recipes: RecipeMeta[] = []
-  for (const file of mdFiles) {
-    const content = await readFile(join(dir, file), 'utf-8')
-    const { meta } = parseFrontmatter(content)
-    recipes.push(meta)
+  for (const recipeName of recipeDirs) {
+    const skillPath = join(dir, recipeName, 'SKILL.md')
+    try {
+      const content = await readFile(skillPath, 'utf-8')
+      const { meta } = parseFrontmatter(content)
+      recipes.push(meta)
+    } catch {
+      // skip invalid recipe directories
+    }
   }
   return recipes
 }
 
 export async function getRecipe(name: string): Promise<string | null> {
   if (!isValidRecipeName(name)) return null
-  const filePath = join(getRecipesDir(), `${name}.md`)
+  const filePath = join(getRecipesDir(), name, 'SKILL.md')
   try {
     return await readFile(filePath, 'utf-8')
+  } catch {
+    return null
+  }
+}
+
+export async function getRecipeDir(name: string): Promise<string | null> {
+  if (!isValidRecipeName(name)) return null
+  const dirPath = join(getRecipesDir(), name)
+  const skillPath = join(dirPath, 'SKILL.md')
+  try {
+    await access(skillPath)
+    return dirPath
   } catch {
     return null
   }
@@ -45,11 +65,14 @@ export async function getRecipe(name: string): Promise<string | null> {
 export async function listUserRecipes(cwd: string): Promise<RecipeMeta[]> {
   const dir = join(cwd, '.apifable', 'recipes')
   try {
-    const files = await readdir(dir)
-    const mdFiles = files.filter(f => f.endsWith('.md')).sort()
+    const entries = await readdir(dir, { withFileTypes: true })
+    const recipeDirs = entries
+      .filter(entry => entry.isDirectory())
+      .map(entry => entry.name)
+      .sort()
     const recipes: RecipeMeta[] = []
-    for (const file of mdFiles) {
-      const content = await readFile(join(dir, file), 'utf-8')
+    for (const recipeName of recipeDirs) {
+      const content = await readFile(join(dir, recipeName, 'SKILL.md'), 'utf-8')
       try {
         const { meta } = parseFrontmatter(content)
         recipes.push(meta)
@@ -65,7 +88,7 @@ export async function listUserRecipes(cwd: string): Promise<RecipeMeta[]> {
 
 export async function getUserRecipe(cwd: string, name: string): Promise<string | null> {
   if (!isValidRecipeName(name)) return null
-  const filePath = join(cwd, '.apifable', 'recipes', `${name}.md`)
+  const filePath = join(cwd, '.apifable', 'recipes', name, 'SKILL.md')
   try {
     return await readFile(filePath, 'utf-8')
   } catch {

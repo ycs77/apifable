@@ -1,7 +1,7 @@
-import { access, mkdir, writeFile } from 'node:fs/promises'
+import { access, cp, mkdir, rm } from 'node:fs/promises'
 import { join } from 'node:path'
 import { confirm, intro, isCancel, log, outro } from '@clack/prompts'
-import { getRecipe } from '../recipes/loader'
+import { getRecipeDir } from '../recipes/loader'
 import { isValidRecipeName } from '../recipes/utils'
 
 export async function add(name: string): Promise<void> {
@@ -11,18 +11,19 @@ export async function add(name: string): Promise<void> {
     log.error(`Invalid recipe name: "${name}"`)
     process.exit(1)
   }
-  const content = await getRecipe(name)
-  if (!content) {
+  const recipeDir = await getRecipeDir(name)
+  if (!recipeDir) {
     log.error(`Recipe not found: ${name}\nRun "apifable add <name>" to install a recipe.`)
     process.exit(1)
   }
 
   const recipesDir = join(process.cwd(), '.apifable', 'recipes')
-  const destPath = join(recipesDir, `${name}.md`)
+  const destDir = join(recipesDir, name)
+  const destSkillPath = join(destDir, 'SKILL.md')
 
   let exists = false
   try {
-    await access(destPath)
+    await access(destSkillPath)
     exists = true
   } catch {
     // file does not exist
@@ -37,8 +38,9 @@ export async function add(name: string): Promise<void> {
   }
 
   await mkdir(recipesDir, { recursive: true })
-  await writeFile(destPath, content, 'utf-8')
-  log.success(`Recipe added: .apifable/recipes/${name}.md`)
+  await rm(destDir, { recursive: true, force: true })
+  await cp(recipeDir, destDir, { recursive: true, force: true })
+  log.success(`Recipe added: .apifable/recipes/${name}/`)
 
   outro()
 }

@@ -77,7 +77,7 @@ node bin/apifable.js init                # initialize apifable configuration (in
 ## Add Command
 
 ```bash
-node bin/apifable.js add <name>          # install a recipe to .apifable/recipes/
+node bin/apifable.js add <name>          # install a recipe skill to .apifable/recipes/
 ```
 
 ## Generate Types Command
@@ -104,7 +104,7 @@ src/
 ├── cache/
 │   └── cache.ts              # Read/write .apifable/cache/cache.json
 ├── recipes/
-│   ├── loader.ts             # listRecipes / getRecipe / listUserRecipes / getUserRecipe
+│   ├── loader.ts             # listRecipes / getRecipeDir / listUserRecipes / getUserRecipe
 │   └── utils.ts              # isValidRecipeName
 ├── codegen/
 │   ├── schema-to-ts.ts       # OpenAPI schema → TypeScript string conversion
@@ -112,7 +112,7 @@ src/
 │   └── generate.ts           # Generator: classify → sort → convert → write files
 ├── commands/
 │   ├── init.ts               # initialize() — init command handler (includes recipe selection)
-│   ├── add.ts                # add(name) — install a recipe to .apifable/recipes/
+│   ├── add.ts                # add(name) — install a recipe skill to .apifable/recipes/
 │   └── generate-types.ts     # generateTypes() — generate TypeScript types from spec
 └── tools/
     ├── get-spec-info.ts
@@ -127,10 +127,10 @@ skills/
 └── apifable-recipe-creator/
     └── SKILL.md              # Claude Code skill for creating custom recipes
 
-recipes/                      # Built-in recipe .md files (top-level, included in package via `files`)
+recipes/                      # Built-in recipe skill folders (top-level, included in package via `files`)
 
 .apifable/
-└── recipes/                  # User-installed recipes (via init or add)
+└── recipes/                  # User-installed recipe skill folders (via init or add)
 
 apifable.config.json          # Project-level config (spec path)
 ```
@@ -159,7 +159,8 @@ apifable.config.json          # Project-level config (spec path)
 
 - Built-in recipes live in the top-level `recipes/` directory (no longer copied by tsdown)
 - At runtime, `src/recipes/loader.ts` resolves recipes via `join(import.meta.dirname, '..', 'recipes')` — since the bundle is at `dist/index.js`, this resolves to the top-level `recipes/`
-- User recipes are stored in `<cwd>/.apifable/recipes/` after running `apifable init` (multiselect) or `apifable add <name>`; files with invalid frontmatter are silently skipped when listing
+- Recipe format is folder-based skill format: `<recipe-name>/SKILL.md`
+- User recipes are stored in `<cwd>/.apifable/recipes/` after running `apifable init` (multiselect) or `apifable add <name>`; directories with invalid or missing `SKILL.md` frontmatter are silently skipped when listing
 - Recipe frontmatter fields: `name`, `type`, `description` (parsed with `yaml` package)
 - Recipe types: `fetch-snippet`, `form`, `bff`
 - The `skills/apifable-codegen/SKILL.md` skill handles AI-driven code generation using recipes + MCP tools

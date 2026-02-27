@@ -17,18 +17,21 @@ If successful, show the user a brief summary (title, version, available tags).
 
 > **Note:** For generating TypeScript types from schemas, use the CLI command `apifable generate-types` instead — it produces deterministic output without AI tokens.
 
-## Step 2: Find the right recipe
+## Step 2: Find the right recipe (No ranking + minimal guardrails)
 
-First, determine which recipe type is needed based on the user's request:
+Recipes are now installed as skill-format folders under `.apifable/recipes/<recipe-name>/SKILL.md`.
 
-| Request type | Recipe type |
-|--------------|-------------|
-| Fetch functions | `fetch-snippet` |
-| React hooks | `fetch-snippet` |
-| React forms | `form` |
-| Next.js/Nuxt/Astro BFF handlers | `bff` |
+Do not use ranking or scoring. Use this exact selection flow:
 
-Check `.apifable/recipes/` in the project root for an installed recipe matching the needed type. If found, use it.
+1. If the user explicitly names a recipe, use that recipe.
+2. Otherwise, list installed recipes from `.apifable/recipes/` and keep only recipes whose `type` matches the request.
+3. If no recipe matches, stop and ask the user to install/create one.
+4. If exactly one recipe matches, use it.
+5. If multiple recipes match, ask the user to choose one by name before generating any code.
+
+Guardrails:
+- If the user asked for a specific framework (e.g. Next.js, Nuxt, Astro, React) and the chosen recipe appears incompatible, ask for clarification before generation.
+- Always state which recipe was selected and why in 1-2 short bullets.
 
 ## Step 3: Fetch spec data
 
@@ -48,7 +51,7 @@ If the user has not specified an output path, ask before generating.
 
 ## Step 5: Generate and write code
 
-Read the recipe file from `.apifable/recipes/` to get the style guide.
+Read the selected recipe skill file from `.apifable/recipes/<recipe-name>/SKILL.md` to get the style guide.
 
 Generate code by following the recipe's rules and examples exactly:
 - Match the naming conventions specified in the recipe
@@ -57,5 +60,7 @@ Generate code by following the recipe's rules and examples exactly:
 - Generate one function/component/type per endpoint or schema unless the user requests otherwise
 
 Write to the confirmed file. If the file already exists, show the user the content that will be added and confirm before overwriting or appending.
+
+If the selected recipe cannot satisfy the requested output type, stop and ask the user to choose another installed recipe.
 
 After all writing is done, briefly confirm what was generated and where it was saved.

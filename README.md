@@ -60,7 +60,7 @@ For other AI agents such as Cursor and Windsurf, you can follow the same approac
 
 ## Recipes
 
-Recipes are style-guide `.md` files that tell the AI how to generate code for your project. Each recipe contains naming conventions, structural rules, and concrete code examples for a specific pattern.
+Recipes are style-guide skill folders that tell the AI how to generate code for your project. Each recipe is stored as `SKILL.md` and contains naming conventions, structural rules, and concrete code examples for a specific pattern.
 
 apifable ships with 6 built-in recipes covering the most common use cases:
 
@@ -77,8 +77,8 @@ apifable ships with 6 built-in recipes covering the most common use cases:
 
 ```bash
 # Install a recipe into your project
-apifable recipe add fetch-ts
-# → writes .apifable/recipes/fetch-ts.md
+apifable add fetch-ts
+# → writes .apifable/recipes/fetch-ts/SKILL.md
 ```
 
 Installed recipes live in `.apifable/recipes/`. You can edit them freely to match your project's conventions — variable naming, error handling style, import paths, and so on.
@@ -100,7 +100,7 @@ apifable includes two Agent Skills that work together:
 
 ### Codegen workflow
 
-1. **Find a recipe** — reads `.apifable/recipes/` for an installed style guide; suggests `recipe add` if none fits, or `/apifable-recipe-creator` to create a custom one
+1. **Find a recipe** — reads `.apifable/recipes/` for installed recipe skills; no ranking is used. If multiple recipes match, you must choose one by name before generation. If none fits, use `apifable add <name>` or `/apifable-recipe-creator`
 2. **Fetch spec data** — calls `get_endpoint` or `get_schema` to get the exact types and structure needed
 3. **Generate code** — follows the recipe's rules and examples, using real spec data for accurate types and names
 4. **Write to file** — asks where to save the output, then writes it to your project

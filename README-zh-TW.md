@@ -60,7 +60,7 @@ npx apifable@latest init
 
 ## Recipes
 
-Recipes 是風格指南 `.md` 檔案，告訴 AI 如何為你的專案生成程式碼。每個 Recipe 針對特定的使用模式，包含命名慣例、結構規則，以及具體的程式碼範例。
+Recipes 是風格指南 Skill 資料夾，告訴 AI 如何為你的專案生成程式碼。每個 Recipe 以 `SKILL.md` 儲存，並針對特定的使用模式提供命名慣例、結構規則與具體程式碼範例。
 
 apifable 內建 6 個 Recipe，涵蓋最常見的使用情境：
 
@@ -77,8 +77,8 @@ apifable 內建 6 個 Recipe，涵蓋最常見的使用情境：
 
 ```bash
 # 將 Recipe 安裝至專案
-apifable recipe add fetch-ts
-# → 寫入 .apifable/recipes/fetch-ts.md
+apifable add fetch-ts
+# → 寫入 .apifable/recipes/fetch-ts/SKILL.md
 ```
 
 已安裝的 Recipe 存放於 `.apifable/recipes/`。你可以自由編輯，以符合專案的慣例——變數命名、錯誤處理風格、import 路徑等。
@@ -100,7 +100,7 @@ apifable 內建兩個 Agent Skill，彼此搭配使用：
 
 ### 程式碼生成工作流程
 
-1. **找到 Recipe** — 讀取 `.apifable/recipes/` 中已安裝的風格指南；若沒有合適的，會建議執行 `recipe add`，或使用 `/apifable-recipe-creator` 建立自訂 Recipe
+1. **找到 Recipe** — 讀取 `.apifable/recipes/` 中已安裝的 Recipe Skills；不使用 ranking。若有多個符合，必須先由使用者明確選擇名稱後才生成。若沒有合適的，請執行 `apifable add <name>` 或使用 `/apifable-recipe-creator`
 2. **取得規格資料** — 呼叫 `get_endpoint` 或 `get_schema` 以取得所需的精確型別與結構
 3. **生成程式碼** — 遵循 Recipe 的規則與範例，使用真實規格資料確保型別與名稱的正確性
 4. **寫入檔案** — 詢問存放位置，然後將輸出寫入你的專案

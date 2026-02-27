@@ -167,7 +167,7 @@ cli
   })
 
 cli
-  .command('add <name>', 'Install a recipe to .apifable/recipes/')
+  .command('add <name>', 'Install a recipe skill to .apifable/recipes/')
   .action(async (name: string) => {
     await add(name)
   })

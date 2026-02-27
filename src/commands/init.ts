@@ -1,9 +1,9 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { cancel, confirm, intro, isCancel, log, multiselect, outro, text } from '@clack/prompts'
 import { configExists, writeConfig } from '../config/config'
 import { showLogo } from '../logo'
-import { getRecipe, listRecipes } from '../recipes/loader'
+import { getRecipeDir, listRecipes } from '../recipes/loader'
 
 export async function initialize(): Promise<void> {
   console.log()
@@ -53,9 +53,11 @@ export async function initialize(): Promise<void> {
       await mkdir(recipesDir, { recursive: true })
 
       for (const name of selected) {
-        const content = await getRecipe(name)
-        if (content) {
-          await writeFile(join(recipesDir, `${name}.md`), content, 'utf-8')
+        const recipeDir = await getRecipeDir(name)
+        if (recipeDir) {
+          const destDir = join(recipesDir, name)
+          await rm(destDir, { recursive: true, force: true })
+          await cp(recipeDir, destDir, { recursive: true, force: true })
         }
       }
 
