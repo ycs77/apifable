@@ -5,7 +5,7 @@ import { parse as parseYaml } from 'yaml'
 import { isValidRecipeName } from './utils'
 
 function parseFrontmatter(content: string): { meta: RecipeMeta, body: string } {
-  const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/)
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/)
   if (!match) {
     throw new Error('Invalid recipe format: missing frontmatter')
   }
@@ -72,12 +72,12 @@ export async function listUserRecipes(cwd: string): Promise<RecipeMeta[]> {
       .sort()
     const recipes: RecipeMeta[] = []
     for (const recipeName of recipeDirs) {
-      const content = await readFile(join(dir, recipeName, 'SKILL.md'), 'utf-8')
       try {
+        const content = await readFile(join(dir, recipeName, 'SKILL.md'), 'utf-8')
         const { meta } = parseFrontmatter(content)
         recipes.push(meta)
       } catch {
-        // skip files with invalid frontmatter
+        // skip directories with missing or invalid SKILL.md
       }
     }
     return recipes

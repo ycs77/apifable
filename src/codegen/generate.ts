@@ -1,7 +1,7 @@
 import type { ParsedSpec } from '../types'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { generateFileContent } from './schema-to-ts'
+import { generateFileContent, toValidIdentifier } from './schema-to-ts'
 import { addTransitiveDeps, buildDependencyGraph, classifySchemasByTag } from './tag-classifier'
 
 export interface GenerateResult {
@@ -21,7 +21,33 @@ export async function generate(
   const allSchemas = spec.schemas
   const depGraph = buildDependencyGraph(allSchemas)
 
+  // Promote cross-tag dependencies to common
+  const commonSet = new Set(common)
+  for (const [, schemaNames] of byTag) {
+    for (const name of schemaNames) {
+      const allDeps = new Set<string>()
+      addTransitiveDeps(name, depGraph, allDeps)
+      allDeps.delete(name)
+      for (const dep of allDeps) {
+        if (!commonSet.has(dep) && !schemaNames.includes(dep)) {
+          commonSet.add(dep)
+        }
+      }
+    }
+  }
+  common.length = 0
+  common.push(...commonSet)
+  for (const [tag, schemaNames] of byTag) {
+    const filtered = schemaNames.filter(n => !commonSet.has(n))
+    if (filtered.length === 0) {
+      byTag.delete(tag)
+    } else {
+      byTag.set(tag, filtered)
+    }
+  }
+
   const files: GenerateResult['files'] = []
+  const usedFileNames = new Set<string>()
   await mkdir(outputDir, { recursive: true })
 
   // Write common file first (no imports needed)
@@ -29,12 +55,12 @@ export async function generate(
     const sorted = topologicalSort(common, depGraph)
     const schemas = sorted.map(name => ({ name, schema: allSchemas[name] }))
     const content = generateFileContent(schemas, allSchemas)
-    const filePath = join(outputDir, `${commonFileName}.ts`)
+    const fileName = `${commonFileName}.ts`
+    usedFileNames.add(fileName)
+    const filePath = join(outputDir, fileName)
     await writeFile(filePath, content, 'utf-8')
     files.push({ path: filePath, schemaCount: schemas.length })
   }
-
-  const commonSet = new Set(common)
 
   // Write tag files
   for (const [tag, schemaNames] of [...byTag.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
@@ -55,11 +81,18 @@ export async function generate(
       }
     }
     if (refsFromCommon.size > 0) {
-      imports.set(`./${commonFileName}`, [...refsFromCommon].sort())
+      imports.set(`./${commonFileName}`, [...refsFromCommon].map(toValidIdentifier).sort())
     }
 
     const content = generateFileContent(schemas, allSchemas, imports)
-    const fileName = `${toKebabCase(tag)}.ts`
+    const baseFileName = toKebabCase(tag)
+    let fileName = `${baseFileName}.ts`
+    let index = 2
+    while (usedFileNames.has(fileName)) {
+      fileName = `${baseFileName}-${index}.ts`
+      index++
+    }
+    usedFileNames.add(fileName)
     const filePath = join(outputDir, fileName)
     await writeFile(filePath, content, 'utf-8')
     files.push({ path: filePath, schemaCount: schemas.length })
@@ -110,5 +143,6 @@ function toKebabCase(str: string): string {
     .replace(/[^a-z0-9-]/gi, '-')
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '')
-    .toLowerCase()
+    .toLowerCase() ||
+    'unknown'
 }

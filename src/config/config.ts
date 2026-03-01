@@ -1,5 +1,5 @@
 import type { ApifableConfig, ApifableUserConfig } from '../types'
-import { readFile, writeFile } from 'node:fs/promises'
+import { access, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
 export const defaultConfig: ApifableConfig = {
@@ -16,11 +16,10 @@ export function getConfigPath(cwd = process.cwd()): string {
 
 function resolveConfig(config: ApifableUserConfig): ApifableConfig {
   return {
-    ...defaultConfig,
-    ...config,
+    spec: config.spec ?? defaultConfig.spec,
     types: {
-      ...defaultConfig.types,
-      ...config.types,
+      output: config.types?.output ?? defaultConfig.types.output,
+      commonFileName: config.types?.commonFileName ?? defaultConfig.types.commonFileName,
     },
   }
 }
@@ -30,21 +29,21 @@ export async function readConfig(cwd?: string): Promise<ApifableConfig | null> {
   try {
     const content = await readFile(configPath, 'utf-8')
     return resolveConfig(JSON.parse(content) as ApifableUserConfig)
-  } catch {
-    return null
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === 'ENOENT') return null
+    throw err
   }
 }
 
 export async function writeConfig(config: ApifableUserConfig, cwd?: string): Promise<void> {
   const configPath = getConfigPath(cwd)
-  const resolved = resolveConfig(config)
-  await writeFile(configPath, `${JSON.stringify(resolved, null, 2)}\n`, 'utf-8')
+  await writeFile(configPath, `${JSON.stringify(config, null, 2)}\n`, 'utf-8')
 }
 
 export async function configExists(cwd?: string): Promise<boolean> {
   const configPath = getConfigPath(cwd)
   try {
-    await readFile(configPath)
+    await access(configPath)
     return true
   } catch {
     return false

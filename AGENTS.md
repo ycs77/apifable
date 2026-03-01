@@ -74,9 +74,9 @@ src/
 │   ├── loader.ts             # listRecipes / getRecipeDir / listUserRecipes / getUserRecipe
 │   └── utils.ts              # isValidRecipeName
 ├── codegen/
-│   ├── schema-to-ts.ts       # OpenAPI schema → TypeScript string conversion
+│   ├── schema-to-ts.ts       # OpenAPI schema → TypeScript string conversion (with identifier sanitization and string escaping; exports toValidIdentifier)
 │   ├── tag-classifier.ts     # Schema-to-tag classification logic
-│   └── generate.ts           # Generator: classify → sort → convert → write files
+│   └── generate.ts           # Generator: classify → promote cross-tag deps → sort → convert → write files
 ├── commands/
 │   ├── init.ts               # initialize() — init command handler (two-phase: collect all prompts, then execute file operations)
 │   ├── add.ts                # add(name) — install a recipe skill to .apifable/recipes/

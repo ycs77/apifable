@@ -4,9 +4,10 @@ import MiniSearch from 'minisearch'
 function scoreEndpoint(entry: EndpointEntry, query: string): number {
   const q = query.toLowerCase()
   if (entry.operationId.toLowerCase() === q) return 0
-  if (entry.path.toLowerCase().includes(q)) return 1
-  if (entry.summary.toLowerCase().includes(q)) return 2
-  if (entry.description.toLowerCase().includes(q)) return 3
+  if (entry.operationId.toLowerCase().includes(q)) return 1
+  if (entry.path.toLowerCase().includes(q)) return 2
+  if (entry.summary.toLowerCase().includes(q)) return 3
+  if (entry.description.toLowerCase().includes(q)) return 4
   return -1
 }
 

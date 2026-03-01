@@ -13,7 +13,7 @@ export async function add(name: string): Promise<void> {
   }
   const recipeDir = await getRecipeDir(name)
   if (!recipeDir) {
-    log.error(`Recipe not found: ${name}\nRun "apifable add <name>" to install a recipe.`)
+    log.error(`Recipe not found: ${name}\nRun "apifable init" to browse available recipes.`)
     process.exit(1)
   }
 

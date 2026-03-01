@@ -6,6 +6,7 @@ export function schemaToTs(
   allSchemas: Record<string, unknown>,
 ): string {
   const s = schema as Schema
+  const tsName = toValidIdentifier(name)
   const lines: string[] = []
 
   const description = s.description as string | undefined
@@ -15,15 +16,15 @@ export function schemaToTs(
 
   // String enum
   if (s.type === 'string' && Array.isArray(s.enum)) {
-    const members = (s.enum as string[]).map(v => `'${v}'`).join(' | ')
-    lines.push(`export type ${name} = ${members}`)
+    const members = (s.enum as string[]).map(v => `'${escapeStringLiteral(v)}'`).join(' | ')
+    lines.push(`export type ${tsName} = ${members}`)
     return lines.join('\n')
   }
 
   // Number enum
   if ((s.type === 'integer' || s.type === 'number') && Array.isArray(s.enum)) {
     const members = (s.enum as number[]).join(' | ')
-    lines.push(`export type ${name} = ${members}`)
+    lines.push(`export type ${tsName} = ${members}`)
     return lines.join('\n')
   }
 
@@ -47,7 +48,7 @@ export function schemaToTs(
     if (refTypes.length > 0 && inlineProps.length <= 1) {
       const merged = inlineProps.length === 1 ? inlineProps[0] : {}
       const props = renderProperties(merged, allSchemas)
-      lines.push(`export interface ${name} extends ${refTypes.join(', ')} {`)
+      lines.push(`export interface ${tsName} extends ${refTypes.join(', ')} {`)
       for (const p of props) {
         lines.push(p)
       }
@@ -65,7 +66,7 @@ export function schemaToTs(
         parts.push(resolveTypeString(item, allSchemas))
       }
     }
-    lines.push(`export type ${name} = ${parts.join(' & ')}`)
+    lines.push(`export type ${tsName} = ${parts.join(' & ') || 'unknown'}`)
     return lines.join('\n')
   }
 
@@ -73,14 +74,14 @@ export function schemaToTs(
   if (Array.isArray(s.oneOf) || Array.isArray(s.anyOf)) {
     const variants = (s.oneOf ?? s.anyOf) as Schema[]
     const members = variants.map(v => resolveTypeString(v, allSchemas))
-    lines.push(`export type ${name} = ${members.join(' | ')}`)
+    lines.push(`export type ${tsName} = ${members.join(' | ')}`)
     return lines.join('\n')
   }
 
   // Object with properties
   if (s.type === 'object' || s.properties) {
     const props = renderProperties(s, allSchemas)
-    lines.push(`export interface ${name} {`)
+    lines.push(`export interface ${tsName} {`)
     for (const p of props) {
       lines.push(p)
     }
@@ -90,7 +91,7 @@ export function schemaToTs(
 
   // Fallback: simple type alias
   const tsType = resolveTypeString(s, allSchemas)
-  lines.push(`export type ${name} = ${tsType}`)
+  lines.push(`export type ${tsName} = ${tsType}`)
   return lines.join('\n')
 }
 
@@ -123,6 +124,7 @@ export function generateFileContent(
 function renderProperties(schema: Schema, allSchemas: Record<string, unknown>): string[] {
   const properties = (schema.properties ?? {}) as Record<string, Schema>
   const required = new Set((schema.required ?? []) as string[])
+  const hasNamedProperties = Object.keys(properties).length > 0
   const lines: string[] = []
 
   for (const [key, prop] of Object.entries(properties)) {
@@ -133,7 +135,8 @@ function renderProperties(schema: Schema, allSchemas: Record<string, unknown>): 
     const optional = required.has(key) ? '' : '?'
     const tsType = resolveTypeString(prop, allSchemas)
     // Array-type nullability (e.g. ["string", "null"]) is already handled by resolveTypeString
-    const nullable = !Array.isArray(prop.type) && isNullable(prop) ? ' | null' : ''
+    const alreadyNullableViaTypeArray = Array.isArray(prop.type) && (prop.type as string[]).includes('null')
+    const nullable = !alreadyNullableViaTypeArray && isNullable(prop) ? ' | null' : ''
     lines.push(`  ${key}${optional}: ${tsType}${nullable}`)
   }
 
@@ -143,7 +146,9 @@ function renderProperties(schema: Schema, allSchemas: Record<string, unknown>): 
     typeof schema.additionalProperties === 'object' &&
     schema.additionalProperties !== null
   ) {
-    const valueType = resolveTypeString(schema.additionalProperties as Schema, allSchemas)
+    const valueType = hasNamedProperties
+      ? 'unknown'
+      : resolveTypeString(schema.additionalProperties as Schema, allSchemas)
     lines.push(`  [key: string]: ${valueType}`)
   }
 
@@ -185,7 +190,7 @@ function resolveTypeString(schema: Schema, allSchemas: Record<string, unknown>):
   // Primitives
   if (schema.type === 'string') {
     if (Array.isArray(schema.enum)) {
-      return (schema.enum as string[]).map(v => `'${v}'`).join(' | ')
+      return (schema.enum as string[]).map(v => `'${escapeStringLiteral(v)}'`).join(' | ')
     }
     return 'string'
   }
@@ -229,7 +234,7 @@ function isNullable(schema: Schema): boolean {
 
 function extractRefName(ref: string): string {
   const match = ref.match(/^#\/components\/schemas\/(.+)$/)
-  return match ? match[1] : ref
+  return match ? toValidIdentifier(match[1]) : ref
 }
 
 function mapPrimitiveType(type: string): string {
@@ -244,10 +249,23 @@ function mapPrimitiveType(type: string): string {
   }
 }
 
+function escapeStringLiteral(value: string): string {
+  return value.replace(/\\/g, '\\\\').replace(/'/g, '\\\'')
+}
+
+export function toValidIdentifier(name: string): string {
+  let result = name.replace(/[^\w$]/g, '_')
+  if (/^\d/.test(result)) {
+    result = `_${result}`
+  }
+  return result || '_'
+}
+
 function formatJsDoc(text: string, indent = ''): string {
-  const lines = text.split('\n')
+  const escaped = text.replace(/\*\//g, '*\\/')
+  const lines = escaped.split('\n')
   if (lines.length === 1) {
-    return `${indent}/** ${text} */`
+    return `${indent}/** ${escaped} */`
   }
   return [
     `${indent}/**`,
