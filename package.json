@@ -21,6 +21,7 @@
     "lint": "eslint . --cache --concurrency auto",
     "type-check": "tsc --noEmit",
     "test": "vitest",
+    "code-check": "pnpm lint && pnpm type-check && pnpm test --run",
     "release": "bumpp --commit \"Release v%s\"",
     "prepack": "pnpm build"
   },

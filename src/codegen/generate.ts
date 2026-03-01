@@ -101,7 +101,7 @@ export async function generate(
   return { files }
 }
 
-function topologicalSort(
+export function topologicalSort(
   names: string[],
   depGraph: Map<string, string[]>,
 ): string[] {
@@ -136,7 +136,7 @@ function topologicalSort(
   return result
 }
 
-function toKebabCase(str: string): string {
+export function toKebabCase(str: string): string {
   return str
     .replace(/([a-z])([A-Z])/g, '$1-$2')
     .replace(/[\s_]+/g, '-')

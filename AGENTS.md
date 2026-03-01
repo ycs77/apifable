@@ -24,6 +24,7 @@ apifable is a spec-first MCP server that turns any OpenAPI specification into an
 
 - `pnpm build` — production build
 - `pnpm type-check` — TypeScript type checking
+- `pnpm test --run` — run Vitest unit tests once
 - `pnpm lint --fix` — ESLint for TypeScript files with auto-fix (uses `@ycs77/eslint-config`)
 - `pnpm eslint [...files] --fix` — ESLint for specific files with auto-fix
 
@@ -96,11 +97,24 @@ skills/
 
 recipes/                      # Built-in recipe skill folders (top-level, included in package via `files`)
 
+test/
+├── helpers.ts                # Shared test factories (e.g. createMockParsedSpec)
+├── codegen/                  # Unit tests for codegen modules
+├── recipes/                  # Unit tests for recipe utilities
+├── spec/                     # Unit tests for OpenAPI parser and ref resolver
+└── tools/                    # Unit tests for MCP tool pure functions
+
 .apifable/
 └── recipes/                  # User-installed recipe skill folders (via init or add)
 
 apifable.config.json          # Project-level config (spec path)
 ```
+
+## Testing
+
+- Framework: Vitest
+- Scope: unit tests for pure-function modules under `src/spec`, `src/codegen`, `src/recipes`, and `src/tools`
+- Shared mocks: `test/helpers.ts`
 
 ## Config
 
