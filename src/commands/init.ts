@@ -12,6 +12,8 @@ export async function initialize(): Promise<void> {
 
   intro('apifable')
 
+  // Phase 1: Collect all user input
+
   if (await configExists()) {
     const shouldOverwrite = await confirm({ message: 'apifable.config.json already exists. Overwrite?' })
     if (isCancel(shouldOverwrite) || !shouldOverwrite) {
@@ -34,8 +36,7 @@ export async function initialize(): Promise<void> {
     process.exit(0)
   }
 
-  await writeConfig({ spec })
-
+  let selectedRecipes: string[] = []
   const recipes = await listRecipes()
   if (recipes.length > 0) {
     const selected = await multiselect({
@@ -48,21 +49,33 @@ export async function initialize(): Promise<void> {
       required: false,
     })
 
-    if (!isCancel(selected) && selected.length > 0) {
-      const recipesDir = join(process.cwd(), '.apifable', 'recipes')
-      await mkdir(recipesDir, { recursive: true })
-
-      for (const name of selected) {
-        const recipeDir = await getRecipeDir(name)
-        if (recipeDir) {
-          const destDir = join(recipesDir, name)
-          await rm(destDir, { recursive: true, force: true })
-          await cp(recipeDir, destDir, { recursive: true, force: true })
-        }
-      }
-
-      log.success(`Installed ${selected.length} recipe${selected.length > 1 ? 's' : ''} to .apifable/recipes/`)
+    if (isCancel(selected)) {
+      cancel('Cancelled.')
+      process.exit(0)
     }
+
+    selectedRecipes = selected
+  }
+
+  // Phase 2: Execute all file operations
+
+  await writeConfig({ spec })
+  log.success('Created apifable.config.json')
+
+  if (selectedRecipes.length > 0) {
+    const recipesDir = join(process.cwd(), '.apifable', 'recipes')
+    await mkdir(recipesDir, { recursive: true })
+
+    for (const name of selectedRecipes) {
+      const recipeDir = await getRecipeDir(name)
+      if (recipeDir) {
+        const destDir = join(recipesDir, name)
+        await rm(destDir, { recursive: true, force: true })
+        await cp(recipeDir, destDir, { recursive: true, force: true })
+      }
+    }
+
+    log.success(`Installed ${selectedRecipes.length} recipe${selectedRecipes.length > 1 ? 's' : ''} to .apifable/recipes/`)
   }
 
   const gitignorePath = join(process.cwd(), '.gitignore')
@@ -83,6 +96,5 @@ export async function initialize(): Promise<void> {
     log.success('Updated .gitignore')
   }
 
-  log.success('Created apifable.config.json')
   outro('Done! Next, add apifable to the MCP config for your AI agent.')
 }

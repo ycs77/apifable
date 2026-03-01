@@ -111,7 +111,7 @@ src/
 │   ├── tag-classifier.ts     # Schema-to-tag classification logic
 │   └── generate.ts           # Generator: classify → sort → convert → write files
 ├── commands/
-│   ├── init.ts               # initialize() — init command handler (includes recipe selection)
+│   ├── init.ts               # initialize() — init command handler (two-phase: collect all prompts, then execute file operations)
 │   ├── add.ts                # add(name) — install a recipe skill to .apifable/recipes/
 │   └── generate-types.ts     # generateTypes() — generate TypeScript types from spec
 └── tools/
