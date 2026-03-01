@@ -108,15 +108,31 @@ apifable 內建兩個 Agent Skill，彼此搭配使用：
 ### 範例提示詞
 
 ```
-Create a React hook for `GET /posts/{id}`
+Petstore API 有哪些端點？
 ```
 
 ```
-Create a Next.js API route for `POST /orders`
+給我看 CreateOrder 的 Schema
 ```
 
 ```
-Create a recipe for Axios fetch functions
+幫 `POST /courses` 端點建立一個 fetch 函式
+```
+
+```
+幫 `GET /posts/{id}` 建立一個 React Hook
+```
+
+```
+用 react-hook-form 和 Zod 驗證建立一個新增課程的表單
+```
+
+```
+幫 `POST /orders` 建立一個 Next.js API 路由
+```
+
+```
+建立一個用來生成 Vue Composable 的 Recipe
 ```
 
 ## MCP Tools

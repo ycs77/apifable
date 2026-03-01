@@ -108,7 +108,23 @@ apifable includes two Agent Skills that work together:
 ### Example prompts
 
 ```
+What endpoints does the Petstore API have?
+```
+
+```
+Show me the CreateOrder schema
+```
+
+```
+Create a fetch function for the `POST /courses` endpoint
+```
+
+```
 Create a React hook for `GET /posts/{id}`
+```
+
+```
+Build a form for creating a course with react-hook-form and Zod validation
 ```
 
 ```
@@ -116,7 +132,7 @@ Create a Next.js API route for `POST /orders`
 ```
 
 ```
-Create a recipe for Axios fetch functions
+Create a recipe for generating Vue composables from API endpoints
 ```
 
 ## MCP Tools

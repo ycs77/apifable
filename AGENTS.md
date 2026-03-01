@@ -1,41 +1,8 @@
 # AGENTS.md
 
-## Product Vision
+## Overview
 
-**Core Concept**: apifable is a spec-first MCP server that turns any OpenAPI specification into an AI-powered development toolkit — enabling developers to query endpoints, generate type-safe code, and customize output through recipes.
-
-### Core Capabilities
-
-1. **Spec Exploration** — Query and search OpenAPI endpoints, schemas, and metadata through MCP tools. Developers can ask natural-language questions about any API and get structured answers instantly.
-
-2. **Code Generation** — Generate production-ready TypeScript code from endpoint and schema definitions, including:
-   - Type definitions and interfaces (`generate-types` CLI command)
-   - API call functions and React hooks (`fetch-snippet`)
-   - Frontend forms with validation (`form`)
-   - Backend for Frontend route handlers (`bff`)
-
-3. **Customizable Recipes** — Define custom code generation templates (recipes) that encode team conventions, framework choices, and style preferences. Built-in recipes cover common patterns; user recipes extend them for any workflow.
-
-### Typical Usage Scenarios
-
-> Query API structure
-"What endpoints does the Course Center API have?"
-"Show me the CreateCourse schema"
-
-> Generate TypeScript types from schemas
-`apifable generate-types`
-
-> Generate API call functions
-"Create a fetch function for the Create Course endpoint"
-
-> Generate frontend forms with validation
-"Build a Create Course form with react-hook-form and Zod validation"
-
-> Generate BFF route handlers for meta-frameworks
-"Create a Next.js API route that calls the Create Course endpoint"
-
-> Create custom recipes for team conventions
-"Create a recipe for generating Vue composables from API endpoints"
+apifable is a spec-first MCP server that turns any OpenAPI specification into an AI-powered development toolkit — enabling developers to query endpoints, generate type-safe code (types, fetch snippets, forms, BFF handlers), and customize output through recipes.
 
 ## Technology Stack
 
