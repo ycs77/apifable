@@ -27,9 +27,6 @@ apifable helps AI agents work with OpenAPI specifications and generate code that
 - 🔍 **Endpoint search** — find relevant endpoints fast with keyword search and fuzzy fallback
 - 📋 **Full endpoint details** — inspect any endpoint in full detail with all `$ref`s resolved
 - 🧩 **Schema browser** — explore schemas with all references fully resolved
-- 📦 **Recipes** — install style guides that tell AI exactly how to generate your code
-- ✨ **Codegen skill** — generate typed fetch functions, React hooks, forms, and BFF route handlers from spec data
-- 🧑‍🍳 **Recipe creator skill** — create custom recipes tailored to your framework and conventions
 
 ## Installation
 
@@ -58,81 +55,12 @@ Add the following to your `.mcp.json`:
 
 For other AI agents such as Cursor and Windsurf, you can follow the same approach to configure apifable as an MCP server.
 
-## Recipes
-
-Recipes are style-guide skill folders that tell the AI how to generate code for your project. Each recipe is stored as `SKILL.md` and contains naming conventions, structural rules, and concrete code examples for a specific pattern.
-
-apifable ships with 6 built-in recipes covering the most common use cases:
-
-| Name | Type | Description |
-|------|------|-------------|
-| `fetch-ts` | `fetch-snippet` | TypeScript fetch function with typed response |
-| `fetch-react-hook` | `fetch-snippet` | React custom hook with loading/error state |
-| `form-react` | `form` | React form with react-hook-form and zod validation |
-| `nextjs-api` | `bff` | Next.js App Router API route handler with typed request and response |
-| `nuxt-api` | `bff` | Nuxt server API route with event handler and validation |
-| `astro-api` | `bff` | Astro API endpoint with typed params and response |
-
-### Recipe Commands
-
-```bash
-# Install a recipe into your project
-apifable add fetch-ts
-# → writes .apifable/recipes/fetch-ts/SKILL.md
-```
-
-Installed recipes live in `.apifable/recipes/`. You can edit them freely to match your project's conventions — variable naming, error handling style, import paths, and so on.
-
 ### Generate Types
 
 Generate TypeScript types directly from your OpenAPI spec:
 
 ```bash
 apifable generate-types
-```
-
-## Code Generation with Agent
-
-apifable includes two Agent Skills that work together:
-
-- **`apifable-codegen`** — ties the MCP server and recipes together into a full code generation workflow
-- **`apifable-recipe-creator`** — creates custom recipes tailored to your framework and conventions
-
-### Codegen workflow
-
-1. **Find a recipe** — reads `.apifable/recipes/` for installed recipe skills; no ranking is used. If multiple recipes match, you must choose one by name before generation. If none fits, use `apifable add <name>` or `/apifable-recipe-creator`
-2. **Fetch spec data** — calls `get_endpoint` or `get_schema` to get the exact types and structure needed
-3. **Generate code** — follows the recipe's rules and examples, using real spec data for accurate types and names
-4. **Write to file** — asks where to save the output, then writes it to your project
-
-### Example prompts
-
-```
-What endpoints does the Petstore API have?
-```
-
-```
-Show me the CreateOrder schema
-```
-
-```
-Create a fetch function for the `POST /courses` endpoint
-```
-
-```
-Create a React hook for `GET /posts/{id}`
-```
-
-```
-Build a form for creating a course with react-hook-form and Zod validation
-```
-
-```
-Create a Next.js API route for `POST /orders`
-```
-
-```
-Create a recipe for generating Vue composables from API endpoints
 ```
 
 ## MCP Tools
@@ -171,6 +99,28 @@ Returns the full endpoint object — parameters, requestBody, responses — with
 - `name` (string): Schema name from `components/schemas`
 
 Returns the full schema with all `$ref`s resolved. Lists available schema names on error.
+
+## Example Prompts
+
+```
+What endpoints does the Petstore API have?
+```
+
+```
+Show me the CreateOrder schema
+```
+
+```
+Search for endpoints related to "user"
+```
+
+```
+Show me the full details of `GET /pets/{petId}`
+```
+
+```
+What tags are available in this API?
+```
 
 ## Recommended Query Pattern
 

@@ -9,8 +9,7 @@
     "apifable": "./bin/apifable.js"
   },
   "files": [
-    "dist",
-    "recipes"
+    "dist"
   ],
   "engines": {
     "node": ">=22.0.0"

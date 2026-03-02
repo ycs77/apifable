@@ -2,7 +2,7 @@
 
 ## Overview
 
-apifable is a spec-first MCP server that turns any OpenAPI specification into an AI-powered development toolkit — enabling developers to query endpoints, generate type-safe code (types, fetch snippets, forms, BFF handlers), and customize output through recipes.
+apifable is a spec-first MCP server that turns any OpenAPI specification into an AI-powered development toolkit — enabling developers to query endpoints and generate type-safe code (types).
 
 ## Constraints
 
@@ -23,11 +23,6 @@ apifable is a spec-first MCP server that turns any OpenAPI specification into an
 
 - Priority: CLI flag > config > default value
 - `types.commonFileName` default: `common` (produces `common.ts`)
-
-## Recipes
-
-- Runtime path: `src/recipes/loader.ts` resolves via `join(import.meta.dirname, '..', 'recipes')` — since the bundle is at `dist/index.js`, this resolves to the top-level `recipes/`
-- Directories with invalid or missing `SKILL.md` frontmatter are silently skipped when listing
 
 ## Gotchas
 

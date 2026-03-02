@@ -67,12 +67,6 @@ export interface OpenAPIObject {
   }
 }
 
-export interface RecipeMeta {
-  name: string
-  type: 'fetch-snippet' | 'form' | 'bff'
-  description: string
-}
-
 export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K]
 }

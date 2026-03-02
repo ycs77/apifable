@@ -6,7 +6,6 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { cac } from 'cac'
 import { z } from 'zod'
 import { readCache, writeCache } from './cache/cache'
-import { add } from './commands/add'
 import { generateTypes } from './commands/generate-types'
 import { initialize } from './commands/init'
 import { readConfig } from './config/config'
@@ -164,12 +163,6 @@ cli
   .option('--output <path>', 'Output directory (default: src/types/)')
   .action(async (options: { spec?: string, output?: string }) => {
     await generateTypes(options)
-  })
-
-cli
-  .command('add <name>', 'Install a recipe skill to .apifable/recipes/')
-  .action(async (name: string) => {
-    await add(name)
   })
 
 cli.help()
