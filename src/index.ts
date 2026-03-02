@@ -12,6 +12,7 @@ import { initialize } from './commands/init'
 import { readConfig } from './config/config'
 import { loadSpecFile } from './spec/loader'
 import { buildParsedSpec } from './spec/parser'
+import { generateTypesTool } from './tools/generate-types-tool'
 import { getEndpoint } from './tools/get-endpoint'
 import { getSchema } from './tools/get-schema'
 import { getSpecInfo } from './tools/get-spec-info'
@@ -146,6 +147,32 @@ cli
       },
       ({ name }) => {
         const result = getSchema(spec, name)
+        const isError = 'isError' in result && result.isError === true
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+          isError,
+        }
+      },
+    )
+
+    server.registerTool(
+      'generate_types',
+      {
+        description: 'Generate self-contained TypeScript type declarations for specified schemas or for all schemas used by a specific endpoint. Provide either "schemas" (array of schema names) or "method" + "path" (endpoint). Transitive dependencies are included automatically.',
+        inputSchema: {
+          schemas: z.array(z.string()).optional().describe(
+            'Array of schema names from components/schemas (e.g. ["User", "Address"])',
+          ),
+          method: z.string().optional().describe(
+            'HTTP method for endpoint mode (e.g. get, post)',
+          ),
+          path: z.string().optional().describe(
+            'Endpoint path for endpoint mode (e.g. /users/{id})',
+          ),
+        },
+      },
+      ({ schemas, method, path }) => {
+        const result = generateTypesTool(spec, { schemas, method, path })
         const isError = 'isError' in result && result.isError === true
         return {
           content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],

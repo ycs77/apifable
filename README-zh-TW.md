@@ -153,6 +153,30 @@ npx apifable@latest generate-types
 
 回傳所有 `$ref` 均已解析的完整 Schema。發生錯誤時會列出可用的 Schema 名稱。
 
+### `generate_types`
+
+**輸入（擇一模式）：**
+- `schemas`（string[]，optional）：`components/schemas` 中的 Schema 名稱陣列
+- `method`（string，optional）：端點模式的 HTTP 方法（例如 `get`、`post`）
+- `path`（string，optional）：端點路徑（例如 `/users/{id}`）
+
+回傳 self-contained 的 TypeScript 宣告程式碼文字。會自動包含 transitive dependencies，且不包含 import 陳述式。
+
+模式規則：
+- 一次呼叫只能使用 `schemas` 模式或 `method` + `path` 模式其中之一
+- 不能在同一個呼叫中混用兩種模式
+- 端點模式必須同時提供 `method` 與 `path`
+
+範例 payload：
+
+```json
+{ "schemas": ["User", "Address"] }
+```
+
+```json
+{ "method": "get", "path": "/lecturers/{id}/courses" }
+```
+
 ## 為什麼
 
 當時我正在開發前端專案，配合 Claude Code 等 AI Agent 來幫助我產生程式碼，但唯獨後端的 API 部分無法和 Agent 配合得很好。需要產生對應的 API 程式碼時，似乎複製貼上是唯一的方法，但這樣既麻煩又不優雅。

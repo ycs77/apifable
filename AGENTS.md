@@ -29,3 +29,5 @@ apifable is a spec-first MCP server that turns any OpenAPI specification into an
 - `search_endpoints` defaults to `limit: 10`; max is 100
 - To force-invalidate all caches (e.g. after `ParsedSpec` shape changes), bump `CACHE_VERSION` in `src/types.ts`
 - `search_endpoints` fuzzy fallback (`minisearch`, fuzzy: `0.2`, prefix matching): response includes `matchType: "exact" | "fuzzy"`, fuzzy results include `score`
+- `generate_types` supports exactly one mode per call: either `schemas` (schema names) or `method` + `path` (endpoint); mixing modes returns an error
+- `generate_types` returns self-contained TypeScript declarations as code text (no import statements)

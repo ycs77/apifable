@@ -153,6 +153,30 @@ Returns the full endpoint object — parameters, requestBody, responses — with
 
 Returns the full schema with all `$ref`s resolved. Lists available schema names on error.
 
+### `generate_types`
+
+**Inputs (choose one mode):**
+- `schemas` (string[], optional): Array of schema names from `components/schemas`
+- `method` (string, optional): HTTP method for endpoint mode (e.g. `get`, `post`)
+- `path` (string, optional): Endpoint path for endpoint mode (e.g. `/users/{id}`)
+
+Generates self-contained TypeScript declarations as code text. It automatically includes transitive dependencies and does not include import statements.
+
+Mode rules:
+- Use either `schemas` mode, or `method` + `path` mode
+- Do not mix both modes in the same call
+- Endpoint mode requires both `method` and `path`
+
+Example payloads:
+
+```json
+{ "schemas": ["User", "Address"] }
+```
+
+```json
+{ "method": "get", "path": "/lecturers/{id}/courses" }
+```
+
 ## Why
 
 I was working on a frontend project, using AI agents like Claude Code to help me generate code — but the backend API part didn't work so well with the agent. Whenever I needed to generate the corresponding API code, copy and paste seemed to be the only option, and that was both tedious and inelegant.
