@@ -116,4 +116,85 @@ describe('schema-to-ts', () => {
     expect(output.indexOf('from \'./a\'')).toBeLessThan(output.indexOf('from \'./b\''))
     expect(output.endsWith('\n')).toBe(true)
   })
+
+  it('generates top-level nullable type alias', () => {
+    const output = schemaToTs(
+      'Foo',
+      {
+        type: 'string',
+        nullable: true,
+      },
+      {},
+    )
+
+    expect(output).toBe('export type Foo = string | null')
+  })
+
+  it('generates nullable array items in object properties', () => {
+    const output = schemaToTs(
+      'Foo',
+      {
+        type: 'object',
+        properties: {
+          items: {
+            type: 'array',
+            items: {
+              type: 'string',
+              nullable: true,
+            },
+          },
+        },
+      },
+      {},
+    )
+
+    expect(output).toContain('  items?: (string | null)[]')
+  })
+
+  it('generates nullable ref wrapped by allOf', () => {
+    const output = schemaToTs(
+      'Foo',
+      {
+        allOf: [
+          { $ref: '#/components/schemas/Bar' },
+        ],
+        nullable: true,
+      },
+      {},
+    )
+
+    expect(output).toBe('export type Foo = Bar | null')
+  })
+
+  it('generates nullable integer as number | null', () => {
+    const output = schemaToTs(
+      'Foo',
+      {
+        type: 'integer',
+        nullable: true,
+      },
+      {},
+    )
+
+    expect(output).toBe('export type Foo = number | null')
+  })
+
+  it('does not duplicate null when type array already includes null', () => {
+    const output = schemaToTs(
+      'Foo',
+      {
+        type: 'object',
+        properties: {
+          value: {
+            type: ['string', 'null'],
+            nullable: true,
+          },
+        },
+      },
+      {},
+    )
+
+    expect(output).toContain('  value?: string | null')
+    expect(output).not.toContain('  value?: string | null | null')
+  })
 })

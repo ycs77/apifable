@@ -45,7 +45,7 @@ export function schemaToTs(
     }
 
     // If all refs and at most one inline props block, use extends
-    if (refTypes.length > 0 && inlineProps.length <= 1) {
+    if (refTypes.length > 0 && inlineProps.length <= 1 && s.nullable !== true) {
       const merged = inlineProps.length === 1 ? inlineProps[0] : {}
       const props = renderProperties(merged, allSchemas)
       lines.push(`export interface ${tsName} extends ${refTypes.join(', ')} {`)
@@ -57,16 +57,7 @@ export function schemaToTs(
     }
 
     // Fallback to intersection type
-    const parts: string[] = [...refTypes]
-    for (const item of inlineProps) {
-      if (item.properties || item.additionalProperties) {
-        const props = renderProperties(item, allSchemas)
-        parts.push(`{\n${props.join('\n')}\n}`)
-      } else {
-        parts.push(resolveTypeString(item, allSchemas))
-      }
-    }
-    lines.push(`export type ${tsName} = ${parts.join(' & ') || 'unknown'}`)
+    lines.push(`export type ${tsName} = ${resolveTypeString(s, allSchemas)}`)
     return lines.join('\n')
   }
 
@@ -134,10 +125,7 @@ function renderProperties(schema: Schema, allSchemas: Record<string, unknown>): 
     }
     const optional = required.has(key) ? '' : '?'
     const tsType = resolveTypeString(prop, allSchemas)
-    // Array-type nullability (e.g. ["string", "null"]) is already handled by resolveTypeString
-    const alreadyNullableViaTypeArray = Array.isArray(prop.type) && (prop.type as string[]).includes('null')
-    const nullable = !alreadyNullableViaTypeArray && isNullable(prop) ? ' | null' : ''
-    lines.push(`  ${key}${optional}: ${tsType}${nullable}`)
+    lines.push(`  ${key}${optional}: ${tsType}`)
   }
 
   if (schema.additionalProperties === true) {
@@ -158,22 +146,27 @@ function renderProperties(schema: Schema, allSchemas: Record<string, unknown>): 
 function resolveTypeString(schema: Schema, allSchemas: Record<string, unknown>): string {
   if (!schema || typeof schema !== 'object') return 'unknown'
 
+  let baseType = 'unknown'
+
   // $ref
   if (schema.$ref) {
-    return extractRefName(schema.$ref as string)
+    baseType = extractRefName(schema.$ref as string)
+    return appendNullable(baseType, schema)
   }
 
   // allOf inline
   if (Array.isArray(schema.allOf)) {
     const parts = (schema.allOf as Schema[]).map(s => resolveTypeString(s, allSchemas))
-    return parts.join(' & ')
+    baseType = parts.join(' & ')
+    return appendNullable(baseType, schema)
   }
 
   // oneOf / anyOf inline
   if (Array.isArray(schema.oneOf) || Array.isArray(schema.anyOf)) {
     const variants = (schema.oneOf ?? schema.anyOf) as Schema[]
     const members = variants.map(v => resolveTypeString(v, allSchemas))
-    return members.length > 1 ? `(${members.join(' | ')})` : members[0]
+    baseType = members.length > 1 ? `(${members.join(' | ')})` : members[0]
+    return appendNullable(baseType, schema)
   }
 
   // Array
@@ -182,36 +175,48 @@ function resolveTypeString(schema: Schema, allSchemas: Record<string, unknown>):
     if (items) {
       const itemType = resolveTypeString(items, allSchemas)
       const needsParens = itemType.includes('|') || itemType.includes('&')
-      return needsParens ? `(${itemType})[]` : `${itemType}[]`
+      baseType = needsParens ? `(${itemType})[]` : `${itemType}[]`
+      return appendNullable(baseType, schema)
     }
-    return 'unknown[]'
+    baseType = 'unknown[]'
+    return appendNullable(baseType, schema)
   }
 
   // Primitives
   if (schema.type === 'string') {
     if (Array.isArray(schema.enum)) {
-      return (schema.enum as string[]).map(v => `'${escapeStringLiteral(v)}'`).join(' | ')
+      baseType = (schema.enum as string[]).map(v => `'${escapeStringLiteral(v)}'`).join(' | ')
+      return appendNullable(baseType, schema)
     }
-    return 'string'
+    baseType = 'string'
+    return appendNullable(baseType, schema)
   }
   if (schema.type === 'integer' || schema.type === 'number') {
     if (Array.isArray(schema.enum)) {
-      return (schema.enum as number[]).join(' | ')
+      baseType = (schema.enum as number[]).join(' | ')
+      return appendNullable(baseType, schema)
     }
-    return 'number'
+    baseType = 'number'
+    return appendNullable(baseType, schema)
   }
-  if (schema.type === 'boolean') return 'boolean'
+  if (schema.type === 'boolean') {
+    baseType = 'boolean'
+    return appendNullable(baseType, schema)
+  }
 
   // Inline object
   if (schema.type === 'object' || schema.properties) {
     const props = renderProperties(schema, allSchemas)
     if (props.length === 0) {
       if (schema.additionalProperties) {
-        return `Record<string, ${resolveTypeString(schema.additionalProperties as Schema, allSchemas)}>`
+        baseType = `Record<string, ${resolveTypeString(schema.additionalProperties as Schema, allSchemas)}>`
+        return appendNullable(baseType, schema)
       }
-      return 'Record<string, unknown>'
+      baseType = 'Record<string, unknown>'
+      return appendNullable(baseType, schema)
     }
-    return `{\n${props.join('\n')}\n}`
+    baseType = `{\n${props.join('\n')}\n}`
+    return appendNullable(baseType, schema)
   }
 
   // Type array (e.g. ["string", "null"])
@@ -220,16 +225,23 @@ function resolveTypeString(schema: Schema, allSchemas: Record<string, unknown>):
     const types = (schema.type as string[]).filter(t => t !== 'null')
     const tsTypes = types.map(t => mapPrimitiveType(t))
     const base = tsTypes.length > 1 ? tsTypes.join(' | ') : tsTypes[0] ?? 'unknown'
-    return hasNull ? `${base} | null` : base
+    baseType = hasNull ? `${base} | null` : base
+    return appendNullable(baseType, schema)
   }
 
-  return 'unknown'
+  return appendNullable(baseType, schema)
 }
 
-function isNullable(schema: Schema): boolean {
-  if (schema.nullable === true) return true
-  if (Array.isArray(schema.type) && (schema.type as string[]).includes('null')) return true
-  return false
+function appendNullable(typeString: string, schema: Schema): string {
+  const hasNullInTypeArray = Array.isArray(schema.type) && (schema.type as string[]).includes('null')
+  const shouldBeNullable = schema.nullable === true || hasNullInTypeArray
+  const alreadyNullable = /\|\s*null\b/.test(typeString)
+
+  if (shouldBeNullable && !alreadyNullable) {
+    return `${typeString} | null`
+  }
+
+  return typeString
 }
 
 function extractRefName(ref: string): string {
