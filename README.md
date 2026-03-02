@@ -4,7 +4,7 @@
 
 # apifable
 
-**Read the spec. Understand the story. Generate the code.**
+**Read the spec. Understand the API. Generate the types.**
 
 [![NPM version][ico-version]][link-npm]
 [![Software License][ico-license]](LICENSE)
@@ -18,7 +18,7 @@ English | [繁體中文](README-zh-TW.md)
 
 ## Overview
 
-apifable helps AI agents work with OpenAPI specifications and generate code that matches your project's conventions. It streamlines the workflow from reading API specs to producing typed, production-ready code — so you spend less time on repetitive boilerplate and more time building features.
+apifable helps AI agents work with OpenAPI specifications. It makes it easy to explore API structure, search endpoints, and generate TypeScript types — so your AI agent always has the context it needs to write accurate API code.
 
 ## ✨ Features
 
@@ -27,6 +27,7 @@ apifable helps AI agents work with OpenAPI specifications and generate code that
 - 🔍 **Endpoint search** — find relevant endpoints fast with keyword search and fuzzy fallback
 - 📋 **Full endpoint details** — inspect any endpoint in full detail with all `$ref`s resolved
 - 🧩 **Schema browser** — explore schemas with all references fully resolved
+- 🏷️ **TypeScript type generation** — generate type definitions directly from your OpenAPI spec
 
 ## Installation
 
@@ -135,7 +136,7 @@ What tags are available in this API?
 
 I was working on a frontend project, using AI agents like Claude Code to help me generate code — but the backend API part didn't work so well with the agent. Whenever I needed to generate the corresponding API code, copy and paste seemed to be the only option, and that was both tedious and inelegant.
 
-So I turned my attention to the OpenAPI specification. I realized it was a great format for collaborating with agents, but at the time no existing MCP tool met my standards. Some came close, but couldn't properly handle openapi.yaml files as large as 2 MB, and lacked the ability to customize code templates. So I teamed up with Claude Code to build apifable, making it easy to query API specs through AI agents and generate code that matches your project's standards.
+So I turned my attention to the OpenAPI specification. I realized it was a great format for collaborating with agents, but at the time no existing MCP tool met my standards. Some came close, but couldn't properly handle openapi.yaml files as large as 2 MB. So I teamed up with Claude Code to build apifable, making it easy to query API specs through AI agents and generate TypeScript types from them.
 
 ## Sponsor
 
