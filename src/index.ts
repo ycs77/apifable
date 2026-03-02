@@ -6,6 +6,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { cac } from 'cac'
 import { z } from 'zod'
 import { readCache, writeCache } from './cache/cache'
+import { fetchSpec } from './commands/fetch'
 import { generateTypes } from './commands/generate-types'
 import { initialize } from './commands/init'
 import { readConfig } from './config/config'
@@ -41,7 +42,7 @@ cli
       process.exit(1)
     }
 
-    const specPath = resolve(options.spec ?? config.spec)
+    const specPath = resolve(options.spec ?? config.spec.path)
 
     try {
       await access(specPath)
@@ -155,6 +156,14 @@ cli
 
     const transport = new StdioServerTransport()
     await server.connect(transport)
+  })
+
+cli
+  .command('fetch', 'Fetch OpenAPI spec from remote URL and save locally')
+  .option('--url <url>', 'OpenAPI spec URL')
+  .option('--output <path>', 'Output file path (.yaml, .yml, or .json)')
+  .action(async (options: { url?: string, output?: string }) => {
+    await fetchSpec(options)
   })
 
 cli

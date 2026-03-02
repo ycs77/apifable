@@ -56,6 +56,30 @@ npx apifable@latest init
 
 其他 AI Agent 如 Cursor、Windsurf 等，可以參考上述方式將 apifable 設定為 MCP 伺服器。
 
+### 下載 Spec
+
+`apifable fetch` 會從 `apifable.config.json` 讀取 `spec.path` 和 `spec.url`，下載並儲存規格至本地。
+
+若 API 需要驗證（私有 API），可在設定檔中加入 `spec.headers`：
+
+```json
+{
+  "spec": {
+    "path": "openapi.yaml",
+    "url": "https://example.com/openapi.yaml",
+    "headers": {
+      "Authorization": "Bearer YOUR_TOKEN"
+    }
+  }
+}
+```
+
+設定完成後，執行以下指令下載規格：
+
+```bash
+apifable fetch
+```
+
 ### 產生型別
 
 直接從 OpenAPI 規格產生 TypeScript 型別：

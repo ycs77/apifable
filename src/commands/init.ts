@@ -37,7 +37,11 @@ export async function initialize(): Promise<void> {
 
   // Phase 2: Execute all file operations
 
-  await writeConfig({ spec })
+  await writeConfig({
+    spec: {
+      path: spec,
+    },
+  })
   log.success('Created apifable.config.json')
 
   const gitignorePath = join(process.cwd(), '.gitignore')

@@ -71,8 +71,14 @@ export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K]
 }
 
+export interface ApifableSpecConfig {
+  path: string
+  url?: string
+  headers?: Record<string, string>
+}
+
 export interface ApifableConfig {
-  spec: string
+  spec: ApifableSpecConfig
   types: {
     output: string
     commonFileName: string

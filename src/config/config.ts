@@ -3,7 +3,9 @@ import { access, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
 export const defaultConfig: ApifableConfig = {
-  spec: 'openapi.yaml',
+  spec: {
+    path: 'openapi.yaml',
+  },
   types: {
     output: 'src/types/',
     commonFileName: 'common',
@@ -16,7 +18,11 @@ export function getConfigPath(cwd = process.cwd()): string {
 
 function resolveConfig(config: ApifableUserConfig): ApifableConfig {
   return {
-    spec: config.spec ?? defaultConfig.spec,
+    spec: {
+      path: config.spec?.path ?? defaultConfig.spec.path,
+      url: config.spec?.url,
+      headers: config.spec?.headers,
+    },
     types: {
       output: config.types?.output ?? defaultConfig.types.output,
       commonFileName: config.types?.commonFileName ?? defaultConfig.types.commonFileName,

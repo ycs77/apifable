@@ -56,6 +56,30 @@ Add the following to your `.mcp.json`:
 
 For other AI agents such as Cursor and Windsurf, you can follow the same approach to configure apifable as an MCP server.
 
+### Fetch Spec
+
+`apifable fetch` reads `spec.path` and `spec.url` from `apifable.config.json` to download and save the spec locally.
+
+For private APIs that require authentication, add a `spec.headers` field to your config:
+
+```json
+{
+  "spec": {
+    "path": "openapi.yaml",
+    "url": "https://example.com/openapi.yaml",
+    "headers": {
+      "Authorization": "Bearer YOUR_TOKEN"
+    }
+  }
+}
+```
+
+To fetch the spec, run:
+
+```bash
+apifable fetch
+```
+
 ### Generate Types
 
 Generate TypeScript types directly from your OpenAPI spec:

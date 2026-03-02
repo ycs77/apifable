@@ -2,7 +2,6 @@ import { resolve } from 'node:path'
 import { intro, log, outro, spinner } from '@clack/prompts'
 import { generate } from '../codegen/generate'
 import { defaultConfig, readConfig } from '../config/config'
-import { showLogo } from '../logo'
 import { loadSpecFile } from '../spec/loader'
 import { buildParsedSpec } from '../spec/parser'
 
@@ -10,14 +9,10 @@ export async function generateTypes(options: {
   spec?: string
   output?: string
 }): Promise<void> {
-  console.log()
-  showLogo()
-  console.log()
-
-  intro('apifable generate-types')
+  intro('apifable')
 
   const config = await readConfig()
-  const specPath = resolve(options.spec ?? config?.spec ?? defaultConfig.spec)
+  const specPath = resolve(options.spec ?? config?.spec.path ?? defaultConfig.spec.path)
   const outputDir = resolve(options.output ?? config?.types.output ?? defaultConfig.types.output)
   const commonFileName = config?.types.commonFileName
 
