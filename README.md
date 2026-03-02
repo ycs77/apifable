@@ -60,27 +60,66 @@ For other AI agents such as Cursor and Windsurf, you can follow the same approac
 
 ## Usage
 
-### Example Prompts
+### Quick Prompt Playbook
 
-```
-What endpoints does the Petstore API have?
-```
+Use these prompts by scenario to quickly move from API discovery to implementation.
 
-```
-Show me the CreateOrder schema
-```
-
-```
-Search for endpoints related to "user"
-```
-
-```
-Show me the full details of `GET /pets/{petId}`
-```
+#### 1. Understand the API first
 
 ```
 What tags are available in this API?
 ```
+
+```
+What endpoints does this API have for lecturers and courses?
+```
+
+#### 2. Find the endpoint you need
+
+```
+Search for endpoints related to "lecturer course list"
+```
+
+```
+List endpoints under the "Lecturer" tag
+```
+
+#### 3. Inspect request/response details
+
+```
+Show me the full details of `GET /lecturers/{id}/courses`
+```
+
+```
+Show me the schema for LecturerCourseListResponse
+```
+
+#### 4. Generate types for coding
+
+```
+Generate TypeScript types for `GET /lecturers/{id}/courses`
+```
+
+```
+Generate types for schemas: Lecturer, Course, LecturerCourseListResponse
+```
+
+#### 5. Ask for implementation directly
+
+```
+Build the lecturer's course list feature in React. Use the endpoint and schemas from this spec.
+```
+
+### Recommended Flow for Fast Development
+
+For most tasks, this sequence gives the best result:
+
+1. Start with API discovery (`get_spec_info` / `search_endpoints`)
+2. Lock the exact contract (`get_endpoint` / `get_schema`)
+3. Generate only needed types (`generate_types`)
+4. Ask the agent to implement UI or service code with those types
+
+This keeps outputs precise and avoids generating unnecessary code.
 
 ## CLI Commands
 

@@ -60,27 +60,66 @@ npx apifable@latest init
 
 ## 使用方式
 
-### 範例提示詞
+### 快速提示詞指南
 
-```
-Petstore API 有哪些端點？
-```
+可依照常見情境直接使用以下提示詞，快速從「找 API」走到「完成開發」。
 
-```
-給我看 CreateOrder 的 Schema
-```
-
-```
-搜尋和 "user" 相關的端點
-```
-
-```
-顯示 `GET /pets/{petId}` 的完整詳情
-```
+#### 1. 先掌握 API 全貌
 
 ```
 這個 API 有哪些 Tag？
 ```
+
+```
+這份規格中，和講師與課程相關的端點有哪些？
+```
+
+#### 2. 快速定位需要的端點
+
+```
+搜尋和「講師課程列表」相關的端點
+```
+
+```
+列出 Lecturer 這個 Tag 底下的所有端點
+```
+
+#### 3. 釐清 request / response 細節
+
+```
+顯示 `GET /lecturers/{id}/courses` 的完整詳情
+```
+
+```
+給我看 LecturerCourseListResponse 的 Schema
+```
+
+#### 4. 產生開發需要的型別
+
+```
+幫我為 `GET /lecturers/{id}/courses` 產生 TypeScript 型別
+```
+
+```
+幫我產生這些 schemas 的型別：Lecturer、Course、LecturerCourseListResponse
+```
+
+#### 5. 直接進入功能實作
+
+```
+幫我建立講師的課程列表功能（React），並使用這份規格中的端點與型別
+```
+
+### 推薦的快速開發流程
+
+多數情境下，建議依這個順序提問：
+
+1. 先探索 API（`get_spec_info` / `search_endpoints`）
+2. 鎖定契約細節（`get_endpoint` / `get_schema`）
+3. 只產生需要的型別（`generate_types`）
+4. 再請 Agent 產生 UI 或 service 程式碼
+
+這樣可以讓輸出更精準，也能避免產生不必要的程式碼。
 
 ## CLI 指令
 
