@@ -29,7 +29,9 @@ apifable helps AI agents work with OpenAPI specifications. It makes it easy to e
 - 🧩 **Schema browser** — explore schemas with all references fully resolved
 - 🏷️ **TypeScript type generation** — generate type definitions directly from your OpenAPI spec
 
-## Installation
+## Getting Started
+
+### Installation
 
 Run `apifable init` to set up your project configuration:
 
@@ -56,9 +58,35 @@ Add the following to your `.mcp.json`:
 
 For other AI agents such as Cursor and Windsurf, you can follow the same approach to configure apifable as an MCP server.
 
+## Usage
+
+### Example Prompts
+
+```
+What endpoints does the Petstore API have?
+```
+
+```
+Show me the CreateOrder schema
+```
+
+```
+Search for endpoints related to "user"
+```
+
+```
+Show me the full details of `GET /pets/{petId}`
+```
+
+```
+What tags are available in this API?
+```
+
+## CLI Commands
+
 ### Fetch Spec
 
-`apifable fetch` reads `spec.path` and `spec.url` from `apifable.config.json` to download and save the spec locally.
+`apifable fetch` reads `spec.path` and `spec.url` from `apifable.config.json` to download the spec locally.
 
 For private APIs that require authentication, add a `spec.headers` field to your config:
 
@@ -77,7 +105,7 @@ For private APIs that require authentication, add a `spec.headers` field to your
 To fetch the spec, run:
 
 ```bash
-apifable fetch
+npx apifable@latest fetch
 ```
 
 ### Generate Types
@@ -85,10 +113,10 @@ apifable fetch
 Generate TypeScript types directly from your OpenAPI spec:
 
 ```bash
-apifable generate-types
+npx apifable@latest generate-types
 ```
 
-## MCP Tools
+## MCP Tools Reference
 
 ### `get_spec_info`
 
@@ -124,37 +152,6 @@ Returns the full endpoint object — parameters, requestBody, responses — with
 - `name` (string): Schema name from `components/schemas`
 
 Returns the full schema with all `$ref`s resolved. Lists available schema names on error.
-
-## Example Prompts
-
-```
-What endpoints does the Petstore API have?
-```
-
-```
-Show me the CreateOrder schema
-```
-
-```
-Search for endpoints related to "user"
-```
-
-```
-Show me the full details of `GET /pets/{petId}`
-```
-
-```
-What tags are available in this API?
-```
-
-## Recommended Query Pattern
-
-```
-1. get_spec_info          → understand tags and structure
-2. search_endpoints       → find relevant endpoints by keyword
-3. get_endpoint           → fetch full details for a specific endpoint
-4. get_schema             → fetch a schema referenced in the endpoint
-```
 
 ## Why
 
