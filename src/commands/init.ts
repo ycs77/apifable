@@ -1,6 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { cancel, confirm, intro, isCancel, log, outro, text } from '@clack/prompts'
+import c from 'picocolors'
 import { configExists, defaultConfig, writeConfig } from '../config/config'
 import { showLogo } from '../logo'
 
@@ -9,7 +10,7 @@ export async function initialize(): Promise<void> {
   showLogo()
   console.log()
 
-  intro('apifable')
+  intro(c.bgBlue(' apifable '))
 
   // Phase 1: Collect all user input
 
@@ -77,5 +78,29 @@ export async function initialize(): Promise<void> {
     log.success('Updated .gitignore')
   }
 
-  outro('Done! Next, add apifable to the MCP config for your AI agent.')
+  log.message(
+    [
+      c.bold('Next steps:'),
+      '',
+      `${c.bold(c.cyan('1.'))} ${c.bold('Prepare your spec')}`,
+      `   Run ${c.cyan('`npx apifable fetch`')} to download the OpenAPI spec locally.`,
+      `   You can also run ${c.cyan('`npx apifable fetch --types`')} to fetch and`,
+      '   generate TypeScript types in one step.',
+      '',
+      `${c.bold(c.cyan('2.'))} ${c.bold('Set up MCP')}`,
+      '   Add apifable to your AI agent\'s MCP config',
+      `   (e.g. ${c.cyan('.mcp.json')} for Claude Code):`,
+      '',
+      c.dim('   {'),
+      c.dim('     "mcpServers": {'),
+      c.dim('       "apifable": {'),
+      c.dim('         "command": "npx",'),
+      c.dim('         "args": ["-y", "apifable@latest", "mcp"]'),
+      c.dim('       }'),
+      c.dim('     }'),
+      c.dim('   }'),
+    ].join('\n'),
+  )
+
+  outro('Done!')
 }

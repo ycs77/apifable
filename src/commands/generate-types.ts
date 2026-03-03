@@ -1,5 +1,6 @@
 import { resolve } from 'node:path'
 import { intro, log, outro, spinner } from '@clack/prompts'
+import c from 'picocolors'
 import { generate } from '../codegen/generate'
 import { defaultConfig, readConfig } from '../config/config'
 import { loadSpecFile } from '../spec/loader'
@@ -41,18 +42,18 @@ export async function loadAndGenerateTypes(ctx: LoadAndGenerateTypesContext): Pr
   s.stop('Types generated')
 
   for (const file of result.files) {
-    log.success(`${file.path} (${file.schemaCount} types)`)
+    log.success(`${c.cyan(file.path)} ${c.dim(`(${file.schemaCount} types)`)}`)
   }
 
   const totalTypes = result.files.reduce((sum, f) => sum + f.schemaCount, 0)
-  log.info(`Generated ${totalTypes} types across ${result.files.length} files.`)
+  log.info(`Generated ${c.bold(String(totalTypes))} types across ${c.bold(String(result.files.length))} files.`)
 }
 
 export async function generateTypes(options: {
   spec?: string
   output?: string
 }): Promise<void> {
-  intro('apifable')
+  intro(c.bgBlue(' apifable generate-types '))
 
   const config = await readConfig()
   const specPath = resolve(options.spec ?? config?.spec.path ?? defaultConfig.spec.path)

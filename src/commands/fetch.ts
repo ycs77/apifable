@@ -2,6 +2,7 @@ import type { OpenAPIObject } from '../types'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, extname, resolve } from 'node:path'
 import { intro, log, outro, spinner } from '@clack/prompts'
+import c from 'picocolors'
 import { parse, stringify } from 'yaml'
 import { defaultConfig, readConfig } from '../config/config'
 import { loadAndGenerateTypes } from './generate-types'
@@ -87,7 +88,7 @@ export async function fetchAndWriteSpec(options: FetchOptions): Promise<{ output
 }
 
 export async function fetchSpec(options: FetchOptions): Promise<void> {
-  intro('apifable')
+  intro(c.bgBlue(' apifable fetch '))
 
   const s = spinner()
   s.start('Downloading OpenAPI spec...')
@@ -98,9 +99,9 @@ export async function fetchSpec(options: FetchOptions): Promise<void> {
     if (result.sourceFormat === result.targetFormat) {
       s.stop('Spec downloaded and saved')
     } else {
-      s.stop(`Spec downloaded, converted ${result.sourceFormat.toUpperCase()} -> ${result.targetFormat.toUpperCase()}, and saved`)
+      s.stop(`Spec downloaded, converted ${c.bold(result.sourceFormat.toUpperCase())} -> ${c.bold(result.targetFormat.toUpperCase())}, and saved`)
     }
-    log.success(`Saved to ${result.outputPath}`)
+    log.success(`Saved to ${c.cyan(result.outputPath)}`)
   } catch (err) {
     s.stop('Failed to fetch spec')
     log.error((err as Error).message)
