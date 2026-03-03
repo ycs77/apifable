@@ -18,7 +18,7 @@ English | [繁體中文](README-zh-TW.md)
 
 ## Overview
 
-apifable helps AI agents work with OpenAPI specifications. It makes it easy to explore API structure, search endpoints, and generate TypeScript types — so your AI agent always has the context it needs to write accurate API code.
+apifable helps AI agents work with OpenAPI 3.0/3.1 specifications. It makes it easy to explore API structure, search endpoints, and generate TypeScript types — so your AI agent always has the context it needs to write accurate API code.
 
 ## ✨ Features
 
@@ -179,9 +179,9 @@ Keyword search across operationId, path, summary, and description. Results are r
 
 ### `get_endpoint`
 
-**Inputs:**
-- `method` (string): HTTP method (e.g. `get`, `post`)
-- `path` (string): Endpoint path (e.g. `/users/{id}`)
+**Inputs (choose one):**
+- `method` (string) + `path` (string): HTTP method and endpoint path (e.g. `get` + `/users/{id}`)
+- `operationId` (string): Operation ID (e.g. `listUsers`)
 
 Returns the full endpoint object — parameters, requestBody, responses — with all `$ref`s resolved inline.
 
@@ -195,16 +195,15 @@ Returns the full schema with all `$ref`s resolved. Lists available schema names 
 ### `generate_types`
 
 **Inputs (choose one mode):**
-- `schemas` (string[], optional): Array of schema names from `components/schemas`
-- `method` (string, optional): HTTP method for endpoint mode (e.g. `get`, `post`)
-- `path` (string, optional): Endpoint path for endpoint mode (e.g. `/users/{id}`)
+- `schemas` (string[]): Array of schema names from `components/schemas`
+- `method` (string) + `path` (string): HTTP method and endpoint path
+- `operationId` (string): Operation ID (e.g. `listUsers`)
 
 Generates self-contained TypeScript declarations as code text. It automatically includes transitive dependencies and does not include import statements.
 
 Mode rules:
-- Use either `schemas` mode, or `method` + `path` mode
-- Do not mix both modes in the same call
-- Endpoint mode requires both `method` and `path`
+- Use exactly one mode per call: `schemas`, `method` + `path`, or `operationId`
+- Do not mix modes in the same call
 
 Example payloads:
 
@@ -214,6 +213,10 @@ Example payloads:
 
 ```json
 { "method": "get", "path": "/lecturers/{id}/courses" }
+```
+
+```json
+{ "operationId": "listUsers" }
 ```
 
 ## Why
@@ -235,6 +238,10 @@ If you think this package has helped you, please consider [Becoming a sponsor](h
 <a href="https://www.patreon.com/ycs77">
   <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patron" />
 </a>
+
+## Credits
+
+- [@reapi/mcp-openapi](https://github.com/ReAPI-com/mcp-openapi) — for the initial inspiration
 
 ## License
 

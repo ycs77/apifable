@@ -18,7 +18,7 @@
 
 ## 概覽
 
-apifable 幫助 AI Agent 讀取 OpenAPI 規格。輕鬆探索 API 結構、搜尋端點、生成 TypeScript 型別——讓你的 AI Agent 隨時掌握所需的上下文，寫出準確的 API 程式碼。
+apifable 幫助 AI Agent 讀取 OpenAPI 3.0/3.1 規格。輕鬆探索 API 結構、搜尋端點、生成 TypeScript 型別——讓你的 AI Agent 隨時掌握所需的上下文，寫出準確的 API 程式碼。
 
 ## ✨ 功能特色
 
@@ -179,9 +179,9 @@ npx apifable@latest generate-types
 
 ### `get_endpoint`
 
-**輸入：**
-- `method`（string）：HTTP 方法（例如 `get`、`post`）
-- `path`（string）：端點路徑（例如 `/users/{id}`）
+**輸入（擇一）：**
+- `method`（string）+ `path`（string）：HTTP 方法與端點路徑（例如 `get` + `/users/{id}`）
+- `operationId`（string）：Operation ID（例如 `listUsers`）
 
 回傳完整的端點物件——參數、請求體、回應——所有 `$ref` 均已內聯解析。
 
@@ -195,16 +195,15 @@ npx apifable@latest generate-types
 ### `generate_types`
 
 **輸入（擇一模式）：**
-- `schemas`（string[]，optional）：`components/schemas` 中的 Schema 名稱陣列
-- `method`（string，optional）：端點模式的 HTTP 方法（例如 `get`、`post`）
-- `path`（string，optional）：端點路徑（例如 `/users/{id}`）
+- `schemas`（string[]）：`components/schemas` 中的 Schema 名稱陣列
+- `method`（string）+ `path`（string）：HTTP 方法與端點路徑
+- `operationId`（string）：Operation ID（例如 `listUsers`）
 
 回傳 self-contained 的 TypeScript 宣告程式碼文字。會自動包含 transitive dependencies，且不包含 import 陳述式。
 
 模式規則：
-- 一次呼叫只能使用 `schemas` 模式或 `method` + `path` 模式其中之一
-- 不能在同一個呼叫中混用兩種模式
-- 端點模式必須同時提供 `method` 與 `path`
+- 一次呼叫只能使用一種模式：`schemas`、`method` + `path`、或 `operationId`
+- 不能在同一個呼叫中混用不同模式
 
 範例 payload：
 
@@ -214,6 +213,10 @@ npx apifable@latest generate-types
 
 ```json
 { "method": "get", "path": "/lecturers/{id}/courses" }
+```
+
+```json
+{ "operationId": "listUsers" }
 ```
 
 ## 為什麼
@@ -235,6 +238,10 @@ npx apifable@latest generate-types
 <a href="https://www.patreon.com/ycs77">
   <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patron" />
 </a>
+
+## Credits
+
+- [@reapi/mcp-openapi](https://github.com/ReAPI-com/mcp-openapi) — 最初的靈感來源
 
 ## License
 
