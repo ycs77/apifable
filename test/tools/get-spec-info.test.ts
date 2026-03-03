@@ -10,6 +10,8 @@ describe('getSpecInfo', () => {
         version: '2.0.0',
         description: 'Store description',
         servers: ['https://store.example.com'],
+        security: [],
+        securitySchemes: [],
       },
       tags: [
         { name: 'orders', description: 'Order endpoints', endpointCount: 3 },
@@ -26,6 +28,30 @@ describe('getSpecInfo', () => {
       tags: [
         { name: 'orders', description: 'Order endpoints', endpointCount: 3 },
       ],
+    })
+  })
+
+  it('includes security schemes when present', () => {
+    const spec = createMockParsedSpec({
+      info: {
+        title: 'Secure API',
+        version: '1.0.0',
+        description: '',
+        servers: [],
+        security: [{ http: [] }],
+        securitySchemes: [
+          { name: 'http', type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+        ],
+      },
+    })
+
+    const result = getSpecInfo(spec)
+
+    expect(result).toMatchObject({
+      securitySchemes: [
+        { name: 'http', type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      ],
+      security: [{ http: [] }],
     })
   })
 })

@@ -45,7 +45,7 @@ export function getEndpoint(spec: ParsedSpec, input: GetEndpointInput) {
     operation = op
   }
 
-  return {
+  const result: Record<string, unknown> = {
     method: normalizedMethod,
     path,
     operationId: operation.operationId ?? '',
@@ -56,4 +56,12 @@ export function getEndpoint(spec: ParsedSpec, input: GetEndpointInput) {
     requestBody: resolveRefs(operation.requestBody, spec.rawSpec),
     responses: resolveRefs(operation.responses, spec.rawSpec),
   }
+
+  if (operation.security !== undefined) {
+    result.security = operation.security
+  } else if (spec.rawSpec.security !== undefined) {
+    result.security = spec.rawSpec.security
+  }
+
+  return result
 }

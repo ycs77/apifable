@@ -1,7 +1,7 @@
 import type { ParsedSpec } from '../types'
 
 export function getSpecInfo(spec: ParsedSpec) {
-  return {
+  const result: Record<string, unknown> = {
     title: spec.info.title,
     version: spec.info.version,
     description: spec.info.description,
@@ -12,4 +12,14 @@ export function getSpecInfo(spec: ParsedSpec) {
       endpointCount: t.endpointCount,
     })),
   }
+
+  if (spec.info.securitySchemes.length > 0) {
+    result.securitySchemes = spec.info.securitySchemes
+  }
+
+  if (spec.info.security.length > 0) {
+    result.security = spec.info.security
+  }
+
+  return result
 }

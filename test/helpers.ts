@@ -64,6 +64,8 @@ export function createMockParsedSpec(overrides: Partial<ParsedSpec> = {}): Parse
       version: '1.0.0',
       description: 'Mock description',
       servers: ['https://api.example.com'],
+      security: [],
+      securitySchemes: [],
     },
     tags: [createMockTag()],
     endpointIndex: [createMockEndpoint()],

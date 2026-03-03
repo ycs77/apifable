@@ -1,13 +1,31 @@
-import type { EndpointEntry, HttpMethod, OpenAPIObject, ParsedSpec, SpecInfo, TagInfo } from '../types'
+import type { EndpointEntry, HttpMethod, OpenAPIObject, ParsedSpec, SecuritySchemeInfo, SpecInfo, TagInfo } from '../types'
 
 const HTTP_METHODS: HttpMethod[] = ['get', 'post', 'put', 'patch', 'delete', 'head', 'options', 'trace']
 
 export function buildParsedSpec(raw: OpenAPIObject): ParsedSpec {
+  const securitySchemes: SecuritySchemeInfo[] = Object.entries(
+    raw.components?.securitySchemes ?? {},
+  ).map(([name, scheme]) => {
+    const result: SecuritySchemeInfo = {
+      name,
+      type: scheme.type,
+    }
+    if (scheme.scheme) result.scheme = scheme.scheme
+    if (scheme.bearerFormat) result.bearerFormat = scheme.bearerFormat
+    if (scheme.description) result.description = scheme.description
+    if (scheme.in) result.in = scheme.in
+    if (scheme.openIdConnectUrl) result.openIdConnectUrl = scheme.openIdConnectUrl
+    if (scheme.flows) result.flowTypes = Object.keys(scheme.flows)
+    return result
+  })
+
   const info: SpecInfo = {
     title: raw.info?.title ?? '',
     version: raw.info?.version ?? '',
     description: raw.info?.description ?? '',
     servers: (raw.servers ?? []).map(s => s.url ?? '').filter(Boolean),
+    security: raw.security ?? [],
+    securitySchemes,
   }
 
   const endpointIndex: EndpointEntry[] = []

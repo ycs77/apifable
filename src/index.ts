@@ -80,7 +80,7 @@ cli
     server.registerTool(
       'get_spec_info',
       {
-        description: 'Get general information about the OpenAPI spec: title, version, description, servers, and available tags with endpoint counts.',
+        description: 'Get general information about the OpenAPI spec: title, version, description, servers, security schemes, and available tags with endpoint counts. Start here to understand an unfamiliar API. Then use list_endpoints_by_tag or search_endpoints to explore specific areas.',
       },
       () => {
         const result = getSpecInfo(spec)
@@ -91,21 +91,25 @@ cli
     server.registerTool(
       'list_endpoints_by_tag',
       {
-        description: 'List all endpoints belonging to a specific tag.',
+        description: 'List all endpoints belonging to a specific tag. Use get_spec_info first to see available tags. Then use get_endpoint to inspect a specific endpoint in detail.',
         inputSchema: {
           tag: z.string().describe('The tag name to filter endpoints by'),
         },
       },
       ({ tag }) => {
         const result = listEndpointsByTag(spec, tag)
-        return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
+        const isError = 'isError' in result && result.isError === true
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+          isError,
+        }
       },
     )
 
     server.registerTool(
       'search_endpoints',
       {
-        description: 'Search endpoints by keyword across operationId, path, summary, and description. Results are ranked by relevance. If no exact matches are found, automatically falls back to fuzzy search. The response includes a matchType field ("exact" or "fuzzy"); fuzzy results also include a score field per result.',
+        description: 'Search endpoints by keyword across operationId, path, summary, and description. Results are ranked by relevance. If no exact matches are found, automatically falls back to fuzzy search. The response includes a matchType field ("exact" or "fuzzy"); fuzzy results also include a score field per result. After finding the target endpoint, use get_endpoint for full details or generate_types for TypeScript types.',
         inputSchema: {
           query: z.string().min(1).describe('Search keyword'),
           tag: z.string().optional().describe('Optional tag to filter results'),
@@ -121,7 +125,7 @@ cli
     server.registerTool(
       'get_endpoint',
       {
-        description: 'Get full details of a specific endpoint including parameters, request body, and responses. All $refs are resolved. Provide either "method" + "path" or "operationId".',
+        description: 'Get full details of a specific endpoint including parameters, request body, responses, and security requirements. All $refs are resolved. Provide either "method" + "path" or "operationId". Use generate_types to get TypeScript type declarations for the endpoint.',
         inputSchema: {
           method: z.string().optional().describe('HTTP method (e.g. get, post, put, delete)'),
           path: z.string().optional().describe('Endpoint path (e.g. /users/{id})'),
@@ -144,7 +148,7 @@ cli
     server.registerTool(
       'get_schema',
       {
-        description: 'Get a specific schema from components/schemas by name. All $refs are resolved.',
+        description: 'Get a specific schema from components/schemas by name. All $refs are resolved. Use generate_types to convert schemas to TypeScript type declarations.',
         inputSchema: {
           name: z.string().describe('Schema name (e.g. User, CreateOrderRequest)'),
         },

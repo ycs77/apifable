@@ -154,7 +154,16 @@ export function generateTypesTool(
   }))
   const code = generateFileContent(schemas, spec.schemas)
 
-  return { code }
+  const headerLines: string[] = []
+  if (hasSchemas) {
+    headerLines.push(`// Generated from schemas: ${rootSchemaNames.join(', ')}`)
+  } else if (hasOperationId) {
+    headerLines.push(`// Generated from endpoint: ${input.operationId}`)
+  } else {
+    headerLines.push(`// Generated from endpoint: ${input.method!.toUpperCase()} ${input.path}`)
+  }
+
+  return { code: `${headerLines.join('\n')}\n\n${code}` }
 }
 
 function findMissingSchemas(

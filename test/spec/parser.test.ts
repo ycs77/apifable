@@ -54,6 +54,8 @@ describe('buildParsedSpec', () => {
       version: '2.1.0',
       description: 'Demo description',
       servers: ['https://api.demo.dev'],
+      security: [],
+      securitySchemes: [],
     })
 
     expect(parsed.endpointIndex).toHaveLength(3)
@@ -93,6 +95,8 @@ describe('buildParsedSpec', () => {
       version: '',
       description: '',
       servers: [],
+      security: [],
+      securitySchemes: [],
     })
     expect(parsed.tags).toEqual([])
     expect(parsed.endpointIndex).toEqual([])

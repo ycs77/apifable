@@ -1,6 +1,15 @@
 import type { ParsedSpec } from '../types'
 
 export function listEndpointsByTag(spec: ParsedSpec, tag: string) {
+  const tagExists = spec.tags.some(t => t.name === tag)
+  if (!tagExists) {
+    return {
+      isError: true,
+      message: `Tag '${tag}' not found.`,
+      availableTags: spec.tags.map(t => t.name),
+    }
+  }
+
   const endpoints = spec.endpointIndex
     .filter(e => e.tags.includes(tag))
     .map(e => ({
@@ -8,6 +17,7 @@ export function listEndpointsByTag(spec: ParsedSpec, tag: string) {
       path: e.path,
       operationId: e.operationId,
       summary: e.summary,
+      description: e.description,
     }))
 
   const result: {

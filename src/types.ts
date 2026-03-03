@@ -1,8 +1,21 @@
+export interface SecuritySchemeInfo {
+  name: string
+  type: string
+  scheme?: string
+  bearerFormat?: string
+  description?: string
+  in?: string
+  openIdConnectUrl?: string
+  flowTypes?: string[]
+}
+
 export interface SpecInfo {
   title: string
   version: string
   description: string
   servers: string[]
+  security: Record<string, string[]>[]
+  securitySchemes: SecuritySchemeInfo[]
 }
 
 export interface TagInfo {
@@ -62,8 +75,10 @@ export interface OpenAPIObject {
     description?: string
   }[]
   paths?: Record<string, PathItemObject>
+  security?: Record<string, string[]>[]
   components?: {
     schemas?: Record<string, unknown>
+    securitySchemes?: Record<string, SecuritySchemeObject>
   }
 }
 
@@ -89,6 +104,17 @@ export type ApifableUserConfig = DeepPartial<ApifableConfig>
 
 export type HttpMethod = 'get' | 'post' | 'put' | 'patch' | 'delete' | 'head' | 'options' | 'trace'
 
+export interface SecuritySchemeObject {
+  type: string
+  description?: string
+  name?: string
+  in?: string
+  scheme?: string
+  bearerFormat?: string
+  openIdConnectUrl?: string
+  flows?: Record<string, { scopes?: Record<string, string> }>
+}
+
 export interface OperationObject {
   operationId?: string
   summary?: string
@@ -97,6 +123,7 @@ export interface OperationObject {
   parameters?: unknown[]
   requestBody?: unknown
   responses?: Record<string, unknown>
+  security?: Record<string, string[]>[]
 }
 
 export type PathItemObject = {
