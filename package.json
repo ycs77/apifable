@@ -5,6 +5,22 @@
   "packageManager": "pnpm@10.30.2",
   "description": "Explore any OpenAPI spec and generate types from it. Built for AI agents.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ycs77/apifable.git"
+  },
+  "keywords": [
+    "openapi",
+    "modelcontextprotocol",
+    "mcp",
+    "types",
+    "typescript",
+    "ai",
+    "agent",
+    "agentic",
+    "llm",
+    "api"
+  ],
   "bin": {
     "apifable": "./bin/apifable.js"
   },
