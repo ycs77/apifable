@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { cancel, confirm, intro, isCancel, log, outro, text } from '@clack/prompts'
-import { configExists, writeConfig } from '../config/config'
+import { configExists, defaultConfig, writeConfig } from '../config/config'
 import { showLogo } from '../logo'
 
 export async function initialize(): Promise<void> {
@@ -35,11 +35,26 @@ export async function initialize(): Promise<void> {
     process.exit(0)
   }
 
+  const specUrl = await text({
+    message: 'URL to fetch OpenAPI spec from (optional, press Enter to skip):',
+    placeholder: 'e.g. https://api.example.com/openapi.yaml',
+  })
+
+  if (isCancel(specUrl)) {
+    cancel('Cancelled.')
+    process.exit(0)
+  }
+
   // Phase 2: Execute all file operations
 
   await writeConfig({
     spec: {
       path: spec,
+      ...(specUrl && { url: specUrl }),
+    },
+    types: {
+      output: defaultConfig.types.output,
+      commonFileName: defaultConfig.types.commonFileName,
     },
   })
   log.success('Created apifable.config.json')

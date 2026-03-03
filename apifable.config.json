@@ -1,5 +1,7 @@
 {
-  "spec": "fixtures/openapi.yaml",
+  "spec": {
+    "path": "fixtures/openapi.yaml"
+  },
   "types": {
     "output": "src/types/",
     "commonFileName": "common"
