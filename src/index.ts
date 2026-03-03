@@ -5,6 +5,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { cac } from 'cac'
 import { z } from 'zod'
+import { version } from '../package.json' with { type: 'json' }
 import { readCache, writeCache } from './cache/cache'
 import { fetchSpec } from './commands/fetch'
 import { generateTypes } from './commands/generate-types'
@@ -75,7 +76,7 @@ cli
 
     const server = new McpServer({
       name: 'apifable',
-      version: '0.4.0',
+      version,
     })
 
     server.registerTool(
@@ -230,4 +231,5 @@ cli
   })
 
 cli.help()
+cli.version(version)
 cli.parse()
