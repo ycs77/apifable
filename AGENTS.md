@@ -1,13 +1,9 @@
 # AGENTS.md
 
-## Overview
-
-apifable is a spec-first MCP server that turns any OpenAPI specification into an AI-powered development toolkit — enabling developers to query endpoints and generate type-safe code (types).
-
 ## Constraints
 
 - Node.js v22+, Zod v4
-- MCP SDK protocol version `2025-11-25` (stable; SDK 1.27+ also ships a `DRAFT-2026-v1` spec type)
+- MCP SDK protocol version `2025-11-25` (stable)
 - Bundler is `tsdown` (not tsc)
 - TypeScript formatting: 2 spaces, single quotes, no semicolons, trailing commas
 
