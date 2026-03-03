@@ -20,6 +20,10 @@
 - Priority: CLI flag > config > default value
 - `types.commonFileName` default: `common` (produces `common.ts`)
 
+## Testing
+
+- Only test pure functions; skip tests for MCP handlers, filesystem (fs), and CLI code
+
 ## Gotchas
 
 - `search_endpoints` defaults to `limit: 10`; max is 100
