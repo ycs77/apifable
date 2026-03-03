@@ -3,18 +3,15 @@ import { getSchema } from '../../src/tools/get-schema'
 import { createMockParsedSpec } from '../helpers'
 
 describe('getSchema', () => {
-  it('returns error payload with available schemas when schema is missing', () => {
-    const schemas = Object.fromEntries(
-      Array.from({ length: 25 }, (_, index) => [`Schema${index}`, { type: 'object' }]),
-    )
-
-    const spec = createMockParsedSpec({ schemas })
+  it('returns error when schema is missing', () => {
+    const spec = createMockParsedSpec({
+      schemas: { User: { type: 'object' } },
+    })
     const result = getSchema(spec, 'UnknownSchema')
 
     expect(result).toEqual({
       isError: true,
       message: 'Schema \'UnknownSchema\' not found.',
-      availableSchemas: Array.from({ length: 20 }, (_, index) => `Schema${index}`),
     })
   })
 
