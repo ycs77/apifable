@@ -223,9 +223,9 @@ npx apifable@latest generate-types
 
 ## 為什麼
 
-當時我正在開發前端專案，配合 Claude Code 等 AI Agent 來幫助我產生程式碼，但唯獨後端的 API 部分無法和 Agent 配合得很好。需要產生對應的 API 程式碼時，似乎複製貼上是唯一的方法，但這樣既麻煩又不優雅。
+當我使用 Claude Code 等 AI Agent 協助開發前端專案時，發現後端 API 的整合始終是一大痛點。每當需要產生對應的 API 程式碼，往往只能手動複製貼上 API 路徑與參數來讓 Agent 理解，過程既繁瑣又不夠優雅。
 
-於是我把注意力轉向了 OpenAPI 協定，我發現這是一個很適合和 Agent 協作的格式，但當時都沒有一個 MCP 工具可以達到我的標準。有些工具接近我的需求，但無法正常讀取高達 2MB 的 openapi.yaml 檔案。因此我和 Claude Code 合作，打造了 apifable，可以輕鬆地透過 AI Agent 查詢 API 規格，並從中生成 TypeScript 型別。
+於是我將注意力轉向 OpenAPI 協定，發現這是一個非常適合與 Agent 協作的格式。然而，當時市面上並沒有任何 MCP 工具能達到我期望的標準：有些套件雖然功能接近，卻無法正常讀取高達 2MB 的 openapi.yaml 檔案；有些則是與 Agent 協作的體驗不夠流暢。因此，我透過 Claude Code 來 Vibe Coding 開發了 apifable，讓開發者能輕鬆透過 AI Agent 查詢 API 規格並精確產生 TypeScript 型別。
 
 ## 贊助
 

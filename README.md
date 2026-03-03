@@ -223,9 +223,9 @@ Example payloads:
 
 ## Why
 
-I was working on a frontend project, using AI agents like Claude Code to help me generate code — but the backend API part didn't work so well with the agent. Whenever I needed to generate the corresponding API code, copy and paste seemed to be the only option, and that was both tedious and inelegant.
+While using AI agents like Claude Code to assist in frontend development, I realized that backend API integration remained a major pain point. Whenever I needed to generate corresponding API code, I often had to manually copy and paste API paths and parameters for the agent to understand—a process that was both tedious and inelegant.
 
-So I turned my attention to the OpenAPI specification. I realized it was a great format for collaborating with agents, but at the time no existing MCP tool met my standards. Some came close, but couldn't properly handle openapi.yaml files as large as 2 MB. So I teamed up with Claude Code to build apifable, making it easy to query API specs through AI agents and generate TypeScript types from them.
+So I turned my attention to the OpenAPI specification and found it to be a format perfectly suited for AI collaboration. However, no existing MCP tool met my standards at the time: some were close in functionality but couldn't handle large `openapi.yaml` files (up to 2MB), while others offered a clunky experience. I decided to build **apifable** via "Vibe Coding" with Claude Code, making it easy to query API specs through AI agents and generate precise TypeScript types.
 
 ## Sponsor
 
