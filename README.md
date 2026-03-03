@@ -18,16 +18,15 @@ English | [繁體中文](README-zh-TW.md)
 
 ## Overview
 
-apifable helps AI agents work with OpenAPI 3.0/3.1 specifications. It makes it easy to explore API structure, search endpoints, and generate TypeScript types — so your AI agent always has the context it needs to write accurate API code.
+apifable helps AI agents work with OpenAPI specifications. It makes it easy to explore API structure, search endpoints, and generate TypeScript types — so your AI agent always has the context it needs to write accurate API code.
 
 ## ✨ Features
 
-- 🤖 **MCP server** — plug into AI agents like Claude out of the box
-- 🗺️ **Spec overview** — get a clear summary of any API's structure and available endpoints
-- 🔍 **Endpoint search** — find relevant endpoints fast with keyword search and fuzzy fallback
-- 📋 **Full endpoint details** — inspect any endpoint in full detail with all `$ref`s resolved
-- 🧩 **Schema browser** — explore schemas with all references fully resolved
-- 🏷️ **TypeScript type generation** — generate type definitions directly from your OpenAPI spec
+- 📦 **OpenAPI 3.0 / 3.1** — works with any standard OpenAPI spec
+- 🤖 **MCP server** — plug into AI agents like Claude, Cursor, and Windsurf
+- 🔍 **API exploration** — browse endpoints, search by keyword, and inspect full request/response details
+- 🏷️ **TypeScript type generation** — generate ready-to-use type definitions from your spec
+- ⚡ **One-command workflow** — fetch your spec and generate types in a single step
 
 ## Getting Started
 

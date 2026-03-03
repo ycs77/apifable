@@ -18,16 +18,15 @@
 
 ## 概覽
 
-apifable 幫助 AI Agent 讀取 OpenAPI 3.0/3.1 規格。輕鬆探索 API 結構、搜尋端點、生成 TypeScript 型別——讓你的 AI Agent 隨時掌握所需的上下文，寫出準確的 API 程式碼。
+apifable 幫助 AI Agent 讀取 OpenAPI 規格。輕鬆探索 API 結構、搜尋 Endpoint、生成 TypeScript 型別——讓你的 AI Agent 隨時掌握所需的上下文，寫出準確的 API 程式碼。
 
 ## ✨ 功能特色
 
-- 🤖 **MCP 伺服器** — 開箱即用，直接接入 Claude 等 AI 代理
-- 🗺️ **規格概覽** — 清晰呈現任何 API 的結構與可用端點
-- 🔍 **端點搜尋** — 透過關鍵字搜尋快速定位相關端點，並支援模糊搜尋
-- 📋 **完整端點詳情** — 查看任意端點的完整資訊，所有 `$ref` 均已內聯解析
-- 🧩 **Schema 瀏覽器** — 瀏覽所有參考均已完整解析的 Schema
-- 🏷️ **TypeScript 型別生成** — 直接從 OpenAPI 規格生成型別定義
+- 📦 **OpenAPI 3.0 / 3.1** — 支援任何標準 OpenAPI 規格
+- 🤖 **MCP 伺服器** — 直接接入 Claude、Cursor、Windsurf 等 AI 代理
+- 🔍 **API 探索** — 瀏覽 Endpoint、關鍵字搜尋、查看完整的 request/response 細節
+- 🏷️ **TypeScript 型別生成** — 從規格直接產生可用的型別定義
+- ⚡ **一條指令搞定** — 一個指令即可下載規格並產生型別
 
 ## 開始使用
 
@@ -105,17 +104,17 @@ npx apifable@latest generate-types
 ```
 
 ```
-這份規格中，和講師與課程相關的端點有哪些？
+這份規格中，和講師與課程相關的 Endpoint 有哪些？
 ```
 
-### 快速定位需要的端點
+### 快速定位需要的 Endpoint
 
 ```
-搜尋和「講師課程列表」相關的端點
+搜尋和「講師課程列表」相關的 Endpoint
 ```
 
 ```
-列出 Lecturer 這個 Tag 底下的所有端點
+列出 Lecturer 這個 Tag 底下的所有 Endpoint
 ```
 
 ### 釐清 request / response 細節
@@ -141,7 +140,7 @@ npx apifable@latest generate-types
 ### 直接進入功能實作
 
 ```
-幫我建立講師的課程列表功能（React），並使用這份規格中的端點與型別
+幫我建立講師的課程列表功能（React），並使用這份規格中的 Endpoint 與型別
 ```
 
 ### 推薦的快速開發流程
@@ -159,14 +158,14 @@ npx apifable@latest generate-types
 
 ### `get_spec_info`
 
-回傳 API 的標題、版本、描述、伺服器列表，以及所有 Tag 與其端點數量。探索陌生規格時，建議從這裡開始。
+回傳 API 的標題、版本、描述、伺服器列表，以及所有 Tag 與其 Endpoint 數量。探索陌生規格時，建議從這裡開始。
 
 ### `list_endpoints_by_tag`
 
 **輸入：**
 - `tag`（string）：要篩選的 Tag 名稱
 
-回傳屬於指定 Tag 的所有端點。當結果超過 30 筆時會顯示警告。
+回傳屬於指定 Tag 的所有 Endpoint。當結果超過 30 筆時會顯示警告。
 
 ### `search_endpoints`
 
@@ -180,10 +179,10 @@ npx apifable@latest generate-types
 ### `get_endpoint`
 
 **輸入（擇一）：**
-- `method`（string）+ `path`（string）：HTTP 方法與端點路徑（例如 `get` + `/users/{id}`）
+- `method`（string）+ `path`（string）：HTTP 方法與 Endpoint 路徑（例如 `get` + `/users/{id}`）
 - `operationId`（string）：Operation ID（例如 `listUsers`）
 
-回傳完整的端點物件——參數、請求體、回應——所有 `$ref` 均已內聯解析。
+回傳完整的 Endpoint 物件——參數、請求體、回應——所有 `$ref` 均已內聯解析。
 
 ### `get_schema`
 
@@ -196,7 +195,7 @@ npx apifable@latest generate-types
 
 **輸入（擇一模式）：**
 - `schemas`（string[]）：`components/schemas` 中的 Schema 名稱陣列
-- `method`（string）+ `path`（string）：HTTP 方法與端點路徑
+- `method`（string）+ `path`（string）：HTTP 方法與 Endpoint 路徑
 - `operationId`（string）：Operation ID（例如 `listUsers`）
 
 回傳 self-contained 的 TypeScript 宣告程式碼文字。會自動包含 transitive dependencies，且不包含 import 陳述式。
