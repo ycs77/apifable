@@ -75,7 +75,7 @@ cli
 
     const server = new McpServer({
       name: 'apifable',
-      version: '0.3.1',
+      version: '0.4.0',
     })
 
     server.registerTool(
