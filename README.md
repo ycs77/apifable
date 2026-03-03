@@ -96,11 +96,9 @@ npx apifable@latest generate-types
 
 ## Usage
 
-### Quick Prompt Playbook
-
 Use these prompts by scenario to quickly move from API discovery to implementation.
 
-#### 1. Understand the API first
+### Understand the API first
 
 ```
 What tags are available in this API?
@@ -110,7 +108,7 @@ What tags are available in this API?
 What endpoints does this API have for lecturers and courses?
 ```
 
-#### 2. Find the endpoint you need
+### Find the endpoint you need
 
 ```
 Search for endpoints related to "lecturer course list"
@@ -120,7 +118,7 @@ Search for endpoints related to "lecturer course list"
 List endpoints under the "Lecturer" tag
 ```
 
-#### 3. Inspect request/response details
+### Inspect request/response details
 
 ```
 Show me the full details of `GET /lecturers/{id}/courses`
@@ -130,7 +128,7 @@ Show me the full details of `GET /lecturers/{id}/courses`
 Show me the schema for LecturerCourseListResponse
 ```
 
-#### 4. Generate types for coding
+### Generate types for coding
 
 ```
 Generate TypeScript types for `GET /lecturers/{id}/courses`
@@ -140,7 +138,7 @@ Generate TypeScript types for `GET /lecturers/{id}/courses`
 Generate types for schemas: Lecturer, Course, LecturerCourseListResponse
 ```
 
-#### 5. Ask for implementation directly
+### Ask for implementation directly
 
 ```
 Build the lecturer's course list feature in React. Use the endpoint and schemas from this spec.

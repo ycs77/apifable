@@ -96,11 +96,9 @@ npx apifable@latest generate-types
 
 ## 使用方式
 
-### 快速提示詞指南
-
 可依照常見情境直接使用以下提示詞，快速從「找 API」走到「完成開發」。
 
-#### 1. 先掌握 API 全貌
+### 先掌握 API 全貌
 
 ```
 這個 API 有哪些 Tag？
@@ -110,7 +108,7 @@ npx apifable@latest generate-types
 這份規格中，和講師與課程相關的端點有哪些？
 ```
 
-#### 2. 快速定位需要的端點
+### 快速定位需要的端點
 
 ```
 搜尋和「講師課程列表」相關的端點
@@ -120,7 +118,7 @@ npx apifable@latest generate-types
 列出 Lecturer 這個 Tag 底下的所有端點
 ```
 
-#### 3. 釐清 request / response 細節
+### 釐清 request / response 細節
 
 ```
 顯示 `GET /lecturers/{id}/courses` 的完整詳情
@@ -130,7 +128,7 @@ npx apifable@latest generate-types
 給我看 LecturerCourseListResponse 的 Schema
 ```
 
-#### 4. 產生開發需要的型別
+### 產生開發需要的型別
 
 ```
 幫我為 `GET /lecturers/{id}/courses` 產生 TypeScript 型別
@@ -140,7 +138,7 @@ npx apifable@latest generate-types
 幫我產生這些 schemas 的型別：Lecturer、Course、LecturerCourseListResponse
 ```
 
-#### 5. 直接進入功能實作
+### 直接進入功能實作
 
 ```
 幫我建立講師的課程列表功能（React），並使用這份規格中的端點與型別
