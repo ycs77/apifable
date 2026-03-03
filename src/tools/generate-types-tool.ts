@@ -63,6 +63,9 @@ export function generateTypesTool(
   }
 
   let rootSchemaNames: string[]
+  let endpointMethod: string | undefined
+  let endpointPath: string | undefined
+  let endpointOperationId: string | undefined
 
   if (hasSchemas) {
     rootSchemaNames = [...new Set(input.schemas)]
@@ -75,8 +78,6 @@ export function generateTypesTool(
     }
   } else {
     let operation
-    let normalizedMethod: string
-    let path: string
 
     if (hasOperationId) {
       const found = findOperationByOperationId(spec, input.operationId!)
@@ -87,28 +88,31 @@ export function generateTypesTool(
         }
       }
       operation = found.operation
-      normalizedMethod = found.method
-      path = found.path
+      endpointMethod = found.method
+      endpointPath = found.path
+      endpointOperationId = input.operationId!
     } else {
       const method = input.method!
-      path = input.path!
-      normalizedMethod = method.toLowerCase() as HttpMethod
-      const pathItem = spec.rawSpec.paths?.[path]
+      endpointPath = input.path!
+      endpointMethod = method.toLowerCase() as HttpMethod
+      const pathItem = spec.rawSpec.paths?.[endpointPath]
 
       if (!pathItem) {
         return {
           isError: true,
-          message: `Path '${path}' not found in spec.`,
+          message: `Path '${endpointPath}' not found in spec.`,
         }
       }
 
-      operation = pathItem[normalizedMethod as HttpMethod]
+      operation = pathItem[endpointMethod as HttpMethod]
       if (!operation) {
         return {
           isError: true,
-          message: `Method '${method.toUpperCase()}' not found for path '${path}'.`,
+          message: `Method '${method.toUpperCase()}' not found for path '${endpointPath}'.`,
         }
       }
+
+      endpointOperationId = operation.operationId
     }
 
     rootSchemaNames = [...new Set([
@@ -120,7 +124,7 @@ export function generateTypesTool(
     if (rootSchemaNames.length === 0) {
       return {
         isError: true,
-        message: `No schema references found for endpoint '${normalizedMethod.toUpperCase()} ${path}'.`,
+        message: `No schema references found for endpoint '${endpointMethod.toUpperCase()} ${endpointPath}'.`,
       }
     }
 
@@ -156,11 +160,11 @@ export function generateTypesTool(
 
   const headerLines: string[] = []
   if (hasSchemas) {
-    headerLines.push(`// Generated from schemas: ${rootSchemaNames.join(', ')}`)
-  } else if (hasOperationId) {
-    headerLines.push(`// Generated from endpoint: ${input.operationId}`)
+    headerLines.push(`// Generated from schemas: ${sortedNames.join(', ')}`)
   } else {
-    headerLines.push(`// Generated from endpoint: ${input.method!.toUpperCase()} ${input.path}`)
+    const operationIdPrefix = endpointOperationId ? `${endpointOperationId} ` : ''
+    headerLines.push(`// Generated from endpoint: ${operationIdPrefix}${endpointMethod!.toUpperCase()} ${endpointPath}`)
+    headerLines.push(`// Includes schemas: ${sortedNames.join(', ')}`)
   }
 
   return { code: `${headerLines.join('\n')}\n\n${code}` }

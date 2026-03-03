@@ -182,6 +182,32 @@ describe('generateTypesTool', () => {
       }
     })
 
+    it('lists all generated schemas including transitive deps in header comment', () => {
+      const spec = createMockParsedSpec({
+        schemas: {
+          User: {
+            type: 'object',
+            properties: {
+              profile: { $ref: '#/components/schemas/Profile' },
+            },
+          },
+          Profile: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+            },
+          },
+        },
+      })
+
+      const result = generateTypesTool(spec, { schemas: ['User'] })
+
+      expect('code' in result).toBe(true)
+      if ('code' in result) {
+        expect(result.code).toMatch(/^\/\/ Generated from schemas: Profile, User/)
+      }
+    })
+
     it('orders output by topological dependency order', () => {
       const spec = createMockParsedSpec({
         schemas: {
@@ -421,6 +447,135 @@ describe('generateTypesTool', () => {
       }
     })
 
+    it('includes operationId in header comment when present', () => {
+      const spec = createMockParsedSpec({
+        schemas: {
+          User: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+            },
+          },
+        },
+        rawSpec: {
+          paths: {
+            '/users/{id}': {
+              get: {
+                operationId: 'getUser',
+                responses: {
+                  200: {
+                    content: {
+                      'application/json': {
+                        schema: { $ref: '#/components/schemas/User' },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+
+      const result = generateTypesTool(spec, {
+        method: 'get',
+        path: '/users/{id}',
+      })
+
+      expect('code' in result).toBe(true)
+      if ('code' in result) {
+        expect(result.code).toMatch(/^\/\/ Generated from endpoint: getUser GET \/users\/\{id\}/)
+        expect(result.code).toContain('// Includes schemas: User')
+      }
+    })
+
+    it('omits operationId in header comment when not present', () => {
+      const spec = createMockParsedSpec({
+        schemas: {
+          User: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+            },
+          },
+        },
+        rawSpec: {
+          paths: {
+            '/users/{id}': {
+              get: {
+                responses: {
+                  200: {
+                    content: {
+                      'application/json': {
+                        schema: { $ref: '#/components/schemas/User' },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+
+      const result = generateTypesTool(spec, {
+        method: 'get',
+        path: '/users/{id}',
+      })
+
+      expect('code' in result).toBe(true)
+      if ('code' in result) {
+        expect(result.code).toMatch(/^\/\/ Generated from endpoint: GET \/users\/\{id\}/)
+        expect(result.code).toContain('// Includes schemas: User')
+      }
+    })
+
+    it('lists all schemas including transitive deps in Includes comment', () => {
+      const spec = createMockParsedSpec({
+        schemas: {
+          User: {
+            type: 'object',
+            properties: {
+              profile: { $ref: '#/components/schemas/Profile' },
+            },
+          },
+          Profile: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+            },
+          },
+        },
+        rawSpec: {
+          paths: {
+            '/users/{id}': {
+              get: {
+                responses: {
+                  200: {
+                    content: {
+                      'application/json': {
+                        schema: { $ref: '#/components/schemas/User' },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+
+      const result = generateTypesTool(spec, {
+        method: 'get',
+        path: '/users/{id}',
+      })
+
+      expect('code' in result).toBe(true)
+      if ('code' in result) {
+        expect(result.code).toContain('// Includes schemas: Profile, User')
+      }
+    })
+
     it('treats method as case-insensitive', () => {
       const spec = createMockParsedSpec({
         schemas: {
@@ -498,6 +653,8 @@ describe('generateTypesTool', () => {
       expect('code' in result).toBe(true)
       if ('code' in result) {
         expect(result.code).toContain('export interface User {')
+        expect(result.code).toMatch(/^\/\/ Generated from endpoint: getUser GET \/users\/\{id\}/)
+        expect(result.code).toContain('// Includes schemas: User')
       }
     })
 
