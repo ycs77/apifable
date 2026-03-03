@@ -1,23 +1,48 @@
-import type { HttpMethod, ParsedSpec } from '../types'
+import type { HttpMethod, OperationObject, ParsedSpec } from '../types'
 import { resolveRefs } from '../spec/ref-resolver'
+import { findOperationByOperationId } from './find-operation'
 
-export function getEndpoint(spec: ParsedSpec, method: string, path: string) {
-  const normalizedMethod = method.toLowerCase() as HttpMethod
-  const pathItem = spec.rawSpec.paths?.[path]
+type GetEndpointInput =
+  | { method: string, path: string }
+  | { operationId: string }
 
-  if (!pathItem) {
-    return {
-      isError: true,
-      message: `Path '${path}' not found in spec.`,
+export function getEndpoint(spec: ParsedSpec, input: GetEndpointInput) {
+  let normalizedMethod: HttpMethod
+  let path: string
+  let operation: OperationObject
+
+  if ('operationId' in input) {
+    const found = findOperationByOperationId(spec, input.operationId)
+    if (!found) {
+      return {
+        isError: true,
+        message: `Operation '${input.operationId}' not found in spec.`,
+      }
     }
-  }
 
-  const operation = pathItem[normalizedMethod]
-  if (!operation) {
-    return {
-      isError: true,
-      message: `Method '${method.toUpperCase()}' not found for path '${path}'.`,
+    normalizedMethod = found.method
+    path = found.path
+    operation = found.operation
+  } else {
+    normalizedMethod = input.method.toLowerCase() as HttpMethod
+    path = input.path
+
+    const pathItem = spec.rawSpec.paths?.[path]
+    if (!pathItem) {
+      return {
+        isError: true,
+        message: `Path '${path}' not found in spec.`,
+      }
     }
+
+    const op = pathItem[normalizedMethod]
+    if (!op) {
+      return {
+        isError: true,
+        message: `Method '${input.method.toUpperCase()}' not found for path '${path}'.`,
+      }
+    }
+    operation = op
   }
 
   return {

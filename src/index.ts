@@ -121,14 +121,18 @@ cli
     server.registerTool(
       'get_endpoint',
       {
-        description: 'Get full details of a specific endpoint including parameters, request body, and responses. All $refs are resolved.',
+        description: 'Get full details of a specific endpoint including parameters, request body, and responses. All $refs are resolved. Provide either "method" + "path" or "operationId".',
         inputSchema: {
-          method: z.string().describe('HTTP method (e.g. get, post, put, delete)'),
-          path: z.string().describe('Endpoint path (e.g. /users/{id})'),
+          method: z.string().optional().describe('HTTP method (e.g. get, post, put, delete)'),
+          path: z.string().optional().describe('Endpoint path (e.g. /users/{id})'),
+          operationId: z.string().optional().describe('Operation ID to look up (e.g. listUsers)'),
         },
       },
-      ({ method, path }) => {
-        const result = getEndpoint(spec, method, path)
+      ({ method, path, operationId }) => {
+        const input = operationId
+          ? { operationId }
+          : { method: method!, path: path! }
+        const result = getEndpoint(spec, input)
         const isError = 'isError' in result && result.isError === true
         return {
           content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
@@ -158,7 +162,7 @@ cli
     server.registerTool(
       'generate_types',
       {
-        description: 'Generate self-contained TypeScript type declarations for specified schemas or for all schemas used by a specific endpoint. Provide either "schemas" (array of schema names) or "method" + "path" (endpoint). Transitive dependencies are included automatically.',
+        description: 'Generate self-contained TypeScript type declarations for specified schemas or for all schemas used by a specific endpoint. Provide exactly one of: "schemas" (array of schema names), "method" + "path" (endpoint), or "operationId". Transitive dependencies are included automatically.',
         inputSchema: {
           schemas: z.array(z.string()).optional().describe(
             'Array of schema names from components/schemas (e.g. ["User", "Address"])',
@@ -169,10 +173,13 @@ cli
           path: z.string().optional().describe(
             'Endpoint path for endpoint mode (e.g. /users/{id})',
           ),
+          operationId: z.string().optional().describe(
+            'Operation ID to generate types for (e.g. listUsers)',
+          ),
         },
       },
-      ({ schemas, method, path }) => {
-        const result = generateTypesTool(spec, { schemas, method, path })
+      ({ schemas, method, path, operationId }) => {
+        const result = generateTypesTool(spec, { schemas, method, path, operationId })
         const isError = 'isError' in result && result.isError === true
         return {
           content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],

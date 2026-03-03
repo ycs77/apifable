@@ -11,7 +11,7 @@ describe('generateTypesTool', () => {
 
       expect(result).toEqual({
         isError: true,
-        message: 'Provide either "schemas" or "method" + "path".',
+        message: 'Provide either "schemas", "method" + "path", or "operationId".',
       })
     })
 
@@ -26,7 +26,36 @@ describe('generateTypesTool', () => {
 
       expect(result).toEqual({
         isError: true,
-        message: 'Provide either "schemas" or "method" + "path", not both.',
+        message: 'Provide exactly one of: "schemas", "method" + "path", or "operationId".',
+      })
+    })
+
+    it('returns error when schemas and operationId are both provided', () => {
+      const spec = createMockParsedSpec()
+
+      const result = generateTypesTool(spec, {
+        schemas: ['Item'],
+        operationId: 'listItems',
+      })
+
+      expect(result).toEqual({
+        isError: true,
+        message: 'Provide exactly one of: "schemas", "method" + "path", or "operationId".',
+      })
+    })
+
+    it('returns error when operationId and endpoint mode are both provided', () => {
+      const spec = createMockParsedSpec()
+
+      const result = generateTypesTool(spec, {
+        operationId: 'listItems',
+        method: 'get',
+        path: '/items',
+      })
+
+      expect(result).toEqual({
+        isError: true,
+        message: 'Provide exactly one of: "schemas", "method" + "path", or "operationId".',
       })
     })
 
@@ -430,6 +459,93 @@ describe('generateTypesTool', () => {
       if ('code' in result) {
         expect(result.code).toContain('export interface User {')
       }
+    })
+  })
+
+  describe('operationId mode', () => {
+    it('generates types for an endpoint found by operationId', () => {
+      const spec = createMockParsedSpec({
+        schemas: {
+          User: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+            },
+          },
+        },
+        rawSpec: {
+          paths: {
+            '/users/{id}': {
+              get: {
+                operationId: 'getUser',
+                responses: {
+                  200: {
+                    content: {
+                      'application/json': {
+                        schema: { $ref: '#/components/schemas/User' },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+
+      const result = generateTypesTool(spec, { operationId: 'getUser' })
+
+      expect('code' in result).toBe(true)
+      if ('code' in result) {
+        expect(result.code).toContain('export interface User {')
+      }
+    })
+
+    it('returns error when operationId is not found', () => {
+      const spec = createMockParsedSpec({
+        rawSpec: {
+          paths: {
+            '/users': {
+              get: {
+                operationId: 'listUsers',
+              },
+            },
+          },
+        },
+      })
+
+      const result = generateTypesTool(spec, { operationId: 'nonExistent' })
+
+      expect(result).toEqual({
+        isError: true,
+        message: 'Operation \'nonExistent\' not found in spec.',
+      })
+    })
+
+    it('returns error when endpoint has no schema refs', () => {
+      const spec = createMockParsedSpec({
+        rawSpec: {
+          paths: {
+            '/users': {
+              get: {
+                operationId: 'listUsers',
+                responses: {
+                  200: {
+                    description: 'OK',
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+
+      const result = generateTypesTool(spec, { operationId: 'listUsers' })
+
+      expect(result).toEqual({
+        isError: true,
+        message: 'No schema references found for endpoint \'GET /users\'.',
+      })
     })
   })
 })

@@ -2,11 +2,13 @@ import type { HttpMethod, ParsedSpec } from '../types'
 import { topologicalSort } from '../codegen/generate'
 import { generateFileContent } from '../codegen/schema-to-ts'
 import { addTransitiveDeps, buildDependencyGraph, collectRefs } from '../codegen/tag-classifier'
+import { findOperationByOperationId } from './find-operation'
 
 interface GenerateTypesInput {
   schemas?: string[]
   method?: string
   path?: string
+  operationId?: string
 }
 
 interface GenerateTypesSuccess {
@@ -25,11 +27,17 @@ export function generateTypesTool(
   const hasSchemas = input.schemas !== undefined
   const hasMethod = input.method !== undefined
   const hasPath = input.path !== undefined
+  const hasOperationId = input.operationId !== undefined
 
-  if (hasSchemas && (hasMethod || hasPath)) {
+  const modeCount =
+    (hasSchemas ? 1 : 0) +
+    (hasMethod || hasPath ? 1 : 0) +
+    (hasOperationId ? 1 : 0)
+
+  if (modeCount > 1) {
     return {
       isError: true,
-      message: 'Provide either "schemas" or "method" + "path", not both.',
+      message: 'Provide exactly one of: "schemas", "method" + "path", or "operationId".',
     }
   }
 
@@ -47,10 +55,10 @@ export function generateTypesTool(
     }
   }
 
-  if (!hasSchemas && !hasMethod && !hasPath) {
+  if (modeCount === 0) {
     return {
       isError: true,
-      message: 'Provide either "schemas" or "method" + "path".',
+      message: 'Provide either "schemas", "method" + "path", or "operationId".',
     }
   }
 
@@ -66,23 +74,40 @@ export function generateTypesTool(
       }
     }
   } else {
-    const method = input.method!
-    const path = input.path!
-    const normalizedMethod = method.toLowerCase() as HttpMethod
-    const pathItem = spec.rawSpec.paths?.[path]
+    let operation
+    let normalizedMethod: string
+    let path: string
 
-    if (!pathItem) {
-      return {
-        isError: true,
-        message: `Path '${path}' not found in spec.`,
+    if (hasOperationId) {
+      const found = findOperationByOperationId(spec, input.operationId!)
+      if (!found) {
+        return {
+          isError: true,
+          message: `Operation '${input.operationId}' not found in spec.`,
+        }
       }
-    }
+      operation = found.operation
+      normalizedMethod = found.method
+      path = found.path
+    } else {
+      const method = input.method!
+      path = input.path!
+      normalizedMethod = method.toLowerCase() as HttpMethod
+      const pathItem = spec.rawSpec.paths?.[path]
 
-    const operation = pathItem[normalizedMethod]
-    if (!operation) {
-      return {
-        isError: true,
-        message: `Method '${method.toUpperCase()}' not found for path '${path}'.`,
+      if (!pathItem) {
+        return {
+          isError: true,
+          message: `Path '${path}' not found in spec.`,
+        }
+      }
+
+      operation = pathItem[normalizedMethod as HttpMethod]
+      if (!operation) {
+        return {
+          isError: true,
+          message: `Method '${method.toUpperCase()}' not found for path '${path}'.`,
+        }
       }
     }
 
