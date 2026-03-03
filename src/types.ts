@@ -33,6 +33,17 @@ export interface SearchResultItem {
   score?: number
 }
 
+export interface SchemaEntry {
+  name: string
+  description: string
+}
+
+export interface SchemaSearchResultItem {
+  name: string
+  description: string
+  score?: number
+}
+
 export interface EndpointEntry {
   method: string
   path: string

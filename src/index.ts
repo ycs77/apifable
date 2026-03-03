@@ -18,6 +18,7 @@ import { getSchema } from './tools/get-schema'
 import { getSpecInfo } from './tools/get-spec-info'
 import { listEndpointsByTag } from './tools/list-endpoints-by-tag'
 import { searchEndpoints } from './tools/search-endpoints'
+import { searchSchemas } from './tools/search-schemas'
 
 const cli = cac('apifable')
 
@@ -142,6 +143,21 @@ cli
           content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
           isError,
         }
+      },
+    )
+
+    server.registerTool(
+      'search_schemas',
+      {
+        description: 'Search schemas by keyword across schema name and description. Results are ranked by relevance. If no exact matches are found, automatically falls back to fuzzy search. Use get_schema to inspect a specific schema in detail.',
+        inputSchema: {
+          query: z.string().min(1).describe('Search keyword'),
+          limit: z.number().int().min(1).max(100).optional().describe('Maximum number of results (default: 10)'),
+        },
+      },
+      ({ query, limit }) => {
+        const result = searchSchemas(spec, query, limit)
+        return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] }
       },
     )
 

@@ -27,6 +27,7 @@
 ## Gotchas
 
 - `search_endpoints` defaults to `limit: 10`; max is 100
+- `search_schemas` defaults to `limit: 10`; max is 100
 - To force-invalidate all caches (e.g. after `ParsedSpec` shape changes), bump `CACHE_VERSION` in `src/types.ts`
 - `search_endpoints` fuzzy fallback (`minisearch`, fuzzy: `0.2`, prefix matching): response includes `matchType: "exact" | "fuzzy"`, fuzzy results include `score`
 - `get_endpoint` accepts either `method` + `path` or `operationId` (mutually exclusive)
