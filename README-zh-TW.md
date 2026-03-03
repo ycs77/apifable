@@ -175,11 +175,9 @@ npx apifable@latest generate-types
 
 ### 規則
 
-- 撰寫 API 呼叫程式碼前，務必確認 Endpoint 的安全需求
-- 使用 `generate_types` 的 Endpoint 模式（`method` + `path` 或 `operationId`）一次取得所有相關型別
-- 不要猜測 API 路徑或參數——務必先用 `get_endpoint` 確認
-- 呈現 apifable 工具回傳的所有欄位值時，必須完整原樣呈現——不得省略、裁減或簡化任何部分（例如：保留完整的 summary 文字，包括 `[ 32 - 001 ]` 等前綴）
-- 不得從範例值推測或修改欄位型別——務必使用 `generate_types` 取得正式的 TypeScript 型別定義
+- 不要猜測 API 路徑或參數，務必先用 `get_endpoint` 確認
+- 呈現 apifable 工具回傳的所有欄位名稱和值時，必須完整原樣呈現。不得省略、裁減或簡化任何部分（例如：保留完整的 summary (說明) 文字，包括 `[ 32 - 001 ]` 等前綴）
+- 不得從範例值推測或修改欄位型別
 ````
 
 ## MCP Tools 參考
