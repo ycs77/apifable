@@ -5,18 +5,16 @@ import { defaultConfig, readConfig } from '../config/config'
 import { loadSpecFile } from '../spec/loader'
 import { buildParsedSpec } from '../spec/parser'
 
-export async function generateTypes(options: {
-  spec?: string
-  output?: string
-}): Promise<void> {
-  intro('apifable')
+interface LoadAndGenerateTypesContext {
+  specPath: string
+  outputDir: string
+  commonFileName?: string
+  spinner: ReturnType<typeof spinner>
+}
 
-  const config = await readConfig()
-  const specPath = resolve(options.spec ?? config?.spec.path ?? defaultConfig.spec.path)
-  const outputDir = resolve(options.output ?? config?.types.output ?? defaultConfig.types.output)
-  const commonFileName = config?.types.commonFileName
+export async function loadAndGenerateTypes(ctx: LoadAndGenerateTypesContext): Promise<void> {
+  const { specPath, outputDir, commonFileName, spinner: s } = ctx
 
-  const s = spinner()
   s.start('Loading OpenAPI spec...')
 
   let parsed
@@ -35,7 +33,6 @@ export async function generateTypes(options: {
   const schemaCount = Object.keys(spec.schemas).length
   if (schemaCount === 0) {
     log.warn('No schemas found in the spec.')
-    outro('Done.')
     return
   }
 
@@ -48,5 +45,22 @@ export async function generateTypes(options: {
   }
 
   const totalTypes = result.files.reduce((sum, f) => sum + f.schemaCount, 0)
-  outro(`Generated ${totalTypes} types across ${result.files.length} files.`)
+  log.info(`Generated ${totalTypes} types across ${result.files.length} files.`)
+}
+
+export async function generateTypes(options: {
+  spec?: string
+  output?: string
+}): Promise<void> {
+  intro('apifable')
+
+  const config = await readConfig()
+  const specPath = resolve(options.spec ?? config?.spec.path ?? defaultConfig.spec.path)
+  const outputDir = resolve(options.output ?? config?.types.output ?? defaultConfig.types.output)
+  const commonFileName = config?.types.commonFileName
+
+  const s = spinner()
+  await loadAndGenerateTypes({ specPath, outputDir, commonFileName, spinner: s })
+
+  outro('Done.')
 }

@@ -196,7 +196,8 @@ cli
   .command('fetch', 'Fetch OpenAPI spec from remote URL and save locally')
   .option('--url <url>', 'OpenAPI spec URL')
   .option('--output <path>', 'Output file path (.yaml, .yml, or .json)')
-  .action(async (options: { url?: string, output?: string }) => {
+  .option('--types', 'Generate TypeScript types after fetching')
+  .action(async (options: { url?: string, output?: string, types?: boolean }) => {
     await fetchSpec(options)
   })
 

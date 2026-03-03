@@ -82,7 +82,13 @@ To fetch the spec, run:
 npx apifable@latest fetch
 ```
 
-You can also generate TypeScript types directly from your OpenAPI spec:
+You can also fetch the spec and generate TypeScript types in one step:
+
+```bash
+npx apifable@latest fetch --types
+```
+
+Alternatively, run type generation separately:
 
 ```bash
 npx apifable@latest generate-types

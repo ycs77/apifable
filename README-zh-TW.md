@@ -82,7 +82,13 @@ npx apifable@latest init
 npx apifable@latest fetch
 ```
 
-你也可以直接從 OpenAPI 規格產生 TypeScript 型別：
+你也可以在下載規格後自動產生 TypeScript 型別：
+
+```bash
+npx apifable@latest fetch --types
+```
+
+或是單獨執行產生型別：
 
 ```bash
 npx apifable@latest generate-types
