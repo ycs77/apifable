@@ -210,12 +210,20 @@ Keyword search across operationId, path, summary, and description. Results are r
 
 Returns the full endpoint object — parameters, requestBody, responses — with all `$ref`s resolved inline.
 
+### `search_schemas`
+
+**Inputs:**
+- `query` (string): Keyword to search for
+- `limit` (number, optional): Max results to return (default: 10)
+
+Keyword search across schema name and description. Results are ranked by relevance. If no exact matches are found, automatically falls back to fuzzy search. The response includes a `matchType` field (`"exact"` or `"fuzzy"`); fuzzy results also include a `score` field per result.
+
 ### `get_schema`
 
 **Inputs:**
 - `name` (string): Schema name from `components/schemas`
 
-Returns the full schema with all `$ref`s resolved. Lists available schema names on error.
+Returns the full schema with all `$ref`s resolved.
 
 ### `generate_types`
 
