@@ -40,23 +40,6 @@ npx apifable@latest init
 
 This creates `apifable.config.json` in your project root. The config file should be committed to version control so the spec path is shared with your team.
 
-### Claude Code
-
-Add the following to your `.mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "apifable": {
-      "command": "npx",
-      "args": ["-y", "apifable@latest", "mcp"]
-    }
-  }
-}
-```
-
-For other AI agents such as Cursor and Windsurf, you can follow the same approach to configure apifable as an MCP server.
-
 ### Prepare Your Spec
 
 `apifable fetch` reads `spec.path` and `spec.url` from `apifable.config.json` to download the spec locally.
@@ -92,6 +75,23 @@ Alternatively, run type generation separately:
 ```bash
 npx apifable@latest generate-types
 ```
+
+### Claude Code
+
+Add the following to your `.mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "apifable": {
+      "command": "npx",
+      "args": ["-y", "apifable@latest", "mcp"]
+    }
+  }
+}
+```
+
+For other AI agents such as Cursor and Windsurf, you can follow the same approach to configure apifable as an MCP server.
 
 ## Usage
 

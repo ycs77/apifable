@@ -40,23 +40,6 @@ npx apifable@latest init
 
 這會在專案根目錄建立 `apifable.config.json`，設定檔應提交至版本控制，讓團隊共享相同的規格路徑。
 
-### Claude Code
-
-在 `.mcp.json` 中加入以下設定：
-
-```json
-{
-  "mcpServers": {
-    "apifable": {
-      "command": "npx",
-      "args": ["-y", "apifable@latest", "mcp"]
-    }
-  }
-}
-```
-
-其他 AI Agent 如 Cursor、Windsurf 等，可以參考上述方式將 apifable 設定為 MCP 伺服器。
-
 ### 準備你的 Spec
 
 `apifable fetch` 會從 `apifable.config.json` 讀取 `spec.path` 和 `spec.url`，下載規格至本地。
@@ -92,6 +75,23 @@ npx apifable@latest fetch --types
 ```bash
 npx apifable@latest generate-types
 ```
+
+### Claude Code
+
+在 `.mcp.json` 中加入以下設定：
+
+```json
+{
+  "mcpServers": {
+    "apifable": {
+      "command": "npx",
+      "args": ["-y", "apifable@latest", "mcp"]
+    }
+  }
+}
+```
+
+其他 AI Agent 如 Cursor、Windsurf 等，可以參考上述方式將 apifable 設定為 MCP 伺服器。
 
 ## 使用方式
 
