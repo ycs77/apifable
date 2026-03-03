@@ -58,6 +58,36 @@ Add the following to your `.mcp.json`:
 
 For other AI agents such as Cursor and Windsurf, you can follow the same approach to configure apifable as an MCP server.
 
+### Prepare Your Spec
+
+`apifable fetch` reads `spec.path` and `spec.url` from `apifable.config.json` to download the spec locally.
+
+For private APIs that require authentication, add a `spec.headers` field to your config:
+
+```json
+{
+  "spec": {
+    "path": "openapi.yaml",
+    "url": "https://example.com/openapi.yaml",
+    "headers": {
+      "Authorization": "Bearer YOUR_TOKEN"
+    }
+  }
+}
+```
+
+To fetch the spec, run:
+
+```bash
+npx apifable@latest fetch
+```
+
+You can also generate TypeScript types directly from your OpenAPI spec:
+
+```bash
+npx apifable@latest generate-types
+```
+
 ## Usage
 
 ### Quick Prompt Playbook
@@ -120,40 +150,6 @@ For most tasks, this sequence gives the best result:
 4. Ask the agent to implement UI or service code with those types
 
 This keeps outputs precise and avoids generating unnecessary code.
-
-## CLI Commands
-
-### Fetch Spec
-
-`apifable fetch` reads `spec.path` and `spec.url` from `apifable.config.json` to download the spec locally.
-
-For private APIs that require authentication, add a `spec.headers` field to your config:
-
-```json
-{
-  "spec": {
-    "path": "openapi.yaml",
-    "url": "https://example.com/openapi.yaml",
-    "headers": {
-      "Authorization": "Bearer YOUR_TOKEN"
-    }
-  }
-}
-```
-
-To fetch the spec, run:
-
-```bash
-npx apifable@latest fetch
-```
-
-### Generate Types
-
-Generate TypeScript types directly from your OpenAPI spec:
-
-```bash
-npx apifable@latest generate-types
-```
 
 ## MCP Tools Reference
 

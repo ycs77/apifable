@@ -58,6 +58,36 @@ npx apifable@latest init
 
 其他 AI Agent 如 Cursor、Windsurf 等，可以參考上述方式將 apifable 設定為 MCP 伺服器。
 
+### 準備你的 Spec
+
+`apifable fetch` 會從 `apifable.config.json` 讀取 `spec.path` 和 `spec.url`，下載規格至本地。
+
+若 API 需要驗證（私有 API），可在設定檔中加入 `spec.headers`：
+
+```json
+{
+  "spec": {
+    "path": "openapi.yaml",
+    "url": "https://example.com/openapi.yaml",
+    "headers": {
+      "Authorization": "Bearer YOUR_TOKEN"
+    }
+  }
+}
+```
+
+執行以下指令下載規格：
+
+```bash
+npx apifable@latest fetch
+```
+
+你也可以直接從 OpenAPI 規格產生 TypeScript 型別：
+
+```bash
+npx apifable@latest generate-types
+```
+
 ## 使用方式
 
 ### 快速提示詞指南
@@ -120,40 +150,6 @@ npx apifable@latest init
 4. 再請 Agent 產生 UI 或 service 程式碼
 
 這樣可以讓輸出更精準，也能避免產生不必要的程式碼。
-
-## CLI 指令
-
-### 下載 Spec
-
-`apifable fetch` 會從 `apifable.config.json` 讀取 `spec.path` 和 `spec.url`，下載規格至本地。
-
-若 API 需要驗證（私有 API），可在設定檔中加入 `spec.headers`：
-
-```json
-{
-  "spec": {
-    "path": "openapi.yaml",
-    "url": "https://example.com/openapi.yaml",
-    "headers": {
-      "Authorization": "Bearer YOUR_TOKEN"
-    }
-  }
-}
-```
-
-設定完成後，執行以下指令下載規格：
-
-```bash
-npx apifable@latest fetch
-```
-
-### 產生型別
-
-直接從 OpenAPI 規格產生 TypeScript 型別：
-
-```bash
-npx apifable@latest generate-types
-```
 
 ## MCP Tools 參考
 
