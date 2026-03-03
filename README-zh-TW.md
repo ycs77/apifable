@@ -154,6 +154,32 @@ npx apifable@latest generate-types
 
 這樣可以讓輸出更精準，也能避免產生不必要的程式碼。
 
+### AI Agent 指引
+
+在專案的 `AGENTS.md` 中加入以下內容，可以幫助 AI Agent 更有效地使用 apifable：
+
+````markdown
+## API 整合 (apifable)
+
+本專案使用 apifable MCP 伺服器來探索 OpenAPI 規格並產生型別。
+
+### 工作流程
+
+處理 API Endpoint 時，請依照以下順序：
+
+1. **探索** — 使用 `get_spec_info` 了解可用的 Tag 和安全機制
+2. **搜尋** — 使用 `search_endpoints` 或 `list_endpoints_by_tag` 定位目標 Endpoint
+3. **查看** — 使用 `get_endpoint` 取得完整的 request/response 細節與安全需求
+4. **型別** — 使用 `generate_types` 產生 Endpoint 對應的 TypeScript 型別
+5. **實作** — 使用產生的型別撰寫功能程式碼
+
+### 規則
+
+- 撰寫 API 呼叫程式碼前，務必確認 Endpoint 的安全需求
+- 使用 `generate_types` 的 Endpoint 模式（`method` + `path` 或 `operationId`）一次取得所有相關型別
+- 不要猜測 API 路徑或參數——務必先用 `get_endpoint` 確認
+````
+
 ## MCP Tools 參考
 
 ### `get_spec_info`

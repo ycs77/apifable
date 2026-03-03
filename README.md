@@ -154,6 +154,32 @@ For most tasks, this sequence gives the best result:
 
 This keeps outputs precise and avoids generating unnecessary code.
 
+### AI Agent Guidance
+
+Add the following to your project's `AGENTS.md` to help AI agents use apifable more effectively:
+
+````markdown
+## API Integration (apifable)
+
+This project uses apifable MCP server for OpenAPI spec exploration and type generation.
+
+### Workflow
+
+When working with API endpoints, follow this sequence:
+
+1. **Discover** — Use `get_spec_info` to understand available tags and security schemes
+2. **Find** — Use `search_endpoints` or `list_endpoints_by_tag` to locate the target endpoint
+3. **Inspect** — Use `get_endpoint` to get full request/response details and security requirements
+4. **Type** — Use `generate_types` to generate TypeScript types for the endpoint
+5. **Implement** — Write the feature code using the generated types
+
+### Rules
+
+- Always check endpoint security requirements before writing API call code
+- Use `generate_types` with endpoint mode (`method` + `path` or `operationId`) to get all related types at once
+- Do not guess API paths or parameters — always verify with `get_endpoint` first
+````
+
 ## MCP Tools Reference
 
 ### `get_spec_info`
