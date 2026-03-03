@@ -178,6 +178,8 @@ When working with API endpoints, follow this sequence:
 - Always check endpoint security requirements before writing API call code
 - Use `generate_types` with endpoint mode (`method` + `path` or `operationId`) to get all related types at once
 - Do not guess API paths or parameters — always verify with `get_endpoint` first
+- Present all field values from apifable tools exactly as returned — do not omit, truncate, or simplify any part (e.g., keep full summary text including any prefixes like `[ 32 - 001 ]`)
+- Never infer or modify field types from example values — always use `generate_types` for authoritative TypeScript type definitions
 ````
 
 ## MCP Tools Reference
