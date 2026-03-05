@@ -8,7 +8,6 @@ import { z } from 'zod'
 import { version } from '../package.json' with { type: 'json' }
 import { readCache, writeCache } from './cache/cache'
 import { fetchSpec } from './commands/fetch'
-import { generateTypes } from './commands/generate-types'
 import { initialize } from './commands/init'
 import { readConfig } from './config/config'
 import { loadSpecFile } from './spec/loader'
@@ -220,14 +219,6 @@ cli
   .option('--types', 'Generate TypeScript types after fetching')
   .action(async (options: { url?: string, output?: string, types?: boolean }) => {
     await fetchSpec(options)
-  })
-
-cli
-  .command('generate-types', 'Generate TypeScript types from OpenAPI spec')
-  .option('--spec <path>', 'Path to OpenAPI spec file')
-  .option('--output <path>', 'Output directory (default: src/types/)')
-  .action(async (options: { spec?: string, output?: string }) => {
-    await generateTypes(options)
   })
 
 cli.help()

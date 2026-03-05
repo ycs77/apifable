@@ -18,7 +18,6 @@
 ## Config
 
 - Priority: CLI flag > config > default value
-- `types.commonFileName` default: `common` (produces `common.ts`)
 
 ## Testing
 

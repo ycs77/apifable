@@ -6,10 +6,6 @@ export const defaultConfig: ApifableConfig = {
   spec: {
     path: 'openapi.yaml',
   },
-  types: {
-    output: 'src/types/',
-    commonFileName: 'common',
-  },
 }
 
 export function getConfigPath(cwd = process.cwd()): string {
@@ -22,10 +18,6 @@ function resolveConfig(config: ApifableUserConfig): ApifableConfig {
       path: config.spec?.path ?? defaultConfig.spec.path,
       url: config.spec?.url,
       headers: config.spec?.headers,
-    },
-    types: {
-      output: config.types?.output ?? defaultConfig.types.output,
-      commonFileName: config.types?.commonFileName ?? defaultConfig.types.commonFileName,
     },
   }
 }

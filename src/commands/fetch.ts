@@ -5,14 +5,12 @@ import { intro, log, outro, spinner } from '@clack/prompts'
 import c from 'picocolors'
 import { parse, stringify } from 'yaml'
 import { defaultConfig, readConfig } from '../config/config'
-import { loadAndGenerateTypes } from './generate-types'
 
 type SpecFormat = 'json' | 'yaml'
 
 export interface FetchOptions {
   url?: string
   output?: string
-  types?: boolean
 }
 
 function getFormatByPath(filePath: string): SpecFormat {
@@ -106,19 +104,6 @@ export async function fetchSpec(options: FetchOptions): Promise<void> {
     s.stop('Failed to fetch spec')
     log.error((err as Error).message)
     process.exit(1)
-  }
-
-  if (options.types) {
-    const config = await readConfig()
-    const outputDir = resolve(config?.types.output ?? defaultConfig.types.output)
-    const commonFileName = config?.types.commonFileName
-
-    await loadAndGenerateTypes({
-      specPath: result.outputPath,
-      outputDir,
-      commonFileName,
-      spinner: s,
-    })
   }
 
   outro('Done.')

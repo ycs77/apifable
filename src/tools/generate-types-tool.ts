@@ -1,7 +1,6 @@
 import type { HttpMethod, ParsedSpec } from '../types'
-import { topologicalSort } from '../codegen/generate'
-import { generateFileContent } from '../codegen/schema-to-ts'
-import { addTransitiveDeps, buildDependencyGraph, collectRefs } from '../codegen/tag-classifier'
+import { addTransitiveDeps, buildDependencyGraph, collectRefs, topologicalSort } from '../schema/dependency'
+import { generateFileContent } from '../schema/to-ts'
 import { findOperationByOperationId } from './find-operation'
 
 interface GenerateTypesInput {

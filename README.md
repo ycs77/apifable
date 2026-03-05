@@ -26,7 +26,6 @@ apifable helps AI agents work with OpenAPI specifications. It makes it easy to e
 - 🤖 **MCP server** — plug into AI agents like Claude, Cursor, and Windsurf
 - 🔍 **API exploration** — browse endpoints, search by keyword, and inspect full request/response details
 - 🏷️ **TypeScript type generation** — generate ready-to-use type definitions from your spec
-- ⚡ **One-command workflow** — fetch your spec and generate types in a single step
 
 ## Getting Started
 
@@ -62,18 +61,6 @@ To fetch the spec, run:
 
 ```bash
 npx apifable@latest fetch
-```
-
-You can also fetch the spec and generate TypeScript types in one step:
-
-```bash
-npx apifable@latest fetch --types
-```
-
-Alternatively, run type generation separately:
-
-```bash
-npx apifable@latest generate-types
 ```
 
 ### Claude Code
@@ -172,6 +159,16 @@ When working with API endpoints, follow this sequence:
 3. **Inspect** — Use `get_endpoint` to get full request/response details and security requirements
 4. **Type** — Use `generate_types` to generate TypeScript types for the endpoint
 5. **Implement** — Write the feature code using the generated types
+
+### Type File Naming
+
+When saving generated types to files, use semantic English names based on the API domain:
+- `auth.ts` — authentication/login related types
+- `user.ts` — user profile and account types
+- `post.ts` — blog post and article types
+- `common.ts` — shared types used across multiple files
+
+The agent decides file names based on schema semantics, not OpenAPI tag names.
 
 ### Rules
 

@@ -105,10 +105,6 @@ export interface ApifableSpecConfig {
 
 export interface ApifableConfig {
   spec: ApifableSpecConfig
-  types: {
-    output: string
-    commonFileName: string
-  }
 }
 
 export type ApifableUserConfig = DeepPartial<ApifableConfig>

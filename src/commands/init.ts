@@ -2,7 +2,7 @@ import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { cancel, confirm, intro, isCancel, log, outro, text } from '@clack/prompts'
 import c from 'picocolors'
-import { configExists, defaultConfig, writeConfig } from '../config/config'
+import { configExists, writeConfig } from '../config/config'
 import { showLogo } from '../logo'
 
 export async function initialize(): Promise<void> {
@@ -53,10 +53,6 @@ export async function initialize(): Promise<void> {
       path: spec,
       ...(specUrl && { url: specUrl }),
     },
-    types: {
-      output: defaultConfig.types.output,
-      commonFileName: defaultConfig.types.commonFileName,
-    },
   })
   log.success('Created apifable.config.json')
 
@@ -84,8 +80,6 @@ export async function initialize(): Promise<void> {
       '',
       `${c.bold(c.cyan('1.'))} ${c.bold('Prepare your spec')}`,
       `   Run ${c.cyan('`npx apifable@latest fetch`')} to download the OpenAPI spec locally.`,
-      `   You can also run ${c.cyan('`npx apifable@latest fetch --types`')} to fetch and`,
-      '   generate TypeScript types in one step.',
       '',
       `${c.bold(c.cyan('2.'))} ${c.bold('Set up MCP')}`,
       '   Add apifable to your AI agent\'s MCP config',
