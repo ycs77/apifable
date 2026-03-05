@@ -12,10 +12,10 @@ import { initialize } from './commands/init'
 import { readConfig } from './config/config'
 import { loadSpecFile } from './spec/loader'
 import { buildParsedSpec } from './spec/parser'
-import { generateTypesTool } from './tools/generate-types-tool'
 import { getEndpoint } from './tools/get-endpoint'
 import { getSchema } from './tools/get-schema'
 import { getSpecInfo } from './tools/get-spec-info'
+import { getTypesTool } from './tools/get-types-tool'
 import { listEndpointsByTag } from './tools/list-endpoints-by-tag'
 import { searchEndpoints } from './tools/search-endpoints'
 import { searchSchemas } from './tools/search-schemas'
@@ -110,7 +110,7 @@ cli
     server.registerTool(
       'search_endpoints',
       {
-        description: 'Search endpoints by keyword across operationId, path, summary, and description. Results are ranked by relevance. If no exact matches are found, automatically falls back to fuzzy search. The response includes a matchType field ("exact" or "fuzzy"); fuzzy results also include a score field per result. After finding the target endpoint, use get_endpoint for full details or generate_types for TypeScript types.',
+        description: 'Search endpoints by keyword across operationId, path, summary, and description. Results are ranked by relevance. If no exact matches are found, automatically falls back to fuzzy search. The response includes a matchType field ("exact" or "fuzzy"); fuzzy results also include a score field per result. After finding the target endpoint, use get_endpoint for full details or get_types for TypeScript types.',
         inputSchema: {
           query: z.string().min(1).describe('Search keyword'),
           tag: z.string().optional().describe('Optional tag to filter results'),
@@ -126,7 +126,7 @@ cli
     server.registerTool(
       'get_endpoint',
       {
-        description: 'Get full details of a specific endpoint including parameters, request body, responses, and security requirements. All $refs are resolved. Provide either "method" + "path" or "operationId". Use generate_types to get TypeScript type declarations for the endpoint.',
+        description: 'Get full details of a specific endpoint including parameters, request body, responses, and security requirements. All $refs are resolved. Provide either "method" + "path" or "operationId". Use get_types to get TypeScript type declarations for the endpoint.',
         inputSchema: {
           method: z.string().optional().describe('HTTP method (e.g. get, post, put, delete)'),
           path: z.string().optional().describe('Endpoint path (e.g. /users/{id})'),
@@ -164,7 +164,7 @@ cli
     server.registerTool(
       'get_schema',
       {
-        description: 'Get a specific schema from components/schemas by name. All $refs are resolved. Use generate_types to convert schemas to TypeScript type declarations.',
+        description: 'Get a specific schema from components/schemas by name. All $refs are resolved. Use get_types to convert schemas to TypeScript type declarations.',
         inputSchema: {
           name: z.string().describe('Schema name (e.g. User, CreateOrderRequest)'),
         },
@@ -180,7 +180,7 @@ cli
     )
 
     server.registerTool(
-      'generate_types',
+      'get_types',
       {
         description: 'Generate self-contained TypeScript type declarations for specified schemas or for all schemas used by a specific endpoint. Provide exactly one of: "schemas" (array of schema names), "method" + "path" (endpoint), or "operationId". Transitive dependencies are included automatically.',
         inputSchema: {
@@ -199,7 +199,7 @@ cli
         },
       },
       ({ schemas, method, path, operationId }) => {
-        const result = generateTypesTool(spec, { schemas, method, path, operationId })
+        const result = getTypesTool(spec, { schemas, method, path, operationId })
         const isError = 'isError' in result && result.isError === true
         return {
           content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
@@ -216,8 +216,7 @@ cli
   .command('fetch', 'Fetch OpenAPI spec from remote URL and save locally')
   .option('--url <url>', 'OpenAPI spec URL')
   .option('--output <path>', 'Output file path (.yaml, .yml, or .json)')
-  .option('--types', 'Generate TypeScript types after fetching')
-  .action(async (options: { url?: string, output?: string, types?: boolean }) => {
+  .action(async (options: { url?: string, output?: string }) => {
     await fetchSpec(options)
   })
 

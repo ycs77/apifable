@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { generateTypesTool } from '../../src/tools/generate-types-tool'
+import { getTypesTool } from '../../src/tools/get-types-tool'
 import { createMockParsedSpec } from '../helpers'
 
-describe('generateTypesTool', () => {
+describe('getTypesTool', () => {
   describe('input validation', () => {
     it('returns error when no input mode is provided', () => {
       const spec = createMockParsedSpec()
 
-      const result = generateTypesTool(spec, {})
+      const result = getTypesTool(spec, {})
 
       expect(result).toEqual({
         isError: true,
@@ -18,7 +18,7 @@ describe('generateTypesTool', () => {
     it('returns error when schemas and endpoint mode are both provided', () => {
       const spec = createMockParsedSpec()
 
-      const result = generateTypesTool(spec, {
+      const result = getTypesTool(spec, {
         schemas: ['Item'],
         method: 'get',
         path: '/items',
@@ -33,7 +33,7 @@ describe('generateTypesTool', () => {
     it('returns error when schemas and operationId are both provided', () => {
       const spec = createMockParsedSpec()
 
-      const result = generateTypesTool(spec, {
+      const result = getTypesTool(spec, {
         schemas: ['Item'],
         operationId: 'listItems',
       })
@@ -47,7 +47,7 @@ describe('generateTypesTool', () => {
     it('returns error when operationId and endpoint mode are both provided', () => {
       const spec = createMockParsedSpec()
 
-      const result = generateTypesTool(spec, {
+      const result = getTypesTool(spec, {
         operationId: 'listItems',
         method: 'get',
         path: '/items',
@@ -62,7 +62,7 @@ describe('generateTypesTool', () => {
     it('returns error when only method is provided', () => {
       const spec = createMockParsedSpec()
 
-      const result = generateTypesTool(spec, { method: 'get' })
+      const result = getTypesTool(spec, { method: 'get' })
 
       expect(result).toEqual({
         isError: true,
@@ -73,7 +73,7 @@ describe('generateTypesTool', () => {
     it('returns error when only path is provided', () => {
       const spec = createMockParsedSpec()
 
-      const result = generateTypesTool(spec, { path: '/items' })
+      const result = getTypesTool(spec, { path: '/items' })
 
       expect(result).toEqual({
         isError: true,
@@ -84,7 +84,7 @@ describe('generateTypesTool', () => {
     it('returns error when schemas is an empty array', () => {
       const spec = createMockParsedSpec()
 
-      const result = generateTypesTool(spec, { schemas: [] })
+      const result = getTypesTool(spec, { schemas: [] })
 
       expect(result).toEqual({
         isError: true,
@@ -97,7 +97,7 @@ describe('generateTypesTool', () => {
     it('returns error with missing schema names', () => {
       const spec = createMockParsedSpec()
 
-      const result = generateTypesTool(spec, {
+      const result = getTypesTool(spec, {
         schemas: ['UnknownB', 'UnknownA'],
       })
 
@@ -119,7 +119,7 @@ describe('generateTypesTool', () => {
         },
       })
 
-      const result = generateTypesTool(spec, { schemas: ['User'] })
+      const result = getTypesTool(spec, { schemas: ['User'] })
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
@@ -146,7 +146,7 @@ describe('generateTypesTool', () => {
         },
       })
 
-      const result = generateTypesTool(spec, { schemas: ['User', 'Address'] })
+      const result = getTypesTool(spec, { schemas: ['User', 'Address'] })
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
@@ -173,7 +173,7 @@ describe('generateTypesTool', () => {
         },
       })
 
-      const result = generateTypesTool(spec, { schemas: ['User'] })
+      const result = getTypesTool(spec, { schemas: ['User'] })
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
@@ -200,7 +200,7 @@ describe('generateTypesTool', () => {
         },
       })
 
-      const result = generateTypesTool(spec, { schemas: ['User'] })
+      const result = getTypesTool(spec, { schemas: ['User'] })
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
@@ -232,7 +232,7 @@ describe('generateTypesTool', () => {
         },
       })
 
-      const result = generateTypesTool(spec, { schemas: ['A'] })
+      const result = getTypesTool(spec, { schemas: ['A'] })
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
@@ -253,7 +253,7 @@ describe('generateTypesTool', () => {
     it('returns path-not-found error when path does not exist', () => {
       const spec = createMockParsedSpec({ rawSpec: { paths: {} } })
 
-      const result = generateTypesTool(spec, {
+      const result = getTypesTool(spec, {
         method: 'get',
         path: '/missing',
       })
@@ -277,7 +277,7 @@ describe('generateTypesTool', () => {
         },
       })
 
-      const result = generateTypesTool(spec, {
+      const result = getTypesTool(spec, {
         method: 'post',
         path: '/users',
       })
@@ -306,7 +306,7 @@ describe('generateTypesTool', () => {
         },
       })
 
-      const result = generateTypesTool(spec, {
+      const result = getTypesTool(spec, {
         method: 'get',
         path: '/users',
       })
@@ -349,7 +349,7 @@ describe('generateTypesTool', () => {
         },
       })
 
-      const result = generateTypesTool(spec, {
+      const result = getTypesTool(spec, {
         method: 'post',
         path: '/users',
       })
@@ -389,7 +389,7 @@ describe('generateTypesTool', () => {
         },
       })
 
-      const result = generateTypesTool(spec, {
+      const result = getTypesTool(spec, {
         method: 'get',
         path: '/users/{id}',
       })
@@ -435,7 +435,7 @@ describe('generateTypesTool', () => {
         },
       })
 
-      const result = generateTypesTool(spec, {
+      const result = getTypesTool(spec, {
         method: 'get',
         path: '/users/{id}',
       })
@@ -477,7 +477,7 @@ describe('generateTypesTool', () => {
         },
       })
 
-      const result = generateTypesTool(spec, {
+      const result = getTypesTool(spec, {
         method: 'get',
         path: '/users/{id}',
       })
@@ -518,7 +518,7 @@ describe('generateTypesTool', () => {
         },
       })
 
-      const result = generateTypesTool(spec, {
+      const result = getTypesTool(spec, {
         method: 'get',
         path: '/users/{id}',
       })
@@ -565,7 +565,7 @@ describe('generateTypesTool', () => {
         },
       })
 
-      const result = generateTypesTool(spec, {
+      const result = getTypesTool(spec, {
         method: 'get',
         path: '/users/{id}',
       })
@@ -605,7 +605,7 @@ describe('generateTypesTool', () => {
         },
       })
 
-      const result = generateTypesTool(spec, {
+      const result = getTypesTool(spec, {
         method: 'POST',
         path: '/users/{id}',
       })
@@ -648,7 +648,7 @@ describe('generateTypesTool', () => {
         },
       })
 
-      const result = generateTypesTool(spec, { operationId: 'getUser' })
+      const result = getTypesTool(spec, { operationId: 'getUser' })
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
@@ -671,7 +671,7 @@ describe('generateTypesTool', () => {
         },
       })
 
-      const result = generateTypesTool(spec, { operationId: 'nonExistent' })
+      const result = getTypesTool(spec, { operationId: 'nonExistent' })
 
       expect(result).toEqual({
         isError: true,
@@ -697,7 +697,7 @@ describe('generateTypesTool', () => {
         },
       })
 
-      const result = generateTypesTool(spec, { operationId: 'listUsers' })
+      const result = getTypesTool(spec, { operationId: 'listUsers' })
 
       expect(result).toEqual({
         isError: true,

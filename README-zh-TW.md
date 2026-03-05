@@ -136,7 +136,7 @@ npx apifable@latest fetch
 
 1. 先探索 API（`get_spec_info` / `search_endpoints`）
 2. 鎖定契約細節（`get_endpoint` / `get_schema`）
-3. 只產生需要的型別（`generate_types`）
+3. 只產生需要的型別（`get_types`）
 4. 再請 Agent 產生 UI 或 service 程式碼
 
 這樣可以讓輸出更精準，也能避免產生不必要的程式碼。
@@ -157,7 +157,7 @@ npx apifable@latest fetch
 1. **探索** — 使用 `get_spec_info` 了解可用的 Tag 和安全機制
 2. **搜尋** — 使用 `search_endpoints` 或 `list_endpoints_by_tag` 定位目標 Endpoint
 3. **查看** — 使用 `get_endpoint` 取得完整的 request/response 細節與安全需求
-4. **型別** — 使用 `generate_types` 產生 Endpoint 對應的 TypeScript 型別
+4. **型別** — 使用 `get_types` 產生 Endpoint 對應的 TypeScript 型別
 5. **實作** — 使用產生的型別撰寫功能程式碼
 
 ### 型別檔案命名
@@ -222,7 +222,7 @@ Agent 應依照 schema 語意決定檔名，而非依照 OpenAPI tag 名稱。
 
 回傳所有 `$ref` 均已解析的完整 Schema。
 
-### `generate_types`
+### `get_types`
 
 **輸入（擇一模式）：**
 - `schemas`（string[]）：`components/schemas` 中的 Schema 名稱陣列

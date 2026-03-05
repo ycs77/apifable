@@ -3,26 +3,26 @@ import { addTransitiveDeps, buildDependencyGraph, collectRefs, topologicalSort }
 import { generateFileContent } from '../schema/to-ts'
 import { findOperationByOperationId } from './find-operation'
 
-interface GenerateTypesInput {
+interface GetTypesInput {
   schemas?: string[]
   method?: string
   path?: string
   operationId?: string
 }
 
-interface GenerateTypesSuccess {
+interface GetTypesSuccess {
   code: string
 }
 
-interface GenerateTypesError {
+interface GetTypesError {
   isError: true
   message: string
 }
 
-export function generateTypesTool(
+export function getTypesTool(
   spec: ParsedSpec,
-  input: GenerateTypesInput,
-): GenerateTypesSuccess | GenerateTypesError {
+  input: GetTypesInput,
+): GetTypesSuccess | GetTypesError {
   const hasSchemas = input.schemas !== undefined
   const hasMethod = input.method !== undefined
   const hasPath = input.path !== undefined
@@ -123,7 +123,7 @@ export function generateTypesTool(
     if (rootSchemaNames.length === 0) {
       return {
         isError: true,
-        message: `No schema references found for endpoint '${endpointMethod.toUpperCase()} ${endpointPath}'.`,
+        message: `No schema references found for endpoint '${endpointMethod!.toUpperCase()} ${endpointPath}'.`,
       }
     }
 

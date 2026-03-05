@@ -136,7 +136,7 @@ For most tasks, this sequence gives the best result:
 
 1. Start with API discovery (`get_spec_info` / `search_endpoints`)
 2. Lock the exact contract (`get_endpoint` / `get_schema`)
-3. Generate only needed types (`generate_types`)
+3. Generate only needed types (`get_types`)
 4. Ask the agent to implement UI or service code with those types
 
 This keeps outputs precise and avoids generating unnecessary code.
@@ -157,7 +157,7 @@ When working with API endpoints, follow this sequence:
 1. **Discover** — Use `get_spec_info` to understand available tags and security schemes
 2. **Find** — Use `search_endpoints` or `list_endpoints_by_tag` to locate the target endpoint
 3. **Inspect** — Use `get_endpoint` to get full request/response details and security requirements
-4. **Type** — Use `generate_types` to generate TypeScript types for the endpoint
+4. **Type** — Use `get_types` to generate TypeScript types for the endpoint
 5. **Implement** — Write the feature code using the generated types
 
 ### Type File Naming
@@ -221,7 +221,7 @@ Keyword search across schema name and description. Results are ranked by relevan
 
 Returns the full schema with all `$ref`s resolved.
 
-### `generate_types`
+### `get_types`
 
 **Inputs (choose one mode):**
 - `schemas` (string[]): Array of schema names from `components/schemas`
