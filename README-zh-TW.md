@@ -151,7 +151,7 @@ npx apifable@latest fetch
 - 撰寫程式碼前，務必先用 `get_endpoint` 確認 API 路徑和參數——不要猜測
 - 實作 API 呼叫前，先用 `get_types` 產生 TypeScript 型別
 - 呈現 apifable 工具回傳的所有屬性名稱和值時，必須完整保留——不可省略、截斷或簡化任何部分（例如保留完整的摘要文字，包括 `[ 32 - 001 ]` 等前綴）
-- 儲存產生的型別檔案時，依領域語意命名（如 `auth.ts`、`user.ts`），而非使用 OpenAPI tag 名稱
+- 儲存產生的型別檔案時，放在 `src/types/` 目錄下，並依領域語意命名（如 `src/types/auth.ts`、`src/types/user.ts`），而非使用 OpenAPI tag 名稱
 ````
 
 ## MCP Tools 參考

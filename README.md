@@ -151,7 +151,7 @@ Add the following to your project's `AGENTS.md` to help AI agents use apifable m
 - Always verify API paths and parameters with `get_endpoint` before writing code — never guess
 - Use `get_types` to generate TypeScript types before implementing API calls
 - Present all property names and values from apifable tools exactly as returned — do not omit, truncate, or simplify any part (e.g., keep full summary text including any prefixes like `[ 32 - 001 ]`)
-- When saving generated types to files, name files by domain semantics (e.g., `auth.ts`, `user.ts`), not by OpenAPI tag names
+- When saving generated types to files, save them under `src/types/` and name files by domain semantics (e.g., `src/types/auth.ts`, `src/types/user.ts`), not by OpenAPI tag names
 ````
 
 ## MCP Tools Reference
