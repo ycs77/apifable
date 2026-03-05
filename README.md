@@ -148,32 +148,10 @@ Add the following to your project's `AGENTS.md` to help AI agents use apifable m
 ````markdown
 ## API Integration (apifable)
 
-This project uses apifable MCP server for OpenAPI spec exploration and type generation.
-
-### Workflow
-
-When working with API endpoints, follow this sequence:
-
-1. **Discover** — Use `get_spec_info` to understand available tags and security schemes
-2. **Find** — Use `search_endpoints` or `list_endpoints_by_tag` to locate the target endpoint
-3. **Inspect** — Use `get_endpoint` to get full request/response details and security requirements
-4. **Type** — Use `get_types` to generate TypeScript types for the endpoint
-5. **Implement** — Write the feature code using the generated types
-
-### Type File Naming
-
-When saving generated types to files, use semantic English names based on the API domain:
-- `auth.ts` — authentication/login related types
-- `user.ts` — user profile and account types
-- `post.ts` — blog post and article types
-- `common.ts` — shared types used across multiple files
-
-The agent decides file names based on schema semantics, not OpenAPI tag names.
-
-### Rules
-
-- Do not guess API paths or parameters, always verify with `get_endpoint` first
-- Present all property name and values from apifable tools exactly as returned, do not omit, truncate, or simplify any part (e.g., keep full summary text including any prefixes like `[ 32 - 001 ]`)
+- Always verify API paths and parameters with `get_endpoint` before writing code — never guess
+- Use `get_types` to generate TypeScript types before implementing API calls
+- Present all property names and values from apifable tools exactly as returned — do not omit, truncate, or simplify any part (e.g., keep full summary text including any prefixes like `[ 32 - 001 ]`)
+- When saving generated types to files, name files by domain semantics (e.g., `auth.ts`, `user.ts`), not by OpenAPI tag names
 ````
 
 ## MCP Tools Reference

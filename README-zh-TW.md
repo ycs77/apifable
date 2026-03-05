@@ -143,38 +143,15 @@ npx apifable@latest fetch
 
 ### AI Agent 指引
 
-在專案的 `AGENTS.md` 中加入以下內容，可以幫助 AI Agent 更有效地使用 apifable：
+將以下內容加入專案的 `AGENTS.md`，幫助 AI 代理更有效地使用 apifable：
 
 ````markdown
 ## API 整合 (apifable)
 
-本專案使用 apifable MCP 伺服器來探索 OpenAPI 規格並產生型別。
-
-### 工作流程
-
-處理 API Endpoint 時，請依照以下順序：
-
-1. **探索** — 使用 `get_spec_info` 了解可用的 Tag 和安全機制
-2. **搜尋** — 使用 `search_endpoints` 或 `list_endpoints_by_tag` 定位目標 Endpoint
-3. **查看** — 使用 `get_endpoint` 取得完整的 request/response 細節與安全需求
-4. **型別** — 使用 `get_types` 產生 Endpoint 對應的 TypeScript 型別
-5. **實作** — 使用產生的型別撰寫功能程式碼
-
-### 型別檔案命名
-
-將產生的型別儲存至檔案時，請依據 API 語意使用英文命名：
-- `auth.ts` — 認證/登入相關型別
-- `user.ts` — 使用者個人資料與帳號型別
-- `post.ts` — 文章與部落格相關型別
-- `common.ts` — 多個檔案共用的型別
-
-Agent 應依照 schema 語意決定檔名，而非依照 OpenAPI tag 名稱。
-
-### 規則
-
-- 不要猜測 API 路徑或參數，務必先用 `get_endpoint` 確認
-- 呈現 apifable 工具回傳的所有欄位名稱和值時，必須完整原樣呈現。不得省略、裁減或簡化任何部分（例如：保留完整的 summary (說明) 文字，包括 `[ 32 - 001 ]` 等前綴）
-- 不得從範例值推測或修改欄位型別
+- 撰寫程式碼前，務必先用 `get_endpoint` 確認 API 路徑和參數——不要猜測
+- 實作 API 呼叫前，先用 `get_types` 產生 TypeScript 型別
+- 呈現 apifable 工具回傳的所有屬性名稱和值時，必須完整保留——不可省略、截斷或簡化任何部分（例如保留完整的摘要文字，包括 `[ 32 - 001 ]` 等前綴）
+- 儲存產生的型別檔案時，依領域語意命名（如 `auth.ts`、`user.ts`），而非使用 OpenAPI tag 名稱
 ````
 
 ## MCP Tools 參考
