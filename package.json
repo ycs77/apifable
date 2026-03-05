@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.5.0",
   "packageManager": "pnpm@10.30.2",
-  "description": "Explore any OpenAPI spec and generate types from it. Built for AI agents.",
+  "description": "MCP server that helps AI agents explore OpenAPI specs and generate TypeScript types.",
   "license": "MIT",
   "repository": {
     "type": "git",
