@@ -1,12 +1,16 @@
 import type { ParsedSpec } from '../types'
+import { findSimilarNames } from './suggestions'
 
 export function listEndpointsByTag(spec: ParsedSpec, tag: string, limit?: number, offset = 0) {
   const tagExists = spec.tags.some(t => t.name === tag)
   if (!tagExists) {
+    const availableTags = spec.tags.map(t => t.name)
+    const suggestions = findSimilarNames(tag, availableTags)
+
     return {
       isError: true,
-      message: `Tag '${tag}' not found.`,
-      availableTags: spec.tags.map(t => t.name),
+      message: buildNotFoundMessage(`Tag '${tag}' not found.`, suggestions),
+      availableTags: [...suggestions, ...availableTags.filter(name => !suggestions.includes(name))],
     }
   }
 
@@ -43,4 +47,9 @@ export function listEndpointsByTag(spec: ParsedSpec, tag: string, limit?: number
   }
 
   return result
+}
+
+function buildNotFoundMessage(message: string, suggestions: string[]): string {
+  if (suggestions.length === 0) return message
+  return `${message} Did you mean: ${suggestions.join(', ')}?`
 }

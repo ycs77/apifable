@@ -5,7 +5,17 @@ import { createMockParsedSpec } from '../helpers'
 describe('getEndpoint', () => {
   describe('method + path mode', () => {
     it('returns path-not-found error when path does not exist', () => {
-      const spec = createMockParsedSpec({ rawSpec: { paths: {} } })
+      const spec = createMockParsedSpec({
+        rawSpec: {
+          paths: {
+            '/users': {
+              get: {
+                operationId: 'listUsers',
+              },
+            },
+          },
+        },
+      })
 
       const result = getEndpoint(spec, { method: 'get', path: '/missing' })
 
@@ -198,6 +208,37 @@ describe('getEndpoint', () => {
       expect(result).toEqual({
         isError: true,
         message: 'Operation \'nonExistent\' not found in spec.',
+      })
+    })
+
+    it('suggests similar operationIds when operation is missing', () => {
+      const spec = createMockParsedSpec({
+        endpointIndex: [
+          {
+            method: 'get',
+            path: '/users',
+            operationId: 'listUsers',
+            summary: 'List users',
+            description: 'List all users',
+            tags: ['users'],
+          },
+        ],
+        rawSpec: {
+          paths: {
+            '/users': {
+              get: {
+                operationId: 'listUsers',
+              },
+            },
+          },
+        },
+      })
+
+      const result = getEndpoint(spec, { operationId: 'listUser' })
+
+      expect(result).toEqual({
+        isError: true,
+        message: 'Operation \'listUser\' not found in spec. Did you mean: listUsers?',
       })
     })
   })

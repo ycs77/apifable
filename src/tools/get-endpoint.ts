@@ -2,6 +2,7 @@ import type { HttpMethod, OperationObject, ParsedSpec } from '../types'
 import { HTTP_METHODS, isValidHttpMethod } from '../http-methods'
 import { resolveRefs } from '../spec/ref-resolver'
 import { findOperationByOperationId } from './find-operation'
+import { findSimilarNames } from './suggestions'
 
 interface GetEndpointInput {
   method?: string
@@ -51,9 +52,14 @@ export function getEndpoint(spec: ParsedSpec, input: GetEndpointInput) {
 
     const found = findOperationByOperationId(spec, input.operationId!)
     if (!found) {
+      const suggestions = findSimilarNames(
+        input.operationId!,
+        spec.endpointIndex.map(entry => entry.operationId).filter(Boolean),
+      )
+
       return {
         isError: true,
-        message: `Operation '${input.operationId}' not found in spec.`,
+        message: buildNotFoundMessage(`Operation '${input.operationId}' not found in spec.`, suggestions),
       }
     }
 
@@ -74,9 +80,11 @@ export function getEndpoint(spec: ParsedSpec, input: GetEndpointInput) {
 
     const pathItem = spec.rawSpec.paths?.[path]
     if (!pathItem) {
+      const suggestions = findSimilarNames(path, Object.keys(spec.rawSpec.paths ?? {}))
+
       return {
         isError: true,
-        message: `Path '${path}' not found in spec.`,
+        message: buildNotFoundMessage(`Path '${path}' not found in spec.`, suggestions),
       }
     }
 
@@ -109,4 +117,9 @@ export function getEndpoint(spec: ParsedSpec, input: GetEndpointInput) {
   }
 
   return result
+}
+
+function buildNotFoundMessage(message: string, suggestions: string[]): string {
+  if (suggestions.length === 0) return message
+  return `${message} Did you mean: ${suggestions.join(', ')}?`
 }

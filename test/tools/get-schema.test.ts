@@ -68,4 +68,20 @@ describe('getSchema', () => {
       },
     })
   })
+
+  it('suggests similar schema names when schema is missing', () => {
+    const spec = createMockParsedSpec({
+      schemas: {
+        User: { type: 'object' },
+        UserProfile: { type: 'object' },
+      },
+    })
+
+    const result = getSchema(spec, 'Usr')
+
+    expect(result).toEqual({
+      isError: true,
+      message: 'Schema \'Usr\' not found. Did you mean: User?',
+    })
+  })
 })

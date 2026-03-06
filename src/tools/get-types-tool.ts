@@ -3,6 +3,7 @@ import { HTTP_METHODS, isValidHttpMethod } from '../http-methods'
 import { addTransitiveDeps, buildDependencyGraph, collectRefs, topologicalSort } from '../schema/dependency'
 import { generateFileContent } from '../schema/to-ts'
 import { findOperationByOperationId } from './find-operation'
+import { findSimilarNames } from './suggestions'
 
 interface GetTypesInput {
   schemas?: string[]
@@ -73,7 +74,7 @@ export function getTypesTool(
     if (missing.length > 0) {
       return {
         isError: true,
-        message: `Schema not found: ${missing.join(', ')}.`,
+        message: buildMissingSchemaMessage(missing, spec.schemas),
       }
     }
   } else {
@@ -89,9 +90,14 @@ export function getTypesTool(
 
       const found = findOperationByOperationId(spec, input.operationId!)
       if (!found) {
+        const suggestions = findSimilarNames(
+          input.operationId!,
+          spec.endpointIndex.map(entry => entry.operationId).filter(Boolean),
+        )
+
         return {
           isError: true,
-          message: `Operation '${input.operationId}' not found in spec.`,
+          message: buildNotFoundMessage(`Operation '${input.operationId}' not found in spec.`, suggestions),
         }
       }
       operation = found.operation
@@ -113,9 +119,11 @@ export function getTypesTool(
       const pathItem = spec.rawSpec.paths?.[endpointPath]
 
       if (!pathItem) {
+        const suggestions = findSimilarNames(endpointPath, Object.keys(spec.rawSpec.paths ?? {}))
+
         return {
           isError: true,
-          message: `Path '${endpointPath}' not found in spec.`,
+          message: buildNotFoundMessage(`Path '${endpointPath}' not found in spec.`, suggestions),
         }
       }
 
@@ -147,7 +155,7 @@ export function getTypesTool(
     if (missing.length > 0) {
       return {
         isError: true,
-        message: `Schema not found: ${missing.join(', ')}.`,
+        message: buildMissingSchemaMessage(missing, spec.schemas),
       }
     }
   }
@@ -162,7 +170,7 @@ export function getTypesTool(
   if (missingDeps.length > 0) {
     return {
       isError: true,
-      message: `Schema not found: ${missingDeps.join(', ')}.`,
+      message: buildMissingSchemaMessage(missingDeps, spec.schemas),
     }
   }
 
@@ -190,4 +198,20 @@ function findMissingSchemas(
   schemas: Record<string, unknown>,
 ): string[] {
   return names.filter(name => !(name in schemas)).sort((a, b) => a.localeCompare(b))
+}
+
+function buildMissingSchemaMessage(
+  missing: string[],
+  schemas: Record<string, unknown>,
+): string {
+  const message = `Schema not found: ${missing.join(', ')}.`
+  if (missing.length !== 1) return message
+
+  const suggestions = findSimilarNames(missing[0], Object.keys(schemas))
+  return buildNotFoundMessage(message, suggestions)
+}
+
+function buildNotFoundMessage(message: string, suggestions: string[]): string {
+  if (suggestions.length === 0) return message
+  return `${message} Did you mean: ${suggestions.join(', ')}?`
 }

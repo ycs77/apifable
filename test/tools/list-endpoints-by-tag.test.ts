@@ -72,4 +72,22 @@ describe('listEndpointsByTag', () => {
       availableTags: ['users', 'orders'],
     })
   })
+
+  it('suggests similar tags before the rest of available tags', () => {
+    const spec = createMockParsedSpec({
+      tags: [
+        createMockTag({ name: 'users' }),
+        createMockTag({ name: 'user-admin' }),
+        createMockTag({ name: 'orders' }),
+      ],
+    })
+
+    const result = listEndpointsByTag(spec, 'user')
+
+    expect(result).toEqual({
+      isError: true,
+      message: 'Tag \'user\' not found. Did you mean: users, user-admin?',
+      availableTags: ['users', 'user-admin', 'orders'],
+    })
+  })
 })

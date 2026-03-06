@@ -107,6 +107,24 @@ describe('getTypesTool', () => {
       })
     })
 
+    it('suggests similar schema names when one schema is missing', () => {
+      const spec = createMockParsedSpec({
+        schemas: {
+          User: { type: 'object' },
+          UserProfile: { type: 'object' },
+        },
+      })
+
+      const result = getTypesTool(spec, {
+        schemas: ['Usr'],
+      })
+
+      expect(result).toEqual({
+        isError: true,
+        message: 'Schema not found: Usr. Did you mean: User?',
+      })
+    })
+
     it('generates TypeScript for a single schema', () => {
       const spec = createMockParsedSpec({
         schemas: {
@@ -251,7 +269,17 @@ describe('getTypesTool', () => {
 
   describe('endpoint mode', () => {
     it('returns path-not-found error when path does not exist', () => {
-      const spec = createMockParsedSpec({ rawSpec: { paths: {} } })
+      const spec = createMockParsedSpec({
+        rawSpec: {
+          paths: {
+            '/users': {
+              get: {
+                operationId: 'listUsers',
+              },
+            },
+          },
+        },
+      })
 
       const result = getTypesTool(spec, {
         method: 'get',
@@ -690,6 +718,37 @@ describe('getTypesTool', () => {
       expect(result).toEqual({
         isError: true,
         message: 'Operation \'nonExistent\' not found in spec.',
+      })
+    })
+
+    it('suggests similar operationIds when operation is missing', () => {
+      const spec = createMockParsedSpec({
+        endpointIndex: [
+          {
+            method: 'get',
+            path: '/users',
+            operationId: 'listUsers',
+            summary: 'List users',
+            description: 'List all users',
+            tags: ['users'],
+          },
+        ],
+        rawSpec: {
+          paths: {
+            '/users': {
+              get: {
+                operationId: 'listUsers',
+              },
+            },
+          },
+        },
+      })
+
+      const result = getTypesTool(spec, { operationId: 'listUser' })
+
+      expect(result).toEqual({
+        isError: true,
+        message: 'Operation \'listUser\' not found in spec. Did you mean: listUsers?',
       })
     })
 
