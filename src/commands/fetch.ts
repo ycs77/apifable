@@ -12,6 +12,7 @@ type SpecFormat = 'json' | 'yaml'
 export interface FetchOptions {
   url?: string
   output?: string
+  cwd?: string
 }
 
 function getFormatByPath(filePath: string): SpecFormat {
@@ -49,20 +50,23 @@ function stringifySpecContent(spec: OpenAPIObject, format: SpecFormat): string {
 }
 
 export async function fetchAndWriteSpec(options: FetchOptions): Promise<{ outputPath: string, sourceFormat: SpecFormat, targetFormat: SpecFormat }> {
-  const config = await readConfig()
+  const config = await readConfig(options.cwd)
   const url = options.url ?? config?.spec.url
 
   if (!url) {
     throw new Error('Spec URL is required. Set `spec.url` in apifable.config.json or pass --url')
   }
 
-  const outputPath = resolve(options.output ?? config?.spec.path ?? defaultConfig.spec.path)
+  const outputPath = resolve(
+    options.cwd || process.cwd(),
+    options.output ?? config?.spec.path ?? defaultConfig.spec.path
+  )
   const targetFormat = getFormatByPath(outputPath)
 
   let response: Response
   try {
     response = await fetch(url, {
-      headers: await resolveHeaders(),
+      headers: await resolveHeaders(options.cwd),
     })
   } catch (err) {
     throw new Error(`Failed to fetch spec URL: ${(err as Error).message}`)

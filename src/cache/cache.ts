@@ -3,13 +3,13 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { CACHE_VERSION } from '../types'
 
-function getCachePath(): string {
-  return join(process.cwd(), '.apifable', 'cache', 'cache.json')
+function getCachePath(cwd = process.cwd()): string {
+  return join(cwd, '.apifable', 'cache', 'cache.json')
 }
 
-export async function readCache(hash: string): Promise<ParsedSpec | null> {
+export async function readCache(hash: string, cwd?: string): Promise<ParsedSpec | null> {
   try {
-    const cachePath = getCachePath()
+    const cachePath = getCachePath(cwd)
     const content = await readFile(cachePath, 'utf-8')
     const cache = JSON.parse(content) as SpecCache
     if (cache.version !== CACHE_VERSION || cache.hash !== hash) {
@@ -21,8 +21,8 @@ export async function readCache(hash: string): Promise<ParsedSpec | null> {
   }
 }
 
-export async function writeCache(hash: string, spec: ParsedSpec): Promise<void> {
-  const cachePath = getCachePath()
+export async function writeCache(hash: string, spec: ParsedSpec, cwd?: string): Promise<void> {
+  const cachePath = getCachePath(cwd)
   await mkdir(dirname(cachePath), { recursive: true })
   const cache: SpecCache = {
     version: CACHE_VERSION,

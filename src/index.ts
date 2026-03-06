@@ -7,6 +7,7 @@ import { cac } from 'cac'
 import { z } from 'zod'
 import { version } from '../package.json' with { type: 'json' }
 import { readCache, writeCache } from './cache/cache'
+import { clearCache } from './commands/clear-cache'
 import { fetchSpec } from './commands/fetch'
 import { initialize } from './commands/init'
 import { readConfig } from './config/config'
@@ -22,6 +23,8 @@ import { searchSchemas } from './tools/search-schemas'
 
 const cli = cac('apifable')
 
+cli.option('--cwd <path>', 'Working directory (defaults to current directory)')
+
 cli
   .command('')
   .action(() => {
@@ -30,21 +33,33 @@ cli
 
 cli
   .command('init', 'Initialize apifable configuration')
-  .action(async () => {
-    await initialize()
+  .action(async (options: { cwd?: string }) => {
+    const cwd = options.cwd ? resolve(options.cwd) : undefined
+    await initialize(cwd)
+  })
+
+cli
+  .command('clear-cache', 'Clear the local spec cache')
+  .action(async (options: { cwd?: string }) => {
+    const cwd = options.cwd ? resolve(options.cwd) : undefined
+    await clearCache(cwd)
   })
 
 cli
   .command('mcp', 'Start MCP server for an OpenAPI spec')
   .option('--spec <path>', 'Path to OpenAPI spec file (.yaml, .yml, or .json)')
-  .action(async (options: { spec?: string }) => {
-    const config = await readConfig()
+  .action(async (options: { spec?: string, cwd?: string }) => {
+    const cwd = options.cwd ? resolve(options.cwd) : undefined
+    const config = await readConfig(cwd)
     if (!config) {
       console.error('No apifable.config.json found. Run "apifable init" to initialize.')
       process.exit(1)
     }
 
-    const specPath = resolve(options.spec ?? config.spec.path)
+    const specPath = resolve(
+      cwd ?? process.cwd(),
+      options.spec ?? config.spec.path
+    )
 
     try {
       await access(specPath)
@@ -65,12 +80,12 @@ cli
     }
 
     let spec: ParsedSpec
-    const cached = await readCache(hash)
+    const cached = await readCache(hash, cwd)
     if (cached) {
       spec = cached
     } else {
       spec = buildParsedSpec(parsed)
-      writeCache(hash, spec).catch(err => console.warn('Cache write failed:', err))
+      writeCache(hash, spec, cwd).catch(err => console.warn('Cache write failed:', err))
     }
 
     const server = new McpServer({
@@ -215,8 +230,9 @@ cli
   .command('fetch', 'Fetch OpenAPI spec from remote URL and save locally')
   .option('--url <url>', 'OpenAPI spec URL')
   .option('--output <path>', 'Output file path (.yaml, .yml, or .json)')
-  .action(async (options: { url?: string, output?: string }) => {
-    await fetchSpec(options)
+  .action(async (options: { url?: string, output?: string, cwd?: string }) => {
+    const cwd = options.cwd ? resolve(options.cwd) : undefined
+    await fetchSpec({ ...options, cwd })
   })
 
 cli.help()

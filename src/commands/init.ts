@@ -5,7 +5,7 @@ import c from 'picocolors'
 import { configExists, writeConfig } from '../config/config'
 import { showLogo } from '../logo'
 
-export async function initialize(): Promise<void> {
+export async function initialize(cwd?: string): Promise<void> {
   console.log()
   showLogo()
   console.log()
@@ -14,7 +14,7 @@ export async function initialize(): Promise<void> {
 
   // Phase 1: Collect all user input
 
-  if (await configExists()) {
+  if (await configExists(cwd)) {
     const shouldOverwrite = await confirm({ message: 'apifable.config.json already exists. Overwrite?' })
     if (isCancel(shouldOverwrite) || !shouldOverwrite) {
       outro('Aborted.')
@@ -53,10 +53,10 @@ export async function initialize(): Promise<void> {
       path: spec,
       ...(specUrl && { url: specUrl }),
     },
-  })
+  }, cwd)
   log.success('Created apifable.config.json')
 
-  const gitignorePath = join(process.cwd(), '.gitignore')
+  const gitignorePath = join(cwd ?? process.cwd(), '.gitignore')
   const gitignoreEntry = '.apifable/'
 
   let gitignoreContent = ''
