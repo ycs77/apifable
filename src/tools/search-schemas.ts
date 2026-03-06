@@ -16,7 +16,7 @@ export function scoreSchema(entry: SchemaEntry, query: string): number {
   return -1
 }
 
-export function fuzzySearchSchemas(candidates: SchemaEntry[], query: string, limit: number): SchemaSearchResultItem[] {
+export function fuzzySearchSchemas(candidates: SchemaEntry[], query: string): SchemaSearchResultItem[] {
   const candidateMap = new Map(candidates.map(e => [e.name, e]))
 
   const ms = new MiniSearch({
@@ -38,7 +38,6 @@ export function fuzzySearchSchemas(candidates: SchemaEntry[], query: string, lim
       prefix: true,
       boost: { name: 2, description: 1 },
     })
-    .slice(0, limit)
     .map(r => {
       const entry = candidateMap.get(r.id)!
       return {
@@ -57,26 +56,32 @@ export function searchSchemas(spec: ParsedSpec, query: string, limit = 10) {
     .map(e => ({ entry: e, score: scoreSchema(e, query) }))
     .filter(r => r.score >= 0)
     .sort((a, b) => a.score - b.score)
-    .slice(0, limit)
 
   if (exactScored.length > 0) {
+    const results = exactScored
+      .slice(0, limit)
+      .map<SchemaSearchResultItem>(r => ({
+        name: r.entry.name,
+        description: r.entry.description,
+      }))
+
     return {
       query,
       matchType: 'exact' as const,
-      results: exactScored.map<SchemaSearchResultItem>(r => ({
-        name: r.entry.name,
-        description: r.entry.description,
-      })),
+      results,
       total: exactScored.length,
+      hasMore: exactScored.length > results.length,
     }
   }
 
   // Fuzzy fallback
-  const fuzzyResults = fuzzySearchSchemas(candidates, query, limit)
+  const fuzzyMatches = fuzzySearchSchemas(candidates, query)
+  const fuzzyResults = fuzzyMatches.slice(0, limit)
   return {
     query,
     matchType: 'fuzzy' as const,
     results: fuzzyResults,
-    total: fuzzyResults.length,
+    total: fuzzyMatches.length,
+    hasMore: fuzzyMatches.length > fuzzyResults.length,
   }
 }

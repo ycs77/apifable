@@ -103,7 +103,8 @@ describe('searchEndpoints', () => {
 
     const result = searchEndpoints(spec, 'user', undefined, 5)
 
-    expect(result.total).toBe(5)
+    expect(result.total).toBe(20)
     expect(result.results).toHaveLength(5)
+    expect(result.hasMore).toBe(true)
   })
 })

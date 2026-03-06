@@ -11,7 +11,7 @@ function scoreEndpoint(entry: EndpointEntry, query: string): number {
   return -1
 }
 
-function fuzzySearch(candidates: EndpointEntry[], query: string, limit: number): SearchResultItem[] {
+function fuzzySearch(candidates: EndpointEntry[], query: string): SearchResultItem[] {
   const candidateMap = new Map(candidates.map(e => [`${e.method}:${e.path}`, e]))
 
   const ms = new MiniSearch({
@@ -40,7 +40,6 @@ function fuzzySearch(candidates: EndpointEntry[], query: string, limit: number):
         description: 1, // lengthy prose, last resort
       },
     })
-    .slice(0, limit)
     .map(r => {
       const entry = candidateMap.get(r.id)!
       return {
@@ -65,39 +64,46 @@ export function searchEndpoints(spec: ParsedSpec, query: string, tag?: string, l
     .map(e => ({ entry: e, score: scoreEndpoint(e, query) }))
     .filter(r => r.score >= 0)
     .sort((a, b) => a.score - b.score)
-    .slice(0, limit)
 
   if (exactScored.length > 0) {
-    return {
-      query,
-      tag,
-      matchType: 'exact' as const,
-      results: exactScored.map<SearchResultItem>(r => ({
+    const results = exactScored
+      .slice(0, limit)
+      .map<SearchResultItem>(r => ({
         method: r.entry.method,
         path: r.entry.path,
         operationId: r.entry.operationId,
         summary: r.entry.summary,
         tags: r.entry.tags,
-      })),
+      }))
+
+    return {
+      query,
+      tag,
+      matchType: 'exact' as const,
+      results,
       total: exactScored.length,
+      hasMore: exactScored.length > results.length,
     }
   }
 
   // Fuzzy fallback
-  const fuzzyResults = fuzzySearch(candidates, query, limit)
+  const fuzzyMatches = fuzzySearch(candidates, query)
+  const fuzzyResults = fuzzyMatches.slice(0, limit)
   const fuzzyReturn: {
     query: string
     tag: string | undefined
     matchType: 'fuzzy'
     results: SearchResultItem[]
     total: number
+    hasMore: boolean
     message?: string
   } = {
     query,
     tag,
     matchType: 'fuzzy',
     results: fuzzyResults,
-    total: fuzzyResults.length,
+    total: fuzzyMatches.length,
+    hasMore: fuzzyMatches.length > fuzzyResults.length,
   }
 
   if (fuzzyResults.length === 0) {

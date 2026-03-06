@@ -45,7 +45,8 @@ describe('searchSchemas', () => {
 
     const result = searchSchemas(spec, 'user', 5)
 
-    expect(result.total).toBe(5)
+    expect(result.total).toBe(20)
     expect(result.results).toHaveLength(5)
+    expect(result.hasMore).toBe(true)
   })
 })
