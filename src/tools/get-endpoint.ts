@@ -2,17 +2,53 @@ import type { HttpMethod, OperationObject, ParsedSpec } from '../types'
 import { resolveRefs } from '../spec/ref-resolver'
 import { findOperationByOperationId } from './find-operation'
 
-type GetEndpointInput =
-  | { method: string, path: string }
-  | { operationId: string }
+interface GetEndpointInput {
+  method?: string
+  path?: string
+  operationId?: string
+}
 
 export function getEndpoint(spec: ParsedSpec, input: GetEndpointInput) {
+  const hasMethod = input.method !== undefined
+  const hasPath = input.path !== undefined
+  const hasOperationId = input.operationId !== undefined
+
+  const modeCount = (hasMethod || hasPath ? 1 : 0) + (hasOperationId ? 1 : 0)
+
+  if (modeCount === 0) {
+    return {
+      isError: true,
+      message: 'Provide either "method" + "path" or "operationId".',
+    }
+  }
+
+  if (modeCount > 1) {
+    return {
+      isError: true,
+      message: 'Provide either "method" + "path" or "operationId", not both.',
+    }
+  }
+
+  if (hasMethod !== hasPath) {
+    return {
+      isError: true,
+      message: 'Both "method" and "path" are required for endpoint mode.',
+    }
+  }
+
   let normalizedMethod: HttpMethod
   let path: string
   let operation: OperationObject
 
-  if ('operationId' in input) {
-    const found = findOperationByOperationId(spec, input.operationId)
+  if (hasOperationId) {
+    if (input.operationId!.trim() === '') {
+      return {
+        isError: true,
+        message: 'operationId must not be an empty string.',
+      }
+    }
+
+    const found = findOperationByOperationId(spec, input.operationId!)
     if (!found) {
       return {
         isError: true,
@@ -24,8 +60,8 @@ export function getEndpoint(spec: ParsedSpec, input: GetEndpointInput) {
     path = found.path
     operation = found.operation
   } else {
-    normalizedMethod = input.method.toLowerCase() as HttpMethod
-    path = input.path
+    normalizedMethod = input.method!.toLowerCase() as HttpMethod
+    path = input.path!
 
     const pathItem = spec.rawSpec.paths?.[path]
     if (!pathItem) {
@@ -39,7 +75,7 @@ export function getEndpoint(spec: ParsedSpec, input: GetEndpointInput) {
     if (!op) {
       return {
         isError: true,
-        message: `Method '${input.method.toUpperCase()}' not found for path '${path}'.`,
+        message: `Method '${input.method!.toUpperCase()}' not found for path '${path}'.`,
       }
     }
     operation = op

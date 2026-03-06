@@ -191,8 +191,10 @@ npx apifable@latest fetch
 
 **輸入：**
 - `tag`（string）：要篩選的 Tag 名稱
+- `limit`（number，optional）：最多回傳幾筆 Endpoint
+- `offset`（number，optional）：略過幾筆 Endpoint（預設：0）
 
-回傳屬於指定 Tag 的所有 Endpoint。當結果超過 30 筆時會顯示警告。
+回傳屬於指定 Tag 的所有 Endpoint。回應包含 `total`、`offset`、`hasMore` 欄位以支援分頁。當結果超過 30 筆且未指定 `limit` 時會顯示警告。
 
 ### `search_endpoints`
 
@@ -252,6 +254,11 @@ npx apifable@latest fetch
 ```json
 { "operationId": "listUsers" }
 ```
+
+## 限制
+
+- `$ref` 解析只支援指向 `#/components/schemas/` 的內部參照，不支援外部 `$ref`（例如指向其他檔案或 URL 的參照）。
+- 不支援 OpenAPI 2.0（Swagger），僅支援 OpenAPI 3.0 與 3.1 規格書。
 
 ## 為什麼
 

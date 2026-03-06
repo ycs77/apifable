@@ -191,8 +191,10 @@ Returns the API title, version, description, servers, and all tags with their en
 
 **Inputs:**
 - `tag` (string): The tag name to filter by
+- `limit` (number, optional): Max endpoints to return
+- `offset` (number, optional): Number of endpoints to skip (default: 0)
 
-Returns all endpoints belonging to the given tag. Includes a warning when results exceed 30 items.
+Returns all endpoints belonging to the given tag. The response includes `total`, `offset`, and `hasMore` fields for pagination. Includes a warning when results exceed 30 items and no `limit` is specified.
 
 ### `search_endpoints`
 
@@ -252,6 +254,11 @@ Example payloads:
 ```json
 { "operationId": "listUsers" }
 ```
+
+## Limitations
+
+- `$ref` resolution only supports internal references to `#/components/schemas/`. External `$ref`s (e.g. references to other files or URLs) are not supported.
+- OpenAPI 2.0 (Swagger) is not supported. Only OpenAPI 3.0 and 3.1 specs are supported.
 
 ## Why
 

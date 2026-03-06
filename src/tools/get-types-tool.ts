@@ -79,6 +79,13 @@ export function getTypesTool(
     let operation
 
     if (hasOperationId) {
+      if (input.operationId!.trim() === '') {
+        return {
+          isError: true,
+          message: 'operationId must not be an empty string.',
+        }
+      }
+
       const found = findOperationByOperationId(spec, input.operationId!)
       if (!found) {
         return {

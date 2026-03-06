@@ -92,13 +92,15 @@ cli
     server.registerTool(
       'list_endpoints_by_tag',
       {
-        description: 'List all endpoints belonging to a specific tag. Use get_spec_info first to see available tags. Then use get_endpoint to inspect a specific endpoint in detail.',
+        description: 'List all endpoints belonging to a specific tag. Use get_spec_info first to see available tags. Supports pagination via limit and offset. Then use get_endpoint to inspect a specific endpoint in detail.',
         inputSchema: {
           tag: z.string().describe('The tag name to filter endpoints by'),
+          limit: z.number().int().min(1).max(100).optional().describe('Maximum number of endpoints to return'),
+          offset: z.number().int().min(0).optional().describe('Number of endpoints to skip (default: 0)'),
         },
       },
-      ({ tag }) => {
-        const result = listEndpointsByTag(spec, tag)
+      ({ tag, limit, offset }) => {
+        const result = listEndpointsByTag(spec, tag, limit, offset)
         const isError = 'isError' in result && result.isError === true
         return {
           content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
@@ -134,10 +136,7 @@ cli
         },
       },
       ({ method, path, operationId }) => {
-        const input = operationId
-          ? { operationId }
-          : { method: method!, path: path! }
-        const result = getEndpoint(spec, input)
+        const result = getEndpoint(spec, { method, path, operationId })
         const isError = 'isError' in result && result.isError === true
         return {
           content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],

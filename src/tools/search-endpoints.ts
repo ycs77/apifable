@@ -85,11 +85,24 @@ export function searchEndpoints(spec: ParsedSpec, query: string, tag?: string, l
 
   // Fuzzy fallback
   const fuzzyResults = fuzzySearch(candidates, query, limit)
-  return {
+  const fuzzyReturn: {
+    query: string
+    tag: string | undefined
+    matchType: 'fuzzy'
+    results: SearchResultItem[]
+    total: number
+    message?: string
+  } = {
     query,
     tag,
-    matchType: 'fuzzy' as const,
+    matchType: 'fuzzy',
     results: fuzzyResults,
     total: fuzzyResults.length,
   }
+
+  if (fuzzyResults.length === 0) {
+    fuzzyReturn.message = 'No endpoints found. Try different keywords or check available tags with get_spec_info.'
+  }
+
+  return fuzzyReturn
 }

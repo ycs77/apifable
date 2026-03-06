@@ -28,8 +28,9 @@
 - `search_endpoints` defaults to `limit: 10`; max is 100
 - `search_schemas` defaults to `limit: 10`; max is 100
 - To force-invalidate all caches (e.g. after `ParsedSpec` shape changes), bump `CACHE_VERSION` in `src/types.ts`
-- `search_endpoints` fuzzy fallback (`minisearch`, fuzzy: `0.2`, prefix matching): response includes `matchType: "exact" | "fuzzy"`, fuzzy results include `score`
-- `get_endpoint` accepts either `method` + `path` or `operationId` (mutually exclusive)
+- `search_endpoints` fuzzy fallback (`minisearch`, fuzzy: `0.2`, prefix matching): response includes `matchType: "exact" | "fuzzy"`, fuzzy results include `score`; empty fuzzy results include `message` hint
+- `get_endpoint` validates mutually exclusive modes in the tool function itself (not in the handler); accepts either `method` + `path` or `operationId`; empty `operationId` returns an error
+- `list_endpoints_by_tag` supports `limit`/`offset` pagination; response includes `total`, `offset`, `hasMore`; warning shown when `total > 30 && limit === undefined`
 - `get_types` supports exactly one mode per call: `schemas` (schema names), `method` + `path` (endpoint), or `operationId`; mixing modes returns an error
 - `get_types` returns self-contained TypeScript declarations as code text (no import statements)
 - Auth headers live in `.apifable/auth.json` (not version-controlled); `spec.headers` in config is for non-secret headers; auth.json overrides config on key conflict; both support `${ENV_VAR}` expansion (undefined vars kept as-is)

@@ -53,7 +53,7 @@ describe('listEndpointsByTag', () => {
     const result = listEndpointsByTag(spec, 'users')
 
     expect('endpoints' in result && result.endpoints).toHaveLength(31)
-    expect('warning' in result && result.warning).toBe('This tag has 31 endpoints. Consider using search_endpoints to narrow results.')
+    expect('warning' in result && result.warning).toBe('This tag has 31 endpoints. Consider using search_endpoints to narrow results or use limit/offset for pagination.')
   })
 
   it('returns error with available tags when tag does not exist', () => {

@@ -1,6 +1,6 @@
 import type { ParsedSpec } from '../types'
 
-export function listEndpointsByTag(spec: ParsedSpec, tag: string) {
+export function listEndpointsByTag(spec: ParsedSpec, tag: string, limit?: number, offset = 0) {
   const tagExists = spec.tags.some(t => t.name === tag)
   if (!tagExists) {
     return {
@@ -10,7 +10,7 @@ export function listEndpointsByTag(spec: ParsedSpec, tag: string) {
     }
   }
 
-  const endpoints = spec.endpointIndex
+  const all = spec.endpointIndex
     .filter(e => e.tags.includes(tag))
     .map(e => ({
       method: e.method,
@@ -20,14 +20,26 @@ export function listEndpointsByTag(spec: ParsedSpec, tag: string) {
       description: e.description,
     }))
 
+  const total = all.length
+  const endpoints = limit !== undefined ? all.slice(offset, offset + limit) : all.slice(offset)
+
   const result: {
     tag: string
     endpoints: typeof endpoints
+    total: number
+    offset: number
+    hasMore: boolean
     warning?: string
-  } = { tag, endpoints }
+  } = {
+    tag,
+    endpoints,
+    total,
+    offset,
+    hasMore: offset + endpoints.length < total,
+  }
 
-  if (endpoints.length > 30) {
-    result.warning = `This tag has ${endpoints.length} endpoints. Consider using search_endpoints to narrow results.`
+  if (total > 30 && limit === undefined) {
+    result.warning = `This tag has ${total} endpoints. Consider using search_endpoints to narrow results or use limit/offset for pagination.`
   }
 
   return result
