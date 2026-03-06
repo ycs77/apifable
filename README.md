@@ -18,7 +18,7 @@ English | [繁體中文](README-zh-TW.md)
 
 ## Overview
 
-apifable helps AI agents work with OpenAPI specifications. It makes it easy to explore API structure, search endpoints, and generate TypeScript types — so your AI agent always has the context it needs to write accurate API code.
+apifable helps AI agents work with OpenAPI spec. It makes it easy to explore API structure, search endpoints, and generate TypeScript types. So your AI agent always has the context it needs to write accurate API code.
 
 ## ✨ Features
 
@@ -41,7 +41,7 @@ This creates `apifable.config.json` in your project root. The config file should
 
 ### Prepare Your Spec
 
-`apifable fetch` reads `spec.path` and `spec.url` from `apifable.config.json` to download the spec locally:
+Run the following command to download the OpenAPI spec to your project (`spec.url` → `spec.path`):
 
 ```bash
 npx apifable@latest fetch
@@ -257,7 +257,7 @@ Example payloads:
 
 While using AI agents like Claude Code to assist in frontend development, I realized that backend API integration remained a major pain point. Whenever I needed to generate corresponding API code, I often had to manually copy and paste API paths and parameters for the agent to understand—a process that was both tedious and inelegant.
 
-So I turned my attention to the OpenAPI specification and found it to be a format perfectly suited for AI collaboration. However, no existing MCP tool met my standards at the time: some were close in functionality but couldn't handle large `openapi.yaml` files (up to 2MB), while others offered a clunky experience. I decided to build **apifable** via "Vibe Coding" with Claude Code, making it easy to query API specs through AI agents and generate precise TypeScript types.
+So I turned my attention to the OpenAPI spec and found it to be a format perfectly suited for AI collaboration. However, no existing MCP tool met my standards at the time: some were close in functionality but couldn't handle large `openapi.yaml` files (up to 2MB), while others offered a clunky experience. I decided to build **apifable** via "Vibe Coding" with Claude Code, making it easy to query API specs through AI agents and generate precise TypeScript types.
 
 ## Sponsor
 
