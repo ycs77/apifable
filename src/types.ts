@@ -61,15 +61,6 @@ export interface ParsedSpec {
   rawSpec: OpenAPIObject
 }
 
-export const CACHE_VERSION = 1
-
-export interface SpecCache {
-  version: number
-  hash: string
-  cachedAt: string
-  spec: ParsedSpec
-}
-
 export interface OpenAPIObject {
   openapi?: string
   info?: {

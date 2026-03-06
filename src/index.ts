@@ -6,8 +6,6 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { cac } from 'cac'
 import { z } from 'zod'
 import { version } from '../package.json' with { type: 'json' }
-import { readCache, writeCache } from './cache/cache'
-import { clearCache } from './commands/clear-cache'
 import { fetchSpec } from './commands/fetch'
 import { initialize } from './commands/init'
 import { readConfig } from './config/config'
@@ -70,25 +68,16 @@ cli
       process.exit(1)
     }
 
-    let hash: string
     let parsed: OpenAPIObject
     try {
       const result = await loadSpecFile(specPath)
-      hash = result.hash
       parsed = result.parsed
     } catch (err) {
       console.error(`Failed to load spec file: ${(err as Error).message}`)
       process.exit(1)
     }
 
-    let spec: ParsedSpec
-    const cached = await readCache(hash, cwd)
-    if (cached) {
-      spec = cached
-    } else {
-      spec = buildParsedSpec(parsed)
-      writeCache(hash, spec, cwd).catch(err => console.warn('Cache write failed:', err))
-    }
+    const spec: ParsedSpec = buildParsedSpec(parsed)
 
     const server = new McpServer({
       name: 'apifable',
@@ -226,13 +215,6 @@ cli
 
     const transport = new StdioServerTransport()
     await server.connect(transport)
-  })
-
-cli
-  .command('clear-cache', 'Clear the local spec cache')
-  .action(async (options: { cwd?: string }) => {
-    const cwd = options.cwd ? resolve(options.cwd) : undefined
-    await clearCache(cwd)
   })
 
 cli.help()

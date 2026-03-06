@@ -27,7 +27,6 @@
 
 - `search_endpoints` defaults to `limit: 10`; max is 100
 - `search_schemas` defaults to `limit: 10`; max is 100
-- To force-invalidate all caches (e.g. after `ParsedSpec` shape changes), bump `CACHE_VERSION` in `src/types.ts`
 - `search_endpoints` fuzzy fallback (`minisearch`, fuzzy: `0.2`, prefix matching): response includes `matchType: "exact" | "fuzzy"`, fuzzy results include `score`; empty fuzzy results include `message` hint
 - `get_endpoint` validates mutually exclusive modes in the tool function itself (not in the handler); accepts either `method` + `path` or `operationId`; empty `operationId` returns an error
 - `list_endpoints_by_tag` supports `limit`/`offset` pagination; response includes `total`, `offset`, `hasMore`; warning shown when `total > 30 && limit === undefined`
