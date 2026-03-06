@@ -1,8 +1,9 @@
-import type { HttpMethod, ParsedSpec } from '../types'
+import type { HttpMethod, OperationObject, ParsedSpec } from '../types'
 import { HTTP_METHODS, isValidHttpMethod } from '../http-methods'
 import { addTransitiveDeps, buildDependencyGraph, collectRefs, topologicalSort } from '../schema/dependency'
 import { generateFileContent } from '../schema/to-ts'
 import { findOperationByOperationId } from './find-operation'
+import { extractInlineSchemas } from './inline-schemas'
 import { findSimilarNames } from './suggestions'
 
 interface GetTypesInput {
@@ -67,6 +68,7 @@ export function getTypesTool(
   let endpointMethod: string | undefined
   let endpointPath: string | undefined
   let endpointOperationId: string | undefined
+  let inlineSchemas: { name: string, schema: unknown }[] = []
 
   if (hasSchemas) {
     rootSchemaNames = [...new Set(input.schemas)]
@@ -78,7 +80,7 @@ export function getTypesTool(
       }
     }
   } else {
-    let operation
+    let operation: OperationObject
 
     if (hasOperationId) {
       if (input.operationId!.trim() === '') {
@@ -127,16 +129,25 @@ export function getTypesTool(
         }
       }
 
-      operation = pathItem[endpointMethod as HttpMethod]
-      if (!operation) {
+      const matchedOperation = pathItem[endpointMethod as HttpMethod]
+      if (!matchedOperation) {
         return {
           isError: true,
           message: `Method '${method.toUpperCase()}' not found for path '${endpointPath}'.`,
         }
       }
 
+      operation = matchedOperation
+
       endpointOperationId = operation.operationId
     }
+
+    inlineSchemas = extractInlineSchemas(
+      operation,
+      endpointOperationId,
+      endpointMethod as HttpMethod | undefined,
+      endpointPath,
+    )
 
     rootSchemaNames = [...new Set([
       ...collectRefs(operation.requestBody),
@@ -144,10 +155,10 @@ export function getTypesTool(
       ...collectRefs(operation.parameters),
     ])]
 
-    if (rootSchemaNames.length === 0) {
+    if (rootSchemaNames.length === 0 && inlineSchemas.length === 0) {
       return {
         isError: true,
-        message: `No schema references found for endpoint '${endpointMethod!.toUpperCase()} ${endpointPath}'.`,
+        message: `No schema references or inline schemas found for endpoint '${endpointMethod!.toUpperCase()} ${endpointPath}'.`,
       }
     }
 
@@ -165,6 +176,11 @@ export function getTypesTool(
   for (const name of rootSchemaNames) {
     addTransitiveDeps(name, depGraph, allSchemaNames)
   }
+  for (const inlineSchema of inlineSchemas) {
+    for (const refName of collectRefs(inlineSchema.schema)) {
+      addTransitiveDeps(refName, depGraph, allSchemaNames)
+    }
+  }
 
   const missingDeps = findMissingSchemas([...allSchemaNames], spec.schemas)
   if (missingDeps.length > 0) {
@@ -175,19 +191,27 @@ export function getTypesTool(
   }
 
   const sortedNames = topologicalSort([...allSchemaNames], depGraph)
-  const schemas = sortedNames.map(name => ({
+  const referencedSchemas = sortedNames.map(name => ({
     name,
     schema: spec.schemas[name],
   }))
-  const code = generateFileContent(schemas, spec.schemas)
+  const generatedSchemas = [...referencedSchemas, ...inlineSchemas]
+  const code = generateFileContent(
+    generatedSchemas,
+    {
+      ...spec.schemas,
+      ...Object.fromEntries(inlineSchemas.map(schema => [schema.name, schema.schema])),
+    },
+  )
 
   const headerLines: string[] = []
   if (hasSchemas) {
     headerLines.push(`// Generated from schemas: ${sortedNames.join(', ')}`)
   } else {
+    const includedNames = [...sortedNames, ...inlineSchemas.map(schema => schema.name)]
     const operationIdPrefix = endpointOperationId ? `${endpointOperationId} ` : ''
     headerLines.push(`// Generated from endpoint: ${operationIdPrefix}${endpointMethod!.toUpperCase()} ${endpointPath}`)
-    headerLines.push(`// Includes schemas: ${sortedNames.join(', ')}`)
+    headerLines.push(`// Includes schemas: ${includedNames.join(', ')}`)
   }
 
   return { code: `${headerLines.join('\n')}\n\n${code}` }

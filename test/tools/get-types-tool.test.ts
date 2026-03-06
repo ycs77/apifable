@@ -355,8 +355,110 @@ describe('getTypesTool', () => {
 
       expect(result).toEqual({
         isError: true,
-        message: 'No schema references found for endpoint \'GET /users\'.',
+        message: 'No schema references or inline schemas found for endpoint \'GET /users\'.',
       })
+    })
+
+    it('generates types for inline request and response schemas', () => {
+      const spec = createMockParsedSpec({
+        rawSpec: {
+          paths: {
+            '/users/{id}': {
+              post: {
+                operationId: 'updateUser',
+                requestBody: {
+                  content: {
+                    'application/json': {
+                      schema: {
+                        type: 'object',
+                        properties: {
+                          name: { type: 'string' },
+                        },
+                      },
+                    },
+                  },
+                },
+                responses: {
+                  200: {
+                    content: {
+                      'application/json': {
+                        schema: {
+                          type: 'object',
+                          properties: {
+                            id: { type: 'string' },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+
+      const result = getTypesTool(spec, {
+        method: 'post',
+        path: '/users/{id}',
+      })
+
+      expect('code' in result).toBe(true)
+      if ('code' in result) {
+        expect(result.code).toContain('export interface UpdateUserRequest {')
+        expect(result.code).toContain('export interface UpdateUserResponse {')
+        expect(result.code).toContain('// Includes schemas: UpdateUserRequest, UpdateUserResponse')
+      }
+    })
+
+    it('includes referenced schemas before inline schemas', () => {
+      const spec = createMockParsedSpec({
+        schemas: {
+          User: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+            },
+          },
+        },
+        rawSpec: {
+          paths: {
+            '/users/{id}': {
+              get: {
+                responses: {
+                  200: {
+                    content: {
+                      'application/json': {
+                        schema: {
+                          type: 'object',
+                          properties: {
+                            user: { $ref: '#/components/schemas/User' },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+
+      const result = getTypesTool(spec, {
+        method: 'get',
+        path: '/users/{id}',
+      })
+
+      expect('code' in result).toBe(true)
+      if ('code' in result) {
+        const userIndex = result.code.indexOf('export interface User {')
+        const responseIndex = result.code.indexOf('export interface GetUsersIdResponse {')
+
+        expect(userIndex).toBeGreaterThanOrEqual(0)
+        expect(responseIndex).toBeGreaterThanOrEqual(0)
+        expect(userIndex).toBeLessThan(responseIndex)
+      }
     })
 
     it('collects schemas from requestBody', () => {
@@ -774,7 +876,7 @@ describe('getTypesTool', () => {
 
       expect(result).toEqual({
         isError: true,
-        message: 'No schema references found for endpoint \'GET /users\'.',
+        message: 'No schema references or inline schemas found for endpoint \'GET /users\'.',
       })
     })
   })
