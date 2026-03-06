@@ -39,10 +39,12 @@ cli
   })
 
 cli
-  .command('clear-cache', 'Clear the local spec cache')
-  .action(async (options: { cwd?: string }) => {
+  .command('fetch', 'Fetch OpenAPI spec from remote URL and save locally')
+  .option('--url <url>', 'OpenAPI spec URL')
+  .option('--output <path>', 'Output OpenAPI file path (.yaml, .yml, or .json)')
+  .action(async (options: { url?: string, output?: string, cwd?: string }) => {
     const cwd = options.cwd ? resolve(options.cwd) : undefined
-    await clearCache(cwd)
+    await fetchSpec({ ...options, cwd })
   })
 
 cli
@@ -227,12 +229,10 @@ cli
   })
 
 cli
-  .command('fetch', 'Fetch OpenAPI spec from remote URL and save locally')
-  .option('--url <url>', 'OpenAPI spec URL')
-  .option('--output <path>', 'Output file path (.yaml, .yml, or .json)')
-  .action(async (options: { url?: string, output?: string, cwd?: string }) => {
+  .command('clear-cache', 'Clear the local spec cache')
+  .action(async (options: { cwd?: string }) => {
     const cwd = options.cwd ? resolve(options.cwd) : undefined
-    await fetchSpec({ ...options, cwd })
+    await clearCache(cwd)
   })
 
 cli.help()
