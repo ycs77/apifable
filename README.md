@@ -4,7 +4,7 @@
 
 # apifable
 
-**Read the spec. Understand the API. Generate the types.**
+**Read the spec. Understand the API. Integrate with confidence.**
 
 [![NPM version][ico-version]][link-npm]
 [![Software License][ico-license]](LICENSE)
@@ -18,14 +18,15 @@ English | [繁體中文](README-zh-TW.md)
 
 ## Overview
 
-apifable helps AI agents work with OpenAPI spec. It makes it easy to explore API structure, search endpoints, and generate TypeScript types. So your AI agent always has the context it needs to write accurate API code.
+apifable is an MCP server that helps AI integrate APIs more smoothly into TypeScript frontend projects. It makes it easy to explore API structure, search endpoints, and generate TypeScript types, giving your AI agent the context it needs to write accurate integration code.
 
 ## ✨ Features
 
-- 📦 **OpenAPI 3.0 / 3.1** — works with any standard OpenAPI spec
-- 🤖 **MCP server** — plug into AI agents like Claude, Cursor, and Windsurf
-- 🔍 **API exploration** — browse endpoints, search by keyword, and inspect full request/response details
-- 🏷️ **TypeScript type generation** — generate ready-to-use type definitions from your spec
+- 📦 **AI-ready API context** — give AI the structure it needs to understand and work with your API
+- 📘 **OpenAPI 3.0 / 3.1 support** — works with standard specs as a reliable source of truth
+- 🤖 **MCP server for AI agents** — plug into Claude, Cursor, and Windsurf
+- 🔍 **API exploration tools** — browse endpoints, search by keyword, and inspect full request/response details
+- 🏷️ **TypeScript type generation** — generate TypeScript type definitions ready to use in frontend code
 
 ## Getting Started
 

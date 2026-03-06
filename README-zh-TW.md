@@ -4,7 +4,7 @@
 
 # apifable
 
-**讀取規格。理解 API。生成型別。**
+**讀懂規格。理解 API。更有把握地完成串接。**
 
 [![NPM version][ico-version]][link-npm]
 [![Software License][ico-license]](LICENSE)
@@ -18,14 +18,15 @@
 
 ## 概覽
 
-apifable 幫助 AI Agent 讀取 OpenAPI 規格書。輕鬆探索 API 結構、搜尋 Endpoint、生成 TypeScript 型別。讓你的 AI Agent 隨時掌握所需的上下文，寫出準確的 API 程式碼。
+apifable 是一個 MCP Server，幫助 AI 更順暢地在 TypeScript 前端專案中串接 API。它讓 AI Agent 能輕鬆探索 API 結構、搜尋 Endpoint，並產生 TypeScript 型別，隨時取得撰寫準確整合程式碼所需的上下文。
 
 ## ✨ 功能特色
 
-- 📦 **OpenAPI 3.0 / 3.1** — 支援任何標準 OpenAPI 規格書
-- 🤖 **MCP 伺服器** — 直接接入 Claude、Cursor、Windsurf 等 AI 代理
-- 🔍 **API 探索** — 瀏覽 Endpoint、關鍵字搜尋、查看完整的 request/response 細節
-- 🏷️ **TypeScript 型別生成** — 從規格直接產生可用的型別定義
+- 📦 **為 AI 準備好的 API 上下文** — 提供 AI 理解與使用 API 所需的完整結構
+- 📘 **支援 OpenAPI 3.0 / 3.1** — 以標準規格作為 API 開發的可靠依據
+- 🤖 **適用 AI Agent 的 MCP Server** — 可直接接入 Claude、Cursor、Windsurf 等工具
+- 🔍 **API 探索工具** — 瀏覽 Endpoint、關鍵字搜尋、查看完整的 request/response 細節
+- 🏷️ **TypeScript 型別生成** — 產生可直接用於前端開發的 TypeScript 型別定義
 
 ## 開始使用
 
@@ -105,7 +106,7 @@ npx apifable@latest fetch
 }
 ```
 
-其他 AI Agent 如 Cursor、Windsurf 等，可以參考上述方式將 apifable 設定為 MCP 伺服器。
+其他 AI Agent 如 Cursor、Windsurf 等，可以參考上述方式將 apifable 設定為 MCP Server。
 
 ## 使用方式
 
@@ -235,7 +236,7 @@ npx apifable@latest fetch
 - `method`（string）+ `path`（string）：HTTP 方法與 Endpoint 路徑
 - `operationId`（string）：Operation ID（例如 `listUsers`）
 
-回傳 self-contained 的 TypeScript 宣告程式碼文字。會自動包含 transitive dependencies，且不包含 import 陳述式。
+回傳 self-contained 的 TypeScript 宣告程式碼文字。會自動包含傳遞相依型別，且不包含 import 陳述式。
 
 模式規則：
 - 一次呼叫只能使用一種模式：`schemas`、`method` + `path`、或 `operationId`
