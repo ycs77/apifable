@@ -64,7 +64,21 @@ export function schemaToTs(
   // oneOf / anyOf
   if (Array.isArray(s.oneOf) || Array.isArray(s.anyOf)) {
     const variants = (s.oneOf ?? s.anyOf) as Schema[]
-    const members = variants.map(v => resolveTypeString(v, allSchemas))
+    const discriminator = s.discriminator as { propertyName: string, mapping?: Record<string, string> } | undefined
+    let members: string[]
+    if (discriminator) {
+      const { propertyName, mapping } = discriminator
+      members = variants.map(v => {
+        if (!v.$ref) return resolveTypeString(v, allSchemas)
+        const value = resolveDiscriminatorValue(v.$ref as string, mapping)
+        const variantType = resolveTypeString(v, allSchemas)
+        return value !== undefined
+          ? `(${variantType} & { ${propertyName}: '${escapeStringLiteral(value)}' })`
+          : variantType
+      })
+    } else {
+      members = variants.map(v => resolveTypeString(v, allSchemas))
+    }
     lines.push(`export type ${tsName} = ${members.join(' | ')}`)
     return lines.join('\n')
   }
@@ -134,10 +148,17 @@ function renderProperties(schema: Schema, allSchemas: Record<string, unknown>): 
     typeof schema.additionalProperties === 'object' &&
     schema.additionalProperties !== null
   ) {
-    const valueType = hasNamedProperties
-      ? 'unknown'
-      : resolveTypeString(schema.additionalProperties as Schema, allSchemas)
-    lines.push(`  [key: string]: ${valueType}`)
+    const addlType = resolveTypeString(schema.additionalProperties as Schema, allSchemas)
+    if (hasNamedProperties) {
+      const typeSet = new Set<string>([addlType])
+      for (const [key, prop] of Object.entries(properties)) {
+        typeSet.add(resolveTypeString(prop, allSchemas))
+        if (!required.has(key)) typeSet.add('undefined')
+      }
+      lines.push(`  [key: string]: ${[...typeSet].join(' | ')}`)
+    } else {
+      lines.push(`  [key: string]: ${addlType}`)
+    }
   }
 
   return lines
@@ -247,6 +268,16 @@ function appendNullable(typeString: string, schema: Schema): string {
 function extractRefName(ref: string): string {
   const match = ref.match(/^#\/components\/schemas\/(.+)$/)
   return match ? toValidIdentifier(match[1]) : ref
+}
+
+function resolveDiscriminatorValue(ref: string, mapping?: Record<string, string>): string | undefined {
+  if (mapping) {
+    for (const [key, value] of Object.entries(mapping)) {
+      if (value === ref) return key
+    }
+  }
+  const match = ref.match(/^#\/components\/schemas\/(.+)$/)
+  return match ? match[1] : undefined
 }
 
 function mapPrimitiveType(type: string): string {

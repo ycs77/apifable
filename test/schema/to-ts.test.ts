@@ -40,7 +40,7 @@ describe('schema-to-ts', () => {
     expect(output).toContain('}')
   })
 
-  it('renders additionalProperties as unknown when named properties exist', () => {
+  it('renders additionalProperties with precise union type when named properties exist', () => {
     const output = schemaToTs(
       'Meta',
       {
@@ -56,7 +56,90 @@ describe('schema-to-ts', () => {
     )
 
     expect(output).toContain('  id?: string')
-    expect(output).toContain('  [key: string]: unknown')
+    expect(output).toContain('  [key: string]: string | undefined')
+  })
+
+  it('renders additionalProperties with heterogeneous property types as union index signature', () => {
+    const output = schemaToTs(
+      'Mixed',
+      {
+        type: 'object',
+        properties: {
+          count: { type: 'integer' },
+          label: { type: 'string' },
+        },
+        required: ['count'],
+        additionalProperties: {
+          type: 'boolean',
+        },
+      },
+      {},
+    )
+
+    expect(output).toContain('  count: number')
+    expect(output).toContain('  label?: string')
+    // index signature must cover all property types; label is optional so undefined included
+    expect(output).toContain('  [key: string]: boolean | number | string | undefined')
+  })
+
+  it('renders additionalProperties type directly when no named properties (regression)', () => {
+    const output = schemaToTs(
+      'Attrs',
+      {
+        type: 'object',
+        additionalProperties: {
+          type: 'number',
+        },
+      },
+      {},
+    )
+
+    expect(output).toContain('[key: string]: number')
+    expect(output).not.toContain('unknown')
+  })
+
+  it('generates discriminated union with explicit mapping', () => {
+    const output = schemaToTs(
+      'Pet',
+      {
+        oneOf: [
+          { $ref: '#/components/schemas/Cat' },
+          { $ref: '#/components/schemas/Dog' },
+        ],
+        discriminator: {
+          propertyName: 'petType',
+          mapping: {
+            cat: '#/components/schemas/Cat',
+            dog: '#/components/schemas/Dog',
+          },
+        },
+      },
+      {},
+    )
+
+    expect(output).toBe(
+      'export type Pet = (Cat & { petType: \'cat\' }) | (Dog & { petType: \'dog\' })',
+    )
+  })
+
+  it('generates discriminated union without mapping by inferring value from $ref', () => {
+    const output = schemaToTs(
+      'Shape',
+      {
+        anyOf: [
+          { $ref: '#/components/schemas/Circle' },
+          { $ref: '#/components/schemas/Square' },
+        ],
+        discriminator: {
+          propertyName: 'kind',
+        },
+      },
+      {},
+    )
+
+    expect(output).toBe(
+      'export type Shape = (Circle & { kind: \'Circle\' }) | (Square & { kind: \'Square\' })',
+    )
   })
 
   it('renders nullable true with type array as union with null', () => {
