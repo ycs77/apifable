@@ -41,9 +41,15 @@ npx apifable@latest init
 
 ### 準備你的 Spec
 
-`apifable fetch` 會從 `apifable.config.json` 讀取 `spec.path` 和 `spec.url`，下載規格至本地。
+`apifable fetch` 會從 `apifable.config.json` 讀取 `spec.path` 和 `spec.url`，下載規格至本地：
 
-若 API 需要驗證（私有 API），可在設定檔中加入 `spec.headers`：
+```bash
+npx apifable@latest fetch
+```
+
+#### Headers
+
+可以與團隊共享的非機密 headers，加入 `apifable.config.json` 的 `spec.headers`：
 
 ```json
 {
@@ -51,17 +57,38 @@ npx apifable@latest init
     "path": "openapi.yaml",
     "url": "https://example.com/openapi.yaml",
     "headers": {
-      "Authorization": "Bearer YOUR_TOKEN"
+      "X-Api-Version": "2"
     }
   }
 }
 ```
 
-執行以下指令下載規格：
+#### Auth Headers（機密 Token）
 
-```bash
-npx apifable@latest fetch
+若 API 需要驗證（私有 API），請將機密 headers 存放在 `.apifable/auth.json` —— 此檔案**不應**提交至版本控制：
+
+```json
+{
+  "headers": {
+    "Authorization": "Bearer YOUR_SECRET_TOKEN"
+  }
+}
 ```
+
+`apifable.config.json` 和 `.apifable/auth.json` 的 header 值均支援 `${ENV_VAR}` 語法。
+
+```json
+{
+  "headers": {
+    "Authorization": "Bearer ${MY_API_KEY}"
+  }
+}
+```
+
+#### Headers 優先順序（高到低）
+
+1. `.apifable/auth.json` 的 headers（覆蓋同名 key）
+2. `apifable.config.json` 的 `spec.headers`
 
 ### Claude Code
 

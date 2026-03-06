@@ -5,6 +5,7 @@ import { intro, log, outro, spinner } from '@clack/prompts'
 import c from 'picocolors'
 import { parse, stringify } from 'yaml'
 import { defaultConfig, readConfig } from '../config/config'
+import { resolveHeaders } from '../config/headers'
 
 type SpecFormat = 'json' | 'yaml'
 
@@ -61,7 +62,7 @@ export async function fetchAndWriteSpec(options: FetchOptions): Promise<{ output
   let response: Response
   try {
     response = await fetch(url, {
-      headers: config?.spec.headers,
+      headers: await resolveHeaders(),
     })
   } catch (err) {
     throw new Error(`Failed to fetch spec URL: ${(err as Error).message}`)

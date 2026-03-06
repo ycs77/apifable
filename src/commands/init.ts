@@ -57,7 +57,7 @@ export async function initialize(): Promise<void> {
   log.success('Created apifable.config.json')
 
   const gitignorePath = join(process.cwd(), '.gitignore')
-  const gitignoreEntry = '.apifable/cache/'
+  const gitignoreEntry = '.apifable/'
 
   let gitignoreContent = ''
   try {
@@ -70,7 +70,7 @@ export async function initialize(): Promise<void> {
     const separator = gitignoreContent
       ? (gitignoreContent.endsWith('\n') ? '\n' : '\n\n')
       : ''
-    await writeFile(gitignorePath, `${gitignoreContent}${separator}# apifable cache\n${gitignoreEntry}\n`, 'utf-8')
+    await writeFile(gitignorePath, `${gitignoreContent}${separator}# apifable\n${gitignoreEntry}\n`, 'utf-8')
     log.success('Updated .gitignore')
   }
 

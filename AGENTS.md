@@ -32,3 +32,4 @@
 - `get_endpoint` accepts either `method` + `path` or `operationId` (mutually exclusive)
 - `get_types` supports exactly one mode per call: `schemas` (schema names), `method` + `path` (endpoint), or `operationId`; mixing modes returns an error
 - `get_types` returns self-contained TypeScript declarations as code text (no import statements)
+- Auth headers live in `.apifable/auth.json` (not version-controlled); `spec.headers` in config is for non-secret headers; auth.json overrides config on key conflict; both support `${ENV_VAR}` expansion (undefined vars kept as-is)

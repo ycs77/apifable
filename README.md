@@ -41,9 +41,15 @@ This creates `apifable.config.json` in your project root. The config file should
 
 ### Prepare Your Spec
 
-`apifable fetch` reads `spec.path` and `spec.url` from `apifable.config.json` to download the spec locally.
+`apifable fetch` reads `spec.path` and `spec.url` from `apifable.config.json` to download the spec locally:
 
-For private APIs that require authentication, add a `spec.headers` field to your config:
+```bash
+npx apifable@latest fetch
+```
+
+#### Headers
+
+For non-sensitive headers that can be shared with your team, add `spec.headers` to `apifable.config.json`:
 
 ```json
 {
@@ -51,17 +57,38 @@ For private APIs that require authentication, add a `spec.headers` field to your
     "path": "openapi.yaml",
     "url": "https://example.com/openapi.yaml",
     "headers": {
-      "Authorization": "Bearer YOUR_TOKEN"
+      "X-Api-Version": "2"
     }
   }
 }
 ```
 
-To fetch the spec, run:
+#### Auth Headers (Secret Tokens)
 
-```bash
-npx apifable@latest fetch
+For private APIs that require authentication, store secret headers in `.apifable/auth.json` — this file should **not** be committed to version control:
+
+```json
+{
+  "headers": {
+    "Authorization": "Bearer YOUR_SECRET_TOKEN"
+  }
+}
 ```
+
+Both `apifable.config.json` and `.apifable/auth.json` support `${ENV_VAR}` syntax in header values.
+
+```json
+{
+  "headers": {
+    "Authorization": "Bearer ${MY_API_KEY}"
+  }
+}
+```
+
+#### Headers Priority (highest to lowest)
+
+1. `.apifable/auth.json` headers (overrides same-named keys)
+2. `apifable.config.json` `spec.headers`
 
 ### Claude Code
 
