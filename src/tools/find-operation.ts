@@ -1,9 +1,8 @@
-import type { HttpMethod, OperationObject, ParsedSpec } from '../types'
-
-const HTTP_METHODS: HttpMethod[] = ['get', 'post', 'put', 'patch', 'delete', 'head', 'options', 'trace']
+import type { OperationObject, ParsedSpec } from '../types'
+import { HTTP_METHODS } from '../http-methods'
 
 export interface FoundOperation {
-  method: HttpMethod
+  method: (typeof HTTP_METHODS)[number]
   path: string
   operation: OperationObject
 }

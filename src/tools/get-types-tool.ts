@@ -1,4 +1,5 @@
 import type { HttpMethod, ParsedSpec } from '../types'
+import { HTTP_METHODS, isValidHttpMethod } from '../http-methods'
 import { addTransitiveDeps, buildDependencyGraph, collectRefs, topologicalSort } from '../schema/dependency'
 import { generateFileContent } from '../schema/to-ts'
 import { findOperationByOperationId } from './find-operation'
@@ -100,7 +101,15 @@ export function getTypesTool(
     } else {
       const method = input.method!
       endpointPath = input.path!
-      endpointMethod = method.toLowerCase() as HttpMethod
+      const normalizedMethod = method.toLowerCase()
+      if (!isValidHttpMethod(normalizedMethod)) {
+        return {
+          isError: true,
+          message: `Invalid HTTP method '${input.method}'. Use one of: ${HTTP_METHODS.join(', ')}.`,
+        }
+      }
+
+      endpointMethod = normalizedMethod
       const pathItem = spec.rawSpec.paths?.[endpointPath]
 
       if (!pathItem) {

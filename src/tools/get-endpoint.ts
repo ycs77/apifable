@@ -1,4 +1,5 @@
 import type { HttpMethod, OperationObject, ParsedSpec } from '../types'
+import { HTTP_METHODS, isValidHttpMethod } from '../http-methods'
 import { resolveRefs } from '../spec/ref-resolver'
 import { findOperationByOperationId } from './find-operation'
 
@@ -60,7 +61,15 @@ export function getEndpoint(spec: ParsedSpec, input: GetEndpointInput) {
     path = found.path
     operation = found.operation
   } else {
-    normalizedMethod = input.method!.toLowerCase() as HttpMethod
+    const method = input.method!.toLowerCase()
+    if (!isValidHttpMethod(method)) {
+      return {
+        isError: true,
+        message: `Invalid HTTP method '${input.method}'. Use one of: ${HTTP_METHODS.join(', ')}.`,
+      }
+    }
+
+    normalizedMethod = method
     path = input.path!
 
     const pathItem = spec.rawSpec.paths?.[path]

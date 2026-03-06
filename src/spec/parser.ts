@@ -1,6 +1,5 @@
-import type { EndpointEntry, HttpMethod, OpenAPIObject, ParsedSpec, SecuritySchemeInfo, SpecInfo, TagInfo } from '../types'
-
-const HTTP_METHODS: HttpMethod[] = ['get', 'post', 'put', 'patch', 'delete', 'head', 'options', 'trace']
+import type { EndpointEntry, OpenAPIObject, ParsedSpec, SecuritySchemeInfo, SpecInfo, TagInfo } from '../types'
+import { HTTP_METHODS } from '../http-methods'
 
 export function buildParsedSpec(raw: OpenAPIObject): ParsedSpec {
   const securitySchemes: SecuritySchemeInfo[] = Object.entries(

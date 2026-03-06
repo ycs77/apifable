@@ -264,6 +264,20 @@ describe('getTypesTool', () => {
       })
     })
 
+    it('returns invalid-method error when method is unsupported', () => {
+      const spec = createMockParsedSpec()
+
+      const result = getTypesTool(spec, {
+        method: 'fetch',
+        path: '/users',
+      })
+
+      expect(result).toEqual({
+        isError: true,
+        message: 'Invalid HTTP method \'fetch\'. Use one of: get, post, put, patch, delete, head, options, trace.',
+      })
+    })
+
     it('returns method-not-found error when method does not exist for path', () => {
       const spec = createMockParsedSpec({
         rawSpec: {
