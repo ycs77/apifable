@@ -1,6 +1,15 @@
 import type { ApifableConfig, ApifableUserConfig } from '../types'
 import { access, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import { z } from 'zod'
+
+const apifableUserConfigSchema = z.object({
+  spec: z.object({
+    path: z.string().optional(),
+    url: z.string().optional(),
+    headers: z.record(z.string(), z.string()).optional(),
+  }).loose().optional(),
+}).loose()
 
 export const defaultConfig: ApifableConfig = {
   spec: {
@@ -26,7 +35,22 @@ export async function readConfig(cwd?: string): Promise<ApifableConfig | null> {
   const configPath = getConfigPath(cwd)
   try {
     const content = await readFile(configPath, 'utf-8')
-    return resolveConfig(JSON.parse(content) as ApifableUserConfig)
+    let parsed: unknown
+
+    try {
+      parsed = JSON.parse(content)
+    } catch (err) {
+      throw new Error(`Invalid JSON in ${configPath}: ${(err as Error).message}`)
+    }
+
+    const result = apifableUserConfigSchema.safeParse(parsed)
+    if (!result.success) {
+      const issue = result.error.issues[0]
+      const fieldPath = issue.path.length > 0 ? issue.path.join('.') : '(root)'
+      throw new Error(`Invalid config in ${configPath}: ${fieldPath}: ${issue.message}`)
+    }
+
+    return resolveConfig(result.data as ApifableUserConfig)
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code === 'ENOENT') return null
     throw err
