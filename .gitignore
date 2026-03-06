@@ -31,5 +31,5 @@ test-results
 # Claude Code
 .claude/settings.local.json
 
-# apifable cache
-.apifable/cache/
+# apifable
+.apifable/
