@@ -16,7 +16,7 @@ export interface FetchOptions {
   cwd?: string
 }
 
-function getFormatByPath(filePath: string): SpecFormat {
+export function getFormatByPath(filePath: string): SpecFormat {
   const extension = extname(filePath).toLowerCase()
   if (extension === '.json') return 'json'
   if (extension === '.yaml' || extension === '.yml') return 'yaml'
@@ -47,7 +47,7 @@ export function parseSpecContent(content: string): { format: SpecFormat, spec: O
   }
 }
 
-function stringifySpecContent(spec: OpenAPIObject, format: SpecFormat): string {
+export function stringifySpecContent(spec: OpenAPIObject, format: SpecFormat): string {
   if (format === 'json') {
     return `${JSON.stringify(spec, null, 2)}\n`
   }

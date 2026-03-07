@@ -21,7 +21,7 @@ export function getConfigPath(cwd = process.cwd()): string {
   return join(cwd, 'apifable.config.json')
 }
 
-function resolveConfig(config: ApifableUserConfig): ApifableConfig {
+export function resolveConfig(config: ApifableUserConfig): ApifableConfig {
   return {
     spec: {
       path: config.spec?.path ?? defaultConfig.spec.path,

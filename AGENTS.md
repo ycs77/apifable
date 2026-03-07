@@ -25,7 +25,7 @@
 ## Rules
 
 - Config priority: CLI flag > config > default value
-- Only test pure functions; skip MCP handlers, fs code, and CLI code
+- Prefer pure-function tests first; controlled temp-dir fs tests are allowed, but skip MCP handlers, CLI code, prompt flows, process.exit paths, and real network calls
 - Do not reintroduce ParsedSpec cache assumptions; parsed specs are built directly
 
 ## Non-Obvious Behavior
