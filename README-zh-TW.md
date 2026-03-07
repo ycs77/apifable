@@ -161,7 +161,7 @@ npx apifable@latest fetch
 ## API 整合 (apifable)
 
 - 撰寫串接程式碼前，務必先用 `get_endpoint` 確認正確的路徑、方法與參數，不要憑假設。
-- 呈現 apifable 工具回傳 endpoint 列表的資料時，依序顯示 `Method`、`Path`、`Summary` 欄位。所有值必須原樣保留，包含 `[ 32 - 001 ]` 等摘要前綴。不得省略、重命名、改寫或新增額外欄位。
+- 呈現 apifable 工具回傳 endpoint 列表的資料時，依序顯示 `Method` (Uppercase)、`Path`、`Summary` 欄位。所有值必須原樣保留，包含 `[ 32 - 001 ]` 等摘要前綴。不得省略、重命名、改寫或新增額外欄位。
 - 儲存產生的型別時，放在 `src/types/` 下並依領域命名 (例如 `src/types/auth.ts`、`src/types/user.ts`)，不要使用 OpenAPI tag 名稱。
 ```
 

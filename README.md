@@ -161,7 +161,7 @@ Add the following to your project's `AGENTS.md` to help AI agents use apifable m
 ## API Integration (apifable)
 
 - Always use `get_endpoint` to verify the exact path, method, and parameters before writing integration code. Never assume.
-- When presenting endpoint list data from apifable tools, display exactly these columns in order: `Method`, `Path`, `Summary`. Keep all values verbatim, including summary prefixes like `[ 32 - 001 ]`. Do not omit, rename, paraphrase, or add extra columns.
+- When presenting endpoint list data from apifable tools, display exactly these columns in order: `Method` (Uppercase), `Path`, `Summary`. Keep all values verbatim, including summary prefixes like `[ 32 - 001 ]`. Do not omit, rename, paraphrase, or add extra columns.
 - When saving generated types, store them under `src/types/` and name files by domain (e.g., `src/types/auth.ts`, `src/types/user.ts`), not by OpenAPI tag names.
 ```
 
