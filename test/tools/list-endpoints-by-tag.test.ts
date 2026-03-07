@@ -3,39 +3,43 @@ import { listEndpointsByTag } from '../../src/tools/list-endpoints-by-tag'
 import { createMockEndpoint, createMockParsedSpec, createMockTag } from '../helpers'
 
 describe('listEndpointsByTag', () => {
-  it('returns endpoints for the requested tag', () => {
+  it('filters endpoints matching the requested tag', () => {
     const spec = createMockParsedSpec({
       tags: [
         createMockTag({ name: 'users' }),
         createMockTag({ name: 'orders' }),
       ],
       endpointIndex: [
-        createMockEndpoint({ method: 'get', path: '/users', operationId: 'listUsers', tags: ['users'] }),
-        createMockEndpoint({ method: 'post', path: '/users', operationId: 'createUser', tags: ['users'] }),
-        createMockEndpoint({ method: 'get', path: '/orders', operationId: 'listOrders', tags: ['orders'] }),
+        createMockEndpoint({ method: 'get', path: '/users', operationId: 'listUsers', summary: 'List users', description: 'List all users', tags: ['users'] }),
+        createMockEndpoint({ method: 'post', path: '/users', operationId: 'createUser', summary: 'Create user', description: 'Create one user', tags: ['users'] }),
+        createMockEndpoint({ method: 'get', path: '/orders', operationId: 'listOrders', summary: 'List orders', description: 'List all orders', tags: ['orders'] }),
       ],
     })
 
     const result = listEndpointsByTag(spec, 'users')
 
-    expect(result).toMatchObject({ tag: 'users' })
-    expect('endpoints' in result && result.endpoints).toEqual([
-      {
-        method: 'get',
-        path: '/users',
-        operationId: 'listUsers',
-        summary: 'List items',
-        description: 'List all items',
-      },
-      {
-        method: 'post',
-        path: '/users',
-        operationId: 'createUser',
-        summary: 'List items',
-        description: 'List all items',
-      },
-    ])
-    expect('warning' in result && result.warning).toBeFalsy()
+    expect(result).toEqual({
+      tag: 'users',
+      endpoints: [
+        {
+          method: 'get',
+          path: '/users',
+          operationId: 'listUsers',
+          summary: 'List users',
+          description: 'List all users',
+        },
+        {
+          method: 'post',
+          path: '/users',
+          operationId: 'createUser',
+          summary: 'Create user',
+          description: 'Create one user',
+        },
+      ],
+      total: 2,
+      offset: 0,
+      hasMore: false,
+    })
   })
 
   it('adds warning when too many endpoints are returned', () => {

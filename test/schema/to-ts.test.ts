@@ -35,9 +35,11 @@ describe('schema-to-ts', () => {
       {},
     )
 
-    expect(output).toContain('export interface AdminUser extends BaseUser {')
-    expect(output).toContain('  role: string')
-    expect(output).toContain('}')
+    expect(output).toBe([
+      'export interface AdminUser extends BaseUser {',
+      '  role: string',
+      '}',
+    ].join('\n'))
   })
 
   it('renders additionalProperties with precise union type when named properties exist', () => {
@@ -55,8 +57,12 @@ describe('schema-to-ts', () => {
       {},
     )
 
-    expect(output).toContain('  id?: string')
-    expect(output).toContain('  [key: string]: string | undefined')
+    expect(output).toBe([
+      'export interface Meta {',
+      '  id?: string',
+      '  [key: string]: string | undefined',
+      '}',
+    ].join('\n'))
   })
 
   it('renders additionalProperties with heterogeneous property types as union index signature', () => {
@@ -76,10 +82,13 @@ describe('schema-to-ts', () => {
       {},
     )
 
-    expect(output).toContain('  count: number')
-    expect(output).toContain('  label?: string')
-    // index signature must cover all property types; label is optional so undefined included
-    expect(output).toContain('  [key: string]: boolean | number | string | undefined')
+    expect(output).toBe([
+      'export interface Mixed {',
+      '  count: number',
+      '  label?: string',
+      '  [key: string]: boolean | number | string | undefined',
+      '}',
+    ].join('\n'))
   })
 
   it('renders additionalProperties type directly when no named properties (regression)', () => {
@@ -94,8 +103,11 @@ describe('schema-to-ts', () => {
       {},
     )
 
-    expect(output).toContain('[key: string]: number')
-    expect(output).not.toContain('unknown')
+    expect(output).toBe([
+      'export interface Attrs {',
+      '  [key: string]: number',
+      '}',
+    ].join('\n'))
   })
 
   it('generates discriminated union with explicit mapping', () => {
@@ -157,7 +169,11 @@ describe('schema-to-ts', () => {
       {},
     )
 
-    expect(output).toContain('  nickname?: string | null')
+    expect(output).toBe([
+      'export interface NullablePayload {',
+      '  nickname?: string | null',
+      '}',
+    ].join('\n'))
   })
 
   it('escapes closing token in JSDoc description text', () => {
@@ -170,8 +186,10 @@ describe('schema-to-ts', () => {
       {},
     )
 
-    expect(output).toContain('/** line with *\\/ token */')
-    expect(output).toContain('export type DangerousComment = string')
+    expect(output).toBe([
+      '/** line with *\\/ token */',
+      'export type DangerousComment = string',
+    ].join('\n'))
   })
 
   it('sorts import paths and imported types in generated file content', () => {
@@ -194,10 +212,15 @@ describe('schema-to-ts', () => {
       ]),
     )
 
-    expect(output).toContain('import type { One, Two } from \'./a\'')
-    expect(output).toContain('import type { Alpha, Zeta } from \'./b\'')
-    expect(output.indexOf('from \'./a\'')).toBeLessThan(output.indexOf('from \'./b\''))
-    expect(output.endsWith('\n')).toBe(true)
+    expect(output).toBe([
+      'import type { One, Two } from \'./a\'',
+      'import type { Alpha, Zeta } from \'./b\'',
+      '',
+      'export interface User {',
+      '  id?: string',
+      '}',
+      '',
+    ].join('\n'))
   })
 
   it('generates top-level nullable type alias', () => {
@@ -231,7 +254,11 @@ describe('schema-to-ts', () => {
       {},
     )
 
-    expect(output).toContain('  items?: (string | null)[]')
+    expect(output).toBe([
+      'export interface Foo {',
+      '  items?: (string | null)[]',
+      '}',
+    ].join('\n'))
   })
 
   it('generates nullable ref wrapped by allOf', () => {
@@ -277,7 +304,10 @@ describe('schema-to-ts', () => {
       {},
     )
 
-    expect(output).toContain('  value?: string | null')
-    expect(output).not.toContain('  value?: string | null | null')
+    expect(output).toBe([
+      'export interface Foo {',
+      '  value?: string | null',
+      '}',
+    ].join('\n'))
   })
 })

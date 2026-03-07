@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { getEndpoint } from '../../src/tools/get-endpoint'
-import { createMockParsedSpec } from '../helpers'
+import { createEmptyParsedSpec, createMockParsedSpec } from '../helpers'
 
 describe('getEndpoint', () => {
   describe('method + path mode', () => {
@@ -26,7 +26,7 @@ describe('getEndpoint', () => {
     })
 
     it('returns invalid-method error when method is unsupported', () => {
-      const spec = createMockParsedSpec()
+      const spec = createEmptyParsedSpec()
 
       const result = getEndpoint(spec, { method: 'fetch', path: '/users' })
 
@@ -265,11 +265,20 @@ describe('getEndpoint', () => {
 
       const result = getEndpoint(spec, { operationId: 'listUsers' })
 
-      expect(result).toMatchObject({
+      expect(result).toEqual({
         method: 'get',
         path: '/users',
         operationId: 'listUsers',
         summary: 'List users',
+        description: 'List all users',
+        tags: ['users'],
+        parameters: undefined,
+        requestBody: undefined,
+        responses: {
+          200: {
+            description: 'OK',
+          },
+        },
       })
     })
 

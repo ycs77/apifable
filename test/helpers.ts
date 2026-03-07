@@ -21,6 +21,60 @@ export function createMockTag(overrides: Partial<TagInfo> = {}): TagInfo {
   }
 }
 
+export function createEmptyParsedSpec(overrides: Partial<ParsedSpec> = {}): ParsedSpec {
+  const baseRawSpec: OpenAPIObject = {
+    openapi: '3.1.0',
+    info: {
+      title: 'Mock API',
+      version: '1.0.0',
+      description: 'Mock description',
+    },
+    paths: {},
+    components: {
+      schemas: {},
+    },
+  }
+
+  const base: ParsedSpec = {
+    info: {
+      title: 'Mock API',
+      version: '1.0.0',
+      description: 'Mock description',
+      servers: [],
+      security: [],
+      securitySchemes: [],
+    },
+    tags: [],
+    endpointIndex: [],
+    schemas: {},
+    rawSpec: baseRawSpec,
+  }
+
+  return {
+    ...base,
+    ...overrides,
+    info: {
+      ...base.info,
+      ...(overrides.info ?? {}),
+    },
+    tags: overrides.tags ?? base.tags,
+    endpointIndex: overrides.endpointIndex ?? base.endpointIndex,
+    schemas: overrides.schemas ?? base.schemas,
+    rawSpec: {
+      ...base.rawSpec,
+      ...(overrides.rawSpec ?? {}),
+      info: {
+        ...(base.rawSpec.info ?? {}),
+        ...((overrides.rawSpec?.info as OpenAPIObject['info']) ?? {}),
+      },
+      paths: overrides.rawSpec?.paths ?? base.rawSpec.paths,
+      components: overrides.rawSpec?.components ?? base.rawSpec.components,
+      tags: overrides.rawSpec?.tags ?? base.rawSpec.tags,
+      servers: overrides.rawSpec?.servers ?? base.rawSpec.servers,
+    },
+  }
+}
+
 export function createMockParsedSpec(overrides: Partial<ParsedSpec> = {}): ParsedSpec {
   const baseRawSpec: OpenAPIObject = {
     openapi: '3.1.0',

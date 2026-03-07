@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { getTypesTool } from '../../src/tools/get-types-tool'
-import { createMockParsedSpec } from '../helpers'
+import { createEmptyParsedSpec, createMockParsedSpec } from '../helpers'
 
 describe('getTypesTool', () => {
   describe('input validation', () => {
     it('returns error when no input mode is provided', () => {
-      const spec = createMockParsedSpec()
+      const spec = createEmptyParsedSpec()
 
       const result = getTypesTool(spec, {})
 
@@ -16,7 +16,7 @@ describe('getTypesTool', () => {
     })
 
     it('returns error when schemas and endpoint mode are both provided', () => {
-      const spec = createMockParsedSpec()
+      const spec = createEmptyParsedSpec()
 
       const result = getTypesTool(spec, {
         schemas: ['Item'],
@@ -31,7 +31,7 @@ describe('getTypesTool', () => {
     })
 
     it('returns error when schemas and operationId are both provided', () => {
-      const spec = createMockParsedSpec()
+      const spec = createEmptyParsedSpec()
 
       const result = getTypesTool(spec, {
         schemas: ['Item'],
@@ -45,7 +45,7 @@ describe('getTypesTool', () => {
     })
 
     it('returns error when operationId and endpoint mode are both provided', () => {
-      const spec = createMockParsedSpec()
+      const spec = createEmptyParsedSpec()
 
       const result = getTypesTool(spec, {
         operationId: 'listItems',
@@ -60,7 +60,7 @@ describe('getTypesTool', () => {
     })
 
     it('returns error when only method is provided', () => {
-      const spec = createMockParsedSpec()
+      const spec = createEmptyParsedSpec()
 
       const result = getTypesTool(spec, { method: 'get' })
 
@@ -71,7 +71,7 @@ describe('getTypesTool', () => {
     })
 
     it('returns error when only path is provided', () => {
-      const spec = createMockParsedSpec()
+      const spec = createEmptyParsedSpec()
 
       const result = getTypesTool(spec, { path: '/items' })
 
@@ -82,7 +82,7 @@ describe('getTypesTool', () => {
     })
 
     it('returns error when schemas is an empty array', () => {
-      const spec = createMockParsedSpec()
+      const spec = createEmptyParsedSpec()
 
       const result = getTypesTool(spec, { schemas: [] })
 
@@ -95,7 +95,7 @@ describe('getTypesTool', () => {
 
   describe('schemas mode', () => {
     it('returns error with missing schema names', () => {
-      const spec = createMockParsedSpec()
+      const spec = createEmptyParsedSpec()
 
       const result = getTypesTool(spec, {
         schemas: ['UnknownB', 'UnknownA'],
@@ -141,8 +141,14 @@ describe('getTypesTool', () => {
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
-        expect(result.code).toContain('export interface User {')
-        expect(result.code).toContain('  id?: string')
+        expect(result.code).toBe([
+          '// Generated from schemas: User',
+          '',
+          'export interface User {',
+          '  id?: string',
+          '}',
+          '',
+        ].join('\n'))
       }
     })
 
@@ -168,8 +174,18 @@ describe('getTypesTool', () => {
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
-        expect(result.code).toContain('export interface User {')
-        expect(result.code).toContain('export interface Address {')
+        expect(result.code).toBe([
+          '// Generated from schemas: Address, User',
+          '',
+          'export interface Address {',
+          '  city?: string',
+          '}',
+          '',
+          'export interface User {',
+          '  id?: string',
+          '}',
+          '',
+        ].join('\n'))
       }
     })
 
@@ -195,8 +211,18 @@ describe('getTypesTool', () => {
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
-        expect(result.code).toContain('export interface User {')
-        expect(result.code).toContain('export interface Profile {')
+        expect(result.code).toBe([
+          '// Generated from schemas: Profile, User',
+          '',
+          'export interface Profile {',
+          '  id?: string',
+          '}',
+          '',
+          'export interface User {',
+          '  profile?: Profile',
+          '}',
+          '',
+        ].join('\n'))
       }
     })
 
@@ -405,9 +431,19 @@ describe('getTypesTool', () => {
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
-        expect(result.code).toContain('export interface UpdateUserRequest {')
-        expect(result.code).toContain('export interface UpdateUserResponse {')
-        expect(result.code).toContain('// Includes schemas: UpdateUserRequest, UpdateUserResponse')
+        expect(result.code).toBe([
+          '// Generated from endpoint: updateUser POST /users/{id}',
+          '// Includes schemas: UpdateUserRequest, UpdateUserResponse',
+          '',
+          'export interface UpdateUserRequest {',
+          '  name?: string',
+          '}',
+          '',
+          'export interface UpdateUserResponse {',
+          '  id?: string',
+          '}',
+          '',
+        ].join('\n'))
       }
     })
 
@@ -500,7 +536,15 @@ describe('getTypesTool', () => {
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
-        expect(result.code).toContain('export interface CreateUserRequest {')
+        expect(result.code).toBe([
+          '// Generated from endpoint: POST /users',
+          '// Includes schemas: CreateUserRequest',
+          '',
+          'export interface CreateUserRequest {',
+          '  name?: string',
+          '}',
+          '',
+        ].join('\n'))
       }
     })
 
@@ -540,7 +584,15 @@ describe('getTypesTool', () => {
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
-        expect(result.code).toContain('export interface User {')
+        expect(result.code).toBe([
+          '// Generated from endpoint: GET /users/{id}',
+          '// Includes schemas: User',
+          '',
+          'export interface User {',
+          '  id?: string',
+          '}',
+          '',
+        ].join('\n'))
       }
     })
 
@@ -606,9 +658,19 @@ describe('getTypesTool', () => {
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
-        expect(result.code).toContain('export interface User {')
-        expect(result.code).toContain('export interface Profile {')
-        expect(result.code).toContain('// Includes schemas: Profile, User')
+        expect(result.code).toBe([
+          '// Generated from endpoint: GET /users/{id}',
+          '// Includes schemas: Profile, User',
+          '',
+          'export interface Profile {',
+          '  name?: string',
+          '}',
+          '',
+          'export interface User {',
+          '  profile?: Profile',
+          '}',
+          '',
+        ].join('\n'))
       }
     })
 
@@ -672,8 +734,15 @@ describe('getTypesTool', () => {
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
-        expect(result.code).toContain('export interface CreateUserRequest {')
-        expect(result.code).toContain('// Includes schemas: CreateUserRequest')
+        expect(result.code).toBe([
+          '// Generated from endpoint: createUser POST /users',
+          '// Includes schemas: CreateUserRequest',
+          '',
+          'export interface CreateUserRequest {',
+          '  name?: string',
+          '}',
+          '',
+        ].join('\n'))
       }
     })
 

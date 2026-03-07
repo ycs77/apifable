@@ -89,6 +89,33 @@ describe('searchEndpoints', () => {
     expect(result.results[0].score).toBeTypeOf('number')
   })
 
+  it('returns an empty fuzzy result with guidance when nothing matches', () => {
+    const spec = createMockParsedSpec({
+      endpointIndex: [
+        {
+          method: 'get',
+          path: '/users',
+          operationId: 'listUsers',
+          summary: 'List users',
+          description: 'Return users',
+          tags: ['users'],
+        },
+      ],
+    })
+
+    const result = searchEndpoints(spec, 'zzznomatch')
+
+    expect(result).toEqual({
+      query: 'zzznomatch',
+      tag: undefined,
+      matchType: 'fuzzy',
+      results: [],
+      total: 0,
+      hasMore: false,
+      message: 'No endpoints found. Try different keywords or check available tags with get_spec_info.',
+    })
+  })
+
   it('respects result limit', () => {
     const spec = createMockParsedSpec({
       endpointIndex: Array.from({ length: 20 }, (_, index) => ({
@@ -106,5 +133,29 @@ describe('searchEndpoints', () => {
     expect(result.total).toBe(20)
     expect(result.results).toHaveLength(5)
     expect(result.hasMore).toBe(true)
+  })
+
+  it('returns no rows but preserves totals when limit is zero', () => {
+    const spec = createMockParsedSpec({
+      endpointIndex: Array.from({ length: 3 }, (_, index) => ({
+        method: 'get',
+        path: `/users/${index}`,
+        operationId: `getUser${index}`,
+        summary: `Get user ${index}`,
+        description: `Fetch user ${index}`,
+        tags: ['users'],
+      })),
+    })
+
+    const result = searchEndpoints(spec, 'user', undefined, 0)
+
+    expect(result).toEqual({
+      query: 'user',
+      tag: undefined,
+      matchType: 'exact',
+      results: [],
+      total: 3,
+      hasMore: true,
+    })
   })
 })

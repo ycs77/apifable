@@ -47,7 +47,14 @@ describe('getSpecInfo', () => {
 
     const result = getSpecInfo(spec)
 
-    expect(result).toMatchObject({
+    expect(result).toEqual({
+      title: 'Secure API',
+      version: '1.0.0',
+      description: '',
+      servers: [],
+      tags: [
+        { name: 'items', description: 'Items endpoints', endpointCount: 1 },
+      ],
       securitySchemes: [
         { name: 'http', type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
       ],

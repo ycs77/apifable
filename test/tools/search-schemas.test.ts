@@ -68,4 +68,46 @@ describe('searchSchemas', () => {
     expect(result.results).toHaveLength(5)
     expect(result.hasMore).toBe(true)
   })
+
+  it('returns no rows but preserves totals when limit is zero', () => {
+    const spec = createMockParsedSpec({
+      schemas: Object.fromEntries(
+        Array.from({ length: 3 }, (_, i) => [`User${i}`, { type: 'object' }]),
+      ),
+    })
+
+    const result = searchSchemas(spec, 'user', 0)
+
+    expect(result).toEqual({
+      query: 'user',
+      matchType: 'exact',
+      results: [],
+      total: 3,
+      hasMore: true,
+    })
+  })
+
+  it('matches schema names with special characters exactly', () => {
+    const spec = createMockParsedSpec({
+      schemas: {
+        'User-Profile.Response': { type: 'object', description: 'Profile response payload' },
+        UserProfile: { type: 'object', description: 'User profile data' },
+      },
+    })
+
+    const result = searchSchemas(spec, 'User-Profile')
+
+    expect(result).toEqual({
+      query: 'User-Profile',
+      matchType: 'exact',
+      results: [
+        {
+          name: 'User-Profile.Response',
+          description: 'Profile response payload',
+        },
+      ],
+      total: 1,
+      hasMore: false,
+    })
+  })
 })

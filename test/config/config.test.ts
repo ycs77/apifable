@@ -74,6 +74,20 @@ describe('readConfig', () => {
     await expect(readConfig(cwd)).resolves.toBeNull()
   })
 
+  it('normalizes an empty config file to the default spec path', async () => {
+    vol.fromJSON({
+      [getConfigPath(cwd)]: JSON.stringify({}),
+    })
+
+    await expect(readConfig(cwd)).resolves.toEqual({
+      spec: {
+        path: defaultConfig.spec.path,
+        url: undefined,
+        headers: undefined,
+      },
+    })
+  })
+
   it('reads config values and applies default path when omitted', async () => {
     vol.fromJSON({
       [getConfigPath(cwd)]: JSON.stringify({
@@ -111,5 +125,19 @@ describe('readConfig', () => {
     })
 
     await expect(readConfig(cwd)).rejects.toThrowError(/Invalid config in .*apifable\.config\.json: spec\.path:/)
+  })
+
+  it('throws a stable error for invalid header value types', async () => {
+    vol.fromJSON({
+      [getConfigPath(cwd)]: JSON.stringify({
+        spec: {
+          headers: {
+            Authorization: 123,
+          },
+        },
+      }),
+    })
+
+    await expect(readConfig(cwd)).rejects.toThrowError(/Invalid config in .*apifable\.config\.json: spec\.headers\.Authorization:/)
   })
 })

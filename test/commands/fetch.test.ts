@@ -1,6 +1,6 @@
 import type { OpenAPIObject } from '../../src/types'
 import { describe, expect, it } from 'vitest'
-import { getFormatByPath, stringifySpecContent } from '../../src/commands/fetch'
+import { getFormatByPath, parseSpecContent, stringifySpecContent } from '../../src/commands/fetch'
 
 const minimalSpec: OpenAPIObject = {
   openapi: '3.1.0',
@@ -41,5 +41,35 @@ describe('stringifySpecContent', () => {
     expect(output).toContain('version: 1.0.0\n')
     expect(output.endsWith('\n')).toBe(true)
     expect(output.endsWith('\n\n')).toBe(false)
+  })
+})
+
+describe('parseSpecContent', () => {
+  it('parses JSON content before attempting YAML', () => {
+    expect(parseSpecContent(JSON.stringify(minimalSpec))).toEqual({
+      format: 'json',
+      spec: minimalSpec,
+    })
+  })
+
+  it('falls back to YAML when JSON parsing fails', () => {
+    const yamlContent = ['openapi: 3.1.0', 'info:', '  title: Example API', '  version: 1.0.0', 'paths: {}', ''].join('\n')
+
+    expect(parseSpecContent(yamlContent)).toEqual({
+      format: 'yaml',
+      spec: minimalSpec,
+    })
+  })
+
+  it('surfaces validation errors for parsed content', () => {
+    expect(() => parseSpecContent(JSON.stringify({
+      openapi: '3.1.0',
+      paths: {},
+    }))).toThrowError(/Invalid OpenAPI document in downloaded spec content: info:/)
+  })
+
+  it('throws a stable error when neither JSON nor YAML can be parsed', () => {
+    expect(() => parseSpecContent('{'))
+      .toThrowError(/Failed to parse downloaded spec content:/)
   })
 })
