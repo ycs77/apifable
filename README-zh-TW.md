@@ -110,64 +110,48 @@ npx apifable@latest fetch
 
 ## 使用方式
 
-可依照常見情境直接使用以下提示詞，快速從「找 API」走到「完成開發」。
+以下是一些探索 API 和實作功能的提示詞範例。
 
-### 先掌握 API 全貌
-
-```
-這個 API 有哪些 Tag？
-```
+### 探索 API
 
 ```
-這份規格中，和講師與課程相關的 Endpoint 有哪些？
-```
-
-### 快速定位需要的 Endpoint
-
-```
-搜尋和「講師課程列表」相關的 Endpoint
+幫我列出 API
 ```
 
 ```
-列出 Lecturer 這個 Tag 底下的所有 Endpoint
-```
-
-### 釐清 request / response 細節
-
-```
-顯示 `GET /lecturers/{id}/courses` 的完整詳情
+給我文章相關的 API
 ```
 
 ```
-給我看 LecturerCourseListResponse 的 Schema
-```
-
-### 產生開發需要的型別
-
-```
-幫我為 `GET /lecturers/{id}/courses` 產生 TypeScript 型別
+列出 Post 標籤下的 API
 ```
 
 ```
-幫我產生這些 schemas 的型別：Lecturer、Course、LecturerCourseListResponse
+給我文章留言的 API 詳情
 ```
 
-### 直接進入功能實作
-
 ```
-幫我建立講師的課程列表功能（React），並使用這份規格中的 Endpoint 與型別
+給我 GET /posts/{id}/comments 的 API 詳情
 ```
 
-### 推薦的快速開發流程
+```
+給我 postComments 的 API 詳情
+```
 
-多數情境下，建議依這個順序提問：
+### 實作功能
 
-1. 先探索 API（`get_spec_info` / `search_endpoints`）
-2. 鎖定契約細節（`get_endpoint` / `get_schema`）
-3. 只產生需要的型別（`get_types`）
-4. 再請 Agent 產生 UI 或 service 程式碼
+```
+實作文章留言功能
 
-這樣可以讓輸出更精準，也能避免產生不必要的程式碼。
+文章頁面: src/pages/posts/[id].tsx
+
+相關 API:
+- GET /posts/{id}/comments (文章留言列表)
+- POST /posts/{id}/comments (新增文章留言)
+```
+
+> [!TIP]
+> 撰寫實作功能的 prompt 時，建議附上所需的上下文，例如頁面路徑、元件位置、相關 API、可參考的實作模式或範例等。
 
 ### AI Agent 指引
 

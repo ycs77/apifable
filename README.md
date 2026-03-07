@@ -110,64 +110,48 @@ For other AI agents such as Cursor and Windsurf, you can follow the same approac
 
 ## Usage
 
-Use these prompts by scenario to quickly move from API discovery to implementation.
+Here are some example prompts you can use to explore APIs and build features.
 
-### Understand the API first
-
-```
-What tags are available in this API?
-```
+### Explore the API
 
 ```
-What endpoints does this API have for lecturers and courses?
-```
-
-### Find the endpoint you need
-
-```
-Search for endpoints related to "lecturer course list"
+List all APIs
 ```
 
 ```
-List endpoints under the "Lecturer" tag
-```
-
-### Inspect request/response details
-
-```
-Show me the full details of `GET /lecturers/{id}/courses`
+Show me APIs related to posts
 ```
 
 ```
-Show me the schema for LecturerCourseListResponse
-```
-
-### Generate types for coding
-
-```
-Generate TypeScript types for `GET /lecturers/{id}/courses`
+List APIs under the Post tag
 ```
 
 ```
-Generate types for schemas: Lecturer, Course, LecturerCourseListResponse
+Show me the API details for post comments
 ```
 
-### Ask for implementation directly
-
 ```
-Build the lecturer's course list feature in React. Use the endpoint and schemas from this spec.
+Show me the API details for GET /posts/{id}/comments
 ```
 
-### Recommended Flow for Fast Development
+```
+Show me the API details for postComments
+```
 
-For most tasks, this sequence gives the best result:
+### Build a feature
 
-1. Start with API discovery (`get_spec_info` / `search_endpoints`)
-2. Lock the exact contract (`get_endpoint` / `get_schema`)
-3. Generate only needed types (`get_types`)
-4. Ask the agent to implement UI or service code with those types
+```
+Implement the post comments feature
 
-This keeps outputs precise and avoids generating unnecessary code.
+Post page: src/pages/posts/[id].tsx
+
+Related APIs:
+- GET /posts/{id}/comments (list post comments)
+- POST /posts/{id}/comments (create a post comment)
+```
+
+> [!TIP]
+> When writing a prompt to build a feature, include relevant context: page paths, component locations, related APIs, and any patterns or examples to follow.
 
 ### AI Agent Guidance
 
