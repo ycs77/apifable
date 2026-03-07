@@ -206,7 +206,7 @@ npx apifable@latest fetch
 - `query`（string）：搜尋關鍵字
 - `limit`（number，optional）：最多回傳幾筆結果（預設：10）
 
-跨 Schema 名稱及描述的關鍵字搜尋，結果依相關性排序。若無精確匹配結果，會自動切換為模糊搜尋。回應包含 `matchType` 欄位（`"exact"` 或 `"fuzzy"`）；模糊搜尋結果另含每筆結果的 `score` 欄位。
+跨 Schema 名稱及描述的關鍵字搜尋，結果依相關性排序。若無精確匹配結果，會自動切換為模糊搜尋。回應包含 `matchType` 欄位（`"exact"` 或 `"fuzzy"`）；模糊搜尋結果另含每筆結果的 `score` 欄位。空結果時也可能包含 `message` 欄位，提供下一步操作建議。
 
 ### `get_schema`
 
@@ -227,20 +227,6 @@ npx apifable@latest fetch
 模式規則：
 - 一次呼叫只能使用一種模式：`schemas`、`method` + `path`、或 `operationId`
 - 不能在同一個呼叫中混用不同模式
-
-範例 payload：
-
-```json
-{ "schemas": ["User", "Address"] }
-```
-
-```json
-{ "method": "get", "path": "/lecturers/{id}/courses" }
-```
-
-```json
-{ "operationId": "listUsers" }
-```
 
 ## 限制
 

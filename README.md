@@ -206,7 +206,7 @@ Returns the full endpoint object, including parameters, requestBody, and respons
 - `query` (string): Keyword to search for
 - `limit` (number, optional): Max results to return (default: 10)
 
-Keyword search across schema name and description. Results are ranked by relevance. If no exact matches are found, automatically falls back to fuzzy search. The response includes a `matchType` field (`"exact"` or `"fuzzy"`); fuzzy results also include a `score` field per result.
+Keyword search across schema name and description. Results are ranked by relevance. If no exact matches are found, automatically falls back to fuzzy search. The response includes a `matchType` field (`"exact"` or `"fuzzy"`); fuzzy results also include a `score` field per result. Empty results may also include a `message` field with guidance for the next step.
 
 ### `get_schema`
 
@@ -227,20 +227,6 @@ Generates self-contained TypeScript declarations as code text. In endpoint mode 
 Mode rules:
 - Use exactly one mode per call: `schemas`, `method` + `path`, or `operationId`
 - Do not mix modes in the same call
-
-Example payloads:
-
-```json
-{ "schemas": ["User", "Address"] }
-```
-
-```json
-{ "method": "get", "path": "/lecturers/{id}/courses" }
-```
-
-```json
-{ "operationId": "listUsers" }
-```
 
 ## Limitations
 

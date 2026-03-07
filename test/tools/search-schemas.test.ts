@@ -36,6 +36,25 @@ describe('searchSchemas', () => {
     expect(result.results[0].score).toBeTypeOf('number')
   })
 
+  it('returns an empty fuzzy result with guidance when nothing matches', () => {
+    const spec = createMockParsedSpec({
+      schemas: {
+        UserProfile: { type: 'object', description: 'User profile data' },
+        OrderItem: { type: 'object', description: 'An order item' },
+      },
+    })
+
+    const result = searchSchemas(spec, 'zzznomatch')
+
+    expect(result.matchType).toBe('fuzzy')
+    expect(result.results).toEqual([])
+    expect(result.total).toBe(0)
+    expect(result.hasMore).toBe(false)
+    expect(result.message).toBe(
+      'No schemas found. Try different keywords or inspect related endpoints with get_endpoint to discover schema names.',
+    )
+  })
+
   it('respects result limit', () => {
     const spec = createMockParsedSpec({
       schemas: Object.fromEntries(

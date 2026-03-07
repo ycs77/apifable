@@ -153,7 +153,7 @@ cli
     server.registerTool(
       'search_schemas',
       {
-        description: 'Search schemas by keyword across schema name and description. Results are ranked by relevance. If no exact matches are found, automatically falls back to fuzzy search. Use get_schema to inspect a specific schema in detail.',
+        description: 'Search schemas by keyword across schema name and description. Results are ranked by relevance. If no exact matches are found, automatically falls back to fuzzy search. Empty results may include a guidance message suggesting next steps. Use get_schema to inspect a specific schema in detail.',
         inputSchema: {
           query: z.string().min(1).describe('Search keyword'),
           limit: z.number().int().min(1).max(100).optional().describe('Maximum number of results (default: 10)'),

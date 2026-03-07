@@ -1,4 +1,10 @@
-import type { ParsedSpec, SchemaEntry, SchemaSearchResultItem } from '../types'
+import type {
+  ParsedSpec,
+  SchemaEntry,
+  SchemaSearchResultItem,
+  SearchSchemasFuzzyResult,
+  SearchSchemasResult,
+} from '../types'
 import MiniSearch from 'minisearch'
 
 export function buildSchemaEntries(schemas: Record<string, unknown>): SchemaEntry[] {
@@ -48,7 +54,7 @@ export function fuzzySearchSchemas(candidates: SchemaEntry[], query: string): Sc
     })
 }
 
-export function searchSchemas(spec: ParsedSpec, query: string, limit = 10) {
+export function searchSchemas(spec: ParsedSpec, query: string, limit = 10): SearchSchemasResult {
   const candidates = buildSchemaEntries(spec.schemas)
 
   // Exact (substring) search
@@ -77,11 +83,17 @@ export function searchSchemas(spec: ParsedSpec, query: string, limit = 10) {
   // Fuzzy fallback
   const fuzzyMatches = fuzzySearchSchemas(candidates, query)
   const fuzzyResults = fuzzyMatches.slice(0, limit)
-  return {
+  const fuzzyReturn: SearchSchemasFuzzyResult = {
     query,
-    matchType: 'fuzzy' as const,
+    matchType: 'fuzzy',
     results: fuzzyResults,
     total: fuzzyMatches.length,
     hasMore: fuzzyMatches.length > fuzzyResults.length,
   }
+
+  if (fuzzyResults.length === 0) {
+    fuzzyReturn.message = 'No schemas found. Try different keywords or inspect related endpoints with get_endpoint to discover schema names.'
+  }
+
+  return fuzzyReturn
 }

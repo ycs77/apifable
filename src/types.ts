@@ -44,6 +44,26 @@ export interface SchemaSearchResultItem {
   score?: number
 }
 
+export interface SearchSchemasExactResult {
+  query: string
+  matchType: 'exact'
+  results: SchemaSearchResultItem[]
+  total: number
+  hasMore: boolean
+  message?: string
+}
+
+export interface SearchSchemasFuzzyResult {
+  query: string
+  matchType: 'fuzzy'
+  results: SchemaSearchResultItem[]
+  total: number
+  hasMore: boolean
+  message?: string
+}
+
+export type SearchSchemasResult = SearchSchemasExactResult | SearchSchemasFuzzyResult
+
 export interface EndpointEntry {
   method: string
   path: string
