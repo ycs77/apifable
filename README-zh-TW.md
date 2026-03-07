@@ -56,6 +56,9 @@ init 會要求你輸入本地檔案路徑，例如 `openapi.yaml`。
 
 init 會先要求你輸入遠端 URL，例如 `https://api.example.com/openapi.yaml`，再輸入下載到本地的路徑，例如 `./openapi.yaml`。
 
+> [!NOTE]
+> 在這個模式下，`init` 也會自動把下載後的本地 spec 路徑加入 `.gitignore`，因為這個檔案預期會由遠端來源重新抓取與更新。
+
 之後你可以執行以下指令，將 OpenAPI 規格書從遠端下載到本地（`spec.url` → `spec.path`）。每次需要更新規格書時，只要重新執行即可：
 
 ```bash
@@ -80,7 +83,7 @@ npx apifable@latest fetch
 
 #### Auth Headers（機密 Token）
 
-若 API 需要驗證（私有 API），請將機密 headers 存放在 `.apifable/auth.json`。此檔案**不應**提交至版本控制：
+若下載遠端 OpenAPI 規格書需要驗證（私有 API），請將機密 headers 存放在 `.apifable/auth.json`。此檔案**不應**提交至版本控制：
 
 ```json
 {

@@ -56,6 +56,9 @@ Use this mode if your OpenAPI spec is available from a stable remote URL, such a
 
 init will first ask for the remote URL, such as `https://api.example.com/openapi.yaml`, and then ask for the local output path, such as `./openapi.yaml`.
 
+> [!NOTE]
+> In this mode, `init` also adds the downloaded local spec path to `.gitignore` automatically, because the file is intended to be refreshed from the remote source.
+
 You can then run the following command to download the OpenAPI spec from the remote URL to your local path (`spec.url` → `spec.path`). Whenever the spec changes, just run it again to refresh:
 
 ```bash
@@ -80,7 +83,7 @@ For non-sensitive headers that can be shared with your team, add `spec.headers` 
 
 #### Auth Headers (Secret Tokens)
 
-For private APIs that require authentication, store secret headers in `.apifable/auth.json`. This file should **not** be committed to version control:
+If downloading the remote OpenAPI spec requires authentication (private API), store secret headers in `.apifable/auth.json`. This file should **not** be committed to version control:
 
 ```json
 {
