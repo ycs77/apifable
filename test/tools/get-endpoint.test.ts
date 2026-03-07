@@ -334,4 +334,75 @@ describe('getEndpoint', () => {
       })
     })
   })
+
+  describe('security inheritance', () => {
+    it('uses operation-level security over global security', () => {
+      const spec = createMockParsedSpec({
+        rawSpec: {
+          security: [{ bearerAuth: [] }],
+          paths: {
+            '/users': {
+              get: {
+                operationId: 'listUsers',
+                summary: 'List users',
+                security: [{ apiKey: [] }],
+                responses: {
+                  200: { description: 'OK' },
+                },
+              },
+            },
+          },
+        },
+      })
+
+      const result = getEndpoint(spec, { method: 'get', path: '/users' })
+
+      expect(result).toHaveProperty('security', [{ apiKey: [] }])
+    })
+
+    it('falls back to global security when operation has none', () => {
+      const spec = createMockParsedSpec({
+        rawSpec: {
+          security: [{ bearerAuth: [] }],
+          paths: {
+            '/users': {
+              get: {
+                operationId: 'listUsers',
+                summary: 'List users',
+                responses: {
+                  200: { description: 'OK' },
+                },
+              },
+            },
+          },
+        },
+      })
+
+      const result = getEndpoint(spec, { method: 'get', path: '/users' })
+
+      expect(result).toHaveProperty('security', [{ bearerAuth: [] }])
+    })
+
+    it('omits security key when neither operation nor global defines it', () => {
+      const spec = createMockParsedSpec({
+        rawSpec: {
+          paths: {
+            '/users': {
+              get: {
+                operationId: 'listUsers',
+                summary: 'List users',
+                responses: {
+                  200: { description: 'OK' },
+                },
+              },
+            },
+          },
+        },
+      })
+
+      const result = getEndpoint(spec, { method: 'get', path: '/users' })
+
+      expect(result).not.toHaveProperty('security')
+    })
+  })
 })

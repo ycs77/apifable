@@ -94,4 +94,38 @@ describe('listEndpointsByTag', () => {
       availableTags: ['users', 'user-admin', 'orders'],
     })
   })
+
+  it('does not add warning when over 30 endpoints but limit is specified', () => {
+    const endpointIndex = Array.from({ length: 31 }, (_, index) => createMockEndpoint({
+      method: 'get',
+      path: `/users/${index}`,
+      operationId: `getUser${index}`,
+      tags: ['users'],
+    }))
+
+    const spec = createMockParsedSpec({
+      tags: [createMockTag({ name: 'users' })],
+      endpointIndex,
+    })
+    const result = listEndpointsByTag(spec, 'users', 10)
+
+    expect(result).not.toHaveProperty('warning')
+  })
+
+  it('does not add warning when exactly 30 endpoints without limit', () => {
+    const endpointIndex = Array.from({ length: 30 }, (_, index) => createMockEndpoint({
+      method: 'get',
+      path: `/users/${index}`,
+      operationId: `getUser${index}`,
+      tags: ['users'],
+    }))
+
+    const spec = createMockParsedSpec({
+      tags: [createMockTag({ name: 'users' })],
+      endpointIndex,
+    })
+    const result = listEndpointsByTag(spec, 'users')
+
+    expect(result).not.toHaveProperty('warning')
+  })
 })
