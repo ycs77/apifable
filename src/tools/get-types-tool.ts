@@ -2,6 +2,7 @@ import type { HttpMethod, OperationObject, ParsedSpec } from '../types'
 import { HTTP_METHODS, isValidHttpMethod } from '../http-methods'
 import { addTransitiveDeps, buildDependencyGraph, collectRefs, topologicalSort } from '../schema/dependency'
 import { generateFileContent } from '../schema/to-ts'
+import { resolveNonSchemaComponentRefs } from '../spec/ref-resolver'
 import { findOperationByOperationId } from './find-operation'
 import { extractInlineSchemas } from './inline-schemas'
 import { findSimilarNames } from './suggestions'
@@ -142,17 +143,19 @@ export function getTypesTool(
       endpointOperationId = operation.operationId
     }
 
+    const resolvedOperation = resolveOperationComponents(operation, spec)
+
     inlineSchemas = extractInlineSchemas(
-      operation,
+      resolvedOperation,
       endpointOperationId,
       endpointMethod as HttpMethod | undefined,
       endpointPath,
     )
 
     rootSchemaNames = [...new Set([
-      ...collectRefs(operation.requestBody),
-      ...collectRefs(operation.responses),
-      ...collectRefs(operation.parameters),
+      ...collectRefs(resolvedOperation.requestBody),
+      ...collectRefs(resolvedOperation.responses),
+      ...collectRefs(resolvedOperation.parameters),
     ])]
 
     if (rootSchemaNames.length === 0 && inlineSchemas.length === 0) {
@@ -238,4 +241,13 @@ function buildMissingSchemaMessage(
 function buildNotFoundMessage(message: string, suggestions: string[]): string {
   if (suggestions.length === 0) return message
   return `${message} Did you mean: ${suggestions.join(', ')}?`
+}
+
+function resolveOperationComponents(operation: OperationObject, spec: ParsedSpec): OperationObject {
+  return {
+    ...operation,
+    parameters: resolveNonSchemaComponentRefs(operation.parameters, spec.rawSpec) as unknown[] | undefined,
+    requestBody: resolveNonSchemaComponentRefs(operation.requestBody, spec.rawSpec),
+    responses: resolveNonSchemaComponentRefs(operation.responses, spec.rawSpec) as Record<string, unknown> | undefined,
+  }
 }

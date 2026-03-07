@@ -156,6 +156,89 @@ describe('getEndpoint', () => {
         },
       })
     })
+
+    it('resolves common internal component refs in parameters and responses', () => {
+      const spec = createMockParsedSpec({
+        rawSpec: {
+          paths: {
+            '/users/{id}': {
+              get: {
+                operationId: 'getUser',
+                parameters: [
+                  { $ref: '#/components/parameters/UserId' },
+                ],
+                responses: {
+                  200: { $ref: '#/components/responses/UserResponse' },
+                },
+              },
+            },
+          },
+          components: {
+            schemas: {
+              User: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                },
+              },
+            },
+            parameters: {
+              UserId: {
+                name: 'id',
+                in: 'path',
+                required: true,
+                schema: { type: 'string' },
+              },
+            },
+            responses: {
+              UserResponse: {
+                description: 'OK',
+                content: {
+                  'application/json': {
+                    schema: { $ref: '#/components/schemas/User' },
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+
+      const result = getEndpoint(spec, { method: 'get', path: '/users/{id}' })
+
+      expect(result).toEqual({
+        method: 'get',
+        path: '/users/{id}',
+        operationId: 'getUser',
+        summary: '',
+        description: '',
+        tags: [],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
+        requestBody: undefined,
+        responses: {
+          200: {
+            description: 'OK',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string' },
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+    })
   })
 
   describe('operationId mode', () => {

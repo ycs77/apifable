@@ -544,6 +544,194 @@ describe('getTypesTool', () => {
       }
     })
 
+    it('collects schemas through components.responses refs', () => {
+      const spec = createMockParsedSpec({
+        schemas: {
+          User: {
+            type: 'object',
+            properties: {
+              profile: { $ref: '#/components/schemas/Profile' },
+            },
+          },
+          Profile: {
+            type: 'object',
+            properties: {
+              name: { type: 'string' },
+            },
+          },
+        },
+        rawSpec: {
+          paths: {
+            '/users/{id}': {
+              get: {
+                responses: {
+                  200: { $ref: '#/components/responses/UserResponse' },
+                },
+              },
+            },
+          },
+          components: {
+            schemas: {
+              User: {
+                type: 'object',
+                properties: {
+                  profile: { $ref: '#/components/schemas/Profile' },
+                },
+              },
+              Profile: {
+                type: 'object',
+                properties: {
+                  name: { type: 'string' },
+                },
+              },
+            },
+            responses: {
+              UserResponse: {
+                description: 'OK',
+                content: {
+                  'application/json': {
+                    schema: { $ref: '#/components/schemas/User' },
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+
+      const result = getTypesTool(spec, {
+        method: 'get',
+        path: '/users/{id}',
+      })
+
+      expect('code' in result).toBe(true)
+      if ('code' in result) {
+        expect(result.code).toContain('export interface User {')
+        expect(result.code).toContain('export interface Profile {')
+        expect(result.code).toContain('// Includes schemas: Profile, User')
+      }
+    })
+
+    it('collects schemas through components.requestBodies refs', () => {
+      const spec = createMockParsedSpec({
+        schemas: {
+          CreateUserRequest: {
+            type: 'object',
+            properties: {
+              name: { type: 'string' },
+            },
+          },
+        },
+        endpointIndex: [
+          {
+            method: 'post',
+            path: '/users',
+            operationId: 'createUser',
+            summary: 'Create user',
+            description: '',
+            tags: ['users'],
+          },
+        ],
+        rawSpec: {
+          paths: {
+            '/users': {
+              post: {
+                operationId: 'createUser',
+                requestBody: { $ref: '#/components/requestBodies/CreateUserBody' },
+                responses: {
+                  201: {
+                    description: 'Created',
+                  },
+                },
+              },
+            },
+          },
+          components: {
+            schemas: {
+              CreateUserRequest: {
+                type: 'object',
+                properties: {
+                  name: { type: 'string' },
+                },
+              },
+            },
+            requestBodies: {
+              CreateUserBody: {
+                content: {
+                  'application/json': {
+                    schema: { $ref: '#/components/schemas/CreateUserRequest' },
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+
+      const result = getTypesTool(spec, { operationId: 'createUser' })
+
+      expect('code' in result).toBe(true)
+      if ('code' in result) {
+        expect(result.code).toContain('export interface CreateUserRequest {')
+        expect(result.code).toContain('// Includes schemas: CreateUserRequest')
+      }
+    })
+
+    it('collects schemas from fixture-like referenced error responses', () => {
+      const spec = createMockParsedSpec({
+        schemas: {
+          ValidationError: {
+            type: 'object',
+            properties: {
+              message: { type: 'string' },
+            },
+          },
+        },
+        rawSpec: {
+          paths: {
+            '/login': {
+              post: {
+                operationId: 'auth.login',
+                responses: {
+                  422: { $ref: '#/components/responses/ValidationException' },
+                },
+              },
+            },
+          },
+          components: {
+            schemas: {
+              ValidationError: {
+                type: 'object',
+                properties: {
+                  message: { type: 'string' },
+                },
+              },
+            },
+            responses: {
+              ValidationException: {
+                description: 'Validation failed',
+                content: {
+                  'application/json': {
+                    schema: { $ref: '#/components/schemas/ValidationError' },
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+
+      const result = getTypesTool(spec, {
+        method: 'post',
+        path: '/login',
+      })
+
+      expect('code' in result).toBe(true)
+      if ('code' in result) {
+        expect(result.code).toContain('export interface ValidationError {')
+      }
+    })
+
     it('includes transitive dependencies for endpoint mode', () => {
       const spec = createMockParsedSpec({
         schemas: {

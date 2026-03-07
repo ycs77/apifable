@@ -31,6 +31,23 @@ describe('resolveRefs', () => {
           },
         },
       },
+      responses: {
+        UserResponse: {
+          description: 'OK',
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/User' },
+            },
+          },
+        },
+      },
+      parameters: {
+        TraceId: {
+          name: 'X-Trace-Id',
+          in: 'header',
+          schema: { type: 'string' },
+        },
+      },
     },
   }
 
@@ -66,12 +83,39 @@ describe('resolveRefs', () => {
     })
   })
 
-  it('keeps unsupported or missing refs unchanged', () => {
-    expect(resolveRefs({ $ref: '#/components/parameters/Id' }, rawSpec)).toEqual({
-      $ref: '#/components/parameters/Id',
+  it('resolves common internal component refs beyond schemas', () => {
+    expect(resolveRefs({ $ref: '#/components/responses/UserResponse' }, rawSpec)).toEqual({
+      description: 'OK',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              profile: {
+                type: 'object',
+                properties: {
+                  name: { type: 'string' },
+                },
+              },
+            },
+          },
+        },
+      },
     })
-    expect(resolveRefs({ $ref: '#/components/schemas/NotFound' }, rawSpec)).toEqual({
-      $ref: '#/components/schemas/NotFound',
+
+    expect(resolveRefs({ $ref: '#/components/parameters/TraceId' }, rawSpec)).toEqual({
+      name: 'X-Trace-Id',
+      in: 'header',
+      schema: { type: 'string' },
+    })
+  })
+
+  it('keeps unsupported or missing refs unchanged', () => {
+    expect(resolveRefs({ $ref: '#/paths/~1users/get' }, rawSpec)).toEqual({
+      $ref: '#/paths/~1users/get',
+    })
+    expect(resolveRefs({ $ref: '#/components/responses/NotFound' }, rawSpec)).toEqual({
+      $ref: '#/components/responses/NotFound',
     })
   })
 

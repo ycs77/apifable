@@ -198,7 +198,7 @@ npx apifable@latest fetch
 - `method`（string）+ `path`（string）：HTTP 方法與 Endpoint 路徑（例如 `get` + `/users/{id}`）
 - `operationId`（string）：Operation ID（例如 `listUsers`）
 
-回傳完整的 Endpoint 物件，包含參數、請求體與回應，且所有 `$ref` 均已內聯解析。
+回傳完整的 Endpoint 物件，包含參數、請求體與回應，且支援的內部 component `$ref` 均已內聯解析。
 
 ### `search_schemas`
 
@@ -213,7 +213,7 @@ npx apifable@latest fetch
 **輸入：**
 - `name`（string）：`components/schemas` 中的 Schema 名稱
 
-回傳所有 `$ref` 均已解析的完整 Schema。
+回傳支援的內部 component `$ref` 均已解析的完整 Schema。
 
 ### `get_types`
 
@@ -222,7 +222,7 @@ npx apifable@latest fetch
 - `method`（string）+ `path`（string）：HTTP 方法與 Endpoint 路徑
 - `operationId`（string）：Operation ID（例如 `listUsers`）
 
-回傳 self-contained 的 TypeScript 宣告程式碼文字。會自動包含傳遞相依型別，且不包含 import 陳述式。
+回傳 self-contained 的 TypeScript 宣告程式碼文字。在 endpoint 模式下，會先沿著支援的內部 component `$ref` 展開，再收集傳遞相依型別，且不包含 import 陳述式。
 
 模式規則：
 - 一次呼叫只能使用一種模式：`schemas`、`method` + `path`、或 `operationId`
@@ -244,7 +244,7 @@ npx apifable@latest fetch
 
 ## 限制
 
-- `$ref` 解析只支援指向 `#/components/schemas/` 的內部參照，不支援外部 `$ref`（例如指向其他檔案或 URL 的參照）。
+- 不支援外部 `$ref`（例如指向其他檔案或 URL 的參照）。
 - 不支援 OpenAPI 2.0（Swagger），僅支援 OpenAPI 3.0 與 3.1 規格書。
 
 ## 贊助

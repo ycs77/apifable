@@ -198,7 +198,7 @@ Keyword search across operationId, path, summary, and description. Results are r
 - `method` (string) + `path` (string): HTTP method and endpoint path (e.g. `get` + `/users/{id}`)
 - `operationId` (string): Operation ID (e.g. `listUsers`)
 
-Returns the full endpoint object, including parameters, requestBody, and responses, with all `$ref`s resolved inline.
+Returns the full endpoint object, including parameters, requestBody, and responses, with supported internal component `$ref`s resolved inline.
 
 ### `search_schemas`
 
@@ -213,7 +213,7 @@ Keyword search across schema name and description. Results are ranked by relevan
 **Inputs:**
 - `name` (string): Schema name from `components/schemas`
 
-Returns the full schema with all `$ref`s resolved.
+Returns the full schema with supported internal component `$ref`s resolved.
 
 ### `get_types`
 
@@ -222,7 +222,7 @@ Returns the full schema with all `$ref`s resolved.
 - `method` (string) + `path` (string): HTTP method and endpoint path
 - `operationId` (string): Operation ID (e.g. `listUsers`)
 
-Generates self-contained TypeScript declarations as code text. It automatically includes transitive dependencies and does not include import statements.
+Generates self-contained TypeScript declarations as code text. In endpoint mode it follows supported internal component `$ref`s before collecting schema dependencies. It automatically includes transitive dependencies and does not include import statements.
 
 Mode rules:
 - Use exactly one mode per call: `schemas`, `method` + `path`, or `operationId`
@@ -244,7 +244,7 @@ Example payloads:
 
 ## Limitations
 
-- `$ref` resolution only supports internal references to `#/components/schemas/`. External `$ref`s (e.g. references to other files or URLs) are not supported.
+- External `$ref`s (e.g. references to other files or URLs) are not supported.
 - OpenAPI 2.0 (Swagger) is not supported. Only OpenAPI 3.0 and 3.1 specs are supported.
 
 ## Sponsor

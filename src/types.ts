@@ -80,6 +80,9 @@ export interface OpenAPIObject {
   security?: Record<string, string[]>[]
   components?: {
     schemas?: Record<string, unknown>
+    responses?: Record<string, unknown>
+    parameters?: Record<string, unknown>
+    requestBodies?: Record<string, unknown>
     securitySchemes?: Record<string, SecuritySchemeObject>
   }
 }

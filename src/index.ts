@@ -133,7 +133,7 @@ cli
     server.registerTool(
       'get_endpoint',
       {
-        description: 'Get full details of a specific endpoint including parameters, request body, responses, and security requirements. All $refs are resolved. Provide either "method" + "path" or "operationId". Use get_types to get TypeScript type declarations for the endpoint.',
+        description: 'Get full details of a specific endpoint including parameters, request body, responses, and security requirements. Supported internal component $refs are resolved inline. Provide either "method" + "path" or "operationId". Use get_types to get TypeScript type declarations for the endpoint.',
         inputSchema: {
           method: z.string().optional().describe('HTTP method (e.g. get, post, put, delete)'),
           path: z.string().optional().describe('Endpoint path (e.g. /users/{id})'),
@@ -168,7 +168,7 @@ cli
     server.registerTool(
       'get_schema',
       {
-        description: 'Get a specific schema from components/schemas by name. All $refs are resolved. Use get_types to convert schemas to TypeScript type declarations.',
+        description: 'Get a specific schema from components/schemas by name. Supported internal component $refs are resolved inline. Use get_types to convert schemas to TypeScript type declarations.',
         inputSchema: {
           name: z.string().describe('Schema name (e.g. User, CreateOrderRequest)'),
         },
@@ -186,7 +186,7 @@ cli
     server.registerTool(
       'get_types',
       {
-        description: 'Generate self-contained TypeScript type declarations for specified schemas or for all schemas used by a specific endpoint. Provide exactly one of: "schemas" (array of schema names), "method" + "path" (endpoint), or "operationId". Transitive dependencies are included automatically.',
+        description: 'Generate self-contained TypeScript type declarations for specified schemas or for all schemas used by a specific endpoint. Endpoint mode follows supported internal component $refs before collecting schema dependencies. Provide exactly one of: "schemas" (array of schema names), "method" + "path" (endpoint), or "operationId". Transitive dependencies are included automatically.',
         inputSchema: {
           schemas: z.array(z.string()).optional().describe(
             'Array of schema names from components/schemas (e.g. ["User", "Address"])',
