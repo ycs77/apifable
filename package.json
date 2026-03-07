@@ -1,7 +1,7 @@
 {
   "name": "apifable",
   "type": "module",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "packageManager": "pnpm@10.30.2",
   "description": "MCP server that helps AI agents explore OpenAPI specs, search endpoints, and generate TypeScript types.",
   "license": "MIT",
