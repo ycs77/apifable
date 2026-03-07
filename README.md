@@ -66,7 +66,7 @@ For non-sensitive headers that can be shared with your team, add `spec.headers` 
 
 #### Auth Headers (Secret Tokens)
 
-For private APIs that require authentication, store secret headers in `.apifable/auth.json` — this file should **not** be committed to version control:
+For private APIs that require authentication, store secret headers in `.apifable/auth.json`. This file should **not** be committed to version control:
 
 ```json
 {
@@ -212,7 +212,7 @@ Keyword search across operationId, path, summary, and description. Results are r
 - `method` (string) + `path` (string): HTTP method and endpoint path (e.g. `get` + `/users/{id}`)
 - `operationId` (string): Operation ID (e.g. `listUsers`)
 
-Returns the full endpoint object — parameters, requestBody, responses — with all `$ref`s resolved inline.
+Returns the full endpoint object, including parameters, requestBody, and responses, with all `$ref`s resolved inline.
 
 ### `search_schemas`
 
@@ -263,7 +263,7 @@ Example payloads:
 
 ## Why
 
-While using AI agents like Claude Code to assist in frontend development, I realized that backend API integration remained a major pain point. Whenever I needed to generate corresponding API code, I often had to manually copy and paste API paths and parameters for the agent to understand—a process that was both tedious and inelegant.
+While using AI agents like Claude Code to assist in frontend development, I realized that backend API integration remained a major pain point. Whenever I needed to generate corresponding API code, I often had to manually copy and paste API paths and parameters for the agent to understand. That process was both tedious and inelegant.
 
 So I turned my attention to the OpenAPI spec and found it to be a format perfectly suited for AI collaboration. However, no existing MCP tool met my standards at the time: some were close in functionality but couldn't handle large `openapi.yaml` files (up to 2MB), while others offered a clunky experience. I decided to build **apifable** via "Vibe Coding" with Claude Code, making it easy to query API specs through AI agents and generate precise TypeScript types.
 

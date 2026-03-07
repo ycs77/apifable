@@ -66,7 +66,7 @@ npx apifable@latest fetch
 
 #### Auth Headers（機密 Token）
 
-若 API 需要驗證（私有 API），請將機密 headers 存放在 `.apifable/auth.json` —— 此檔案**不應**提交至版本控制：
+若 API 需要驗證（私有 API），請將機密 headers 存放在 `.apifable/auth.json`。此檔案**不應**提交至版本控制：
 
 ```json
 {
@@ -212,7 +212,7 @@ npx apifable@latest fetch
 - `method`（string）+ `path`（string）：HTTP 方法與 Endpoint 路徑（例如 `get` + `/users/{id}`）
 - `operationId`（string）：Operation ID（例如 `listUsers`）
 
-回傳完整的 Endpoint 物件——參數、請求體、回應——所有 `$ref` 均已內聯解析。
+回傳完整的 Endpoint 物件，包含參數、請求體與回應，且所有 `$ref` 均已內聯解析。
 
 ### `search_schemas`
 
