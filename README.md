@@ -160,13 +160,12 @@ Add the following to your project's `AGENTS.md` to help AI agents use apifable m
 ```markdown
 ## API Integration (apifable)
 
-- Treat apifable output as the single source of truth for API contracts; do not infer fields, params, enums, response shapes, or examples that are not explicitly defined in the spec.
-- Before writing or changing API integration code, use `get_endpoint` to verify the exact contract and use `get_types` only for the endpoint or schemas required by the current task.
-- Preserve apifable output exactly as returned; do not rename, translate, truncate, normalize, or fill in missing contract details.
-- Save generated type files in the project's existing types location and name them by domain meaning, not by OpenAPI tag names. If no such convention exists, use `src/types/`.
-- Use `get_schema` only when contract details are still unclear.
-- When spec gaps affect API contract correctness, stop and surface the gap. Otherwise, continue only with contract-safe work, and label assumptions without inventing missing API details.
+- Always use `get_endpoint` to verify the exact path, method, and parameters before writing integration code. Never assume.
+- When presenting endpoint list data from apifable tools, display exactly these columns in order: `Method`, `Path`, `Summary`. Keep all values verbatim, including summary prefixes like `[ 32 - 001 ]`. Do not omit, rename, paraphrase, or add extra columns.
+- When saving generated types, store them under `src/types/` and name files by domain (e.g., `src/types/auth.ts`, `src/types/user.ts`), not by OpenAPI tag names.
 ```
+
+The above is a recommended starting point. Feel free to adjust the endpoint list columns and the types folder path to match your project.
 
 ## MCP Tools Reference
 

@@ -160,13 +160,12 @@ npx apifable@latest fetch
 ```markdown
 ## API 整合 (apifable)
 
-- 將 apifable 的輸出視為 API 契約的唯一依據；spec 未明確定義的欄位、參數、列舉值、回應結構與範例，一律不得推測。
-- 撰寫或修改 API 串接程式碼前，先用 `get_endpoint` 確認實際契約，並只用 `get_types` 產生目前任務所需的 endpoint 或 schema 型別。
-- apifable 的輸出必須原樣保留；不得重命名、翻譯、截斷、正規化，或自行補完缺漏的契約細節。
-- 儲存產生的型別檔案時，優先沿用專案既有的型別目錄，並依領域語意命名，不要使用 OpenAPI tag 名稱；若專案沒有既有慣例，再使用 `src/types/`。
-- 只有在契約細節仍不清楚時才使用 `get_schema`。
-- 若 spec 缺口會影響 API 契約正確性，必須指出缺口並停止；否則只能繼續處理不影響契約的部分，並明確標示假設，不得自行補完缺漏的 API 細節。
+- 撰寫串接程式碼前，務必先用 `get_endpoint` 確認正確的路徑、方法與參數，不要憑假設。
+- 呈現 apifable 工具回傳 endpoint 列表的資料時，依序顯示 `Method`、`Path`、`Summary` 欄位。所有值必須原樣保留，包含 `[ 32 - 001 ]` 等摘要前綴。不得省略、重命名、改寫或新增額外欄位。
+- 儲存產生的型別時，放在 `src/types/` 下並依領域命名 (例如 `src/types/auth.ts`、`src/types/user.ts`)，不要使用 OpenAPI tag 名稱。
 ```
+
+以上為建議的指引範例，你可以根據專案需求調整 endpoint 列表顯示的欄位和 types 的存放路徑。
 
 ## MCP Tools 參考
 
