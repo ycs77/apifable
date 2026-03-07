@@ -5,6 +5,29 @@ import c from 'picocolors'
 import { configExists, writeConfig } from '../config/config'
 import { showLogo } from '../logo'
 
+export function buildGitignoreContent(existing: string, entries: string[]): string {
+  const existingLines = existing.split('\n').map(l => l.trim())
+  const newEntries = entries.filter(e => !existingLines.includes(e))
+
+  if (newEntries.length === 0) return existing
+
+  const blockStart = existing.split('\n').findIndex(l => l.trim() === '# apifable')
+  if (blockStart !== -1) {
+    const lines = existing.split('\n')
+    let insertAt = blockStart + 1
+    while (insertAt < lines.length && lines[insertAt].trim() !== '' && !lines[insertAt].startsWith('#')) {
+      insertAt++
+    }
+    lines.splice(insertAt, 0, ...newEntries)
+    return lines.join('\n')
+  }
+
+  const separator = existing
+    ? (existing.endsWith('\n') ? '\n' : '\n\n')
+    : ''
+  return `${existing}${separator}# apifable\n${newEntries.join('\n')}\n`
+}
+
 export async function initialize(cwd?: string): Promise<void> {
   console.log()
   showLogo()
@@ -57,7 +80,14 @@ export async function initialize(cwd?: string): Promise<void> {
   log.success('Created apifable.config.json')
 
   const gitignorePath = join(cwd ?? process.cwd(), '.gitignore')
-  const gitignoreEntry = '.apifable/'
+
+  const gitignoreEntries = ['.apifable/']
+  if (specUrl) {
+    const normalizedSpec = spec.replace(/\\/g, '/').replace(/^\.\//, '')
+    if (!normalizedSpec.startsWith('.apifable/')) {
+      gitignoreEntries.push(normalizedSpec)
+    }
+  }
 
   let gitignoreContent = ''
   try {
@@ -66,11 +96,9 @@ export async function initialize(cwd?: string): Promise<void> {
     // file does not exist, will create
   }
 
-  if (!gitignoreContent.includes(gitignoreEntry)) {
-    const separator = gitignoreContent
-      ? (gitignoreContent.endsWith('\n') ? '\n' : '\n\n')
-      : ''
-    await writeFile(gitignorePath, `${gitignoreContent}${separator}# apifable\n${gitignoreEntry}\n`, 'utf-8')
+  const newGitignoreContent = buildGitignoreContent(gitignoreContent, gitignoreEntries)
+  if (newGitignoreContent !== gitignoreContent) {
+    await writeFile(gitignorePath, newGitignoreContent, 'utf-8')
     log.success('Updated .gitignore')
   }
 
