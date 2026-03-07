@@ -173,14 +173,16 @@ npx apifable@latest fetch
 
 將以下內容加入專案的 `AGENTS.md`，幫助 AI 代理更有效地使用 apifable：
 
-````markdown
+```markdown
 ## API 整合 (apifable)
 
-- 撰寫程式碼前，務必先用 `get_endpoint` 確認 API 路徑和參數——不要猜測
-- 實作 API 呼叫前，先用 `get_types` 產生 TypeScript 型別
-- 呈現 apifable 工具回傳的所有屬性名稱和值時，必須完整保留——不可省略、截斷或簡化任何部分（例如保留完整的摘要文字，包括 `[ 32 - 001 ]` 等前綴）
-- 儲存產生的型別檔案時，放在 `src/types/` 目錄下，並依領域語意命名（如 `src/types/auth.ts`、`src/types/user.ts`），而非使用 OpenAPI tag 名稱
-````
+- 將 apifable 的輸出視為 API 契約的唯一依據；spec 未明確定義的欄位、參數、列舉值、回應結構與範例，一律不得推測。
+- 撰寫或修改 API 串接程式碼前，先用 `get_endpoint` 確認實際契約，並只用 `get_types` 產生目前任務所需的 endpoint 或 schema 型別。
+- apifable 的輸出必須原樣保留；不得重命名、翻譯、截斷、正規化，或自行補完缺漏的契約細節。
+- 儲存產生的型別檔案時，優先沿用專案既有的型別目錄，並依領域語意命名，不要使用 OpenAPI tag 名稱；若專案沒有既有慣例，再使用 `src/types/`。
+- 只有在契約細節仍不清楚時才使用 `get_schema`。
+- 若 spec 缺口會影響 API 契約正確性，必須指出缺口並停止；否則只能繼續處理不影響契約的部分，並明確標示假設，不得自行補完缺漏的 API 細節。
+```
 
 ## MCP Tools 參考
 
