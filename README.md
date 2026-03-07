@@ -40,9 +40,23 @@ npx apifable@latest init
 
 This creates `apifable.config.json` in your project root. The config file should be committed to version control so the spec path is shared with your team.
 
-### Prepare Your Spec
+After the command starts, you can choose between **Manual file** and **Remote URL**.
 
-Run the following command to download the OpenAPI spec to your project (`spec.url` → `spec.path`):
+#### 1. Manual file
+
+Use this mode if your OpenAPI spec already lives in the project, or if you want to manage spec updates yourself.
+
+init will ask for the local file path, such as `openapi.yaml`.
+
+You then need to place your OpenAPI spec at that path manually. When the backend API changes, you also need to update that file manually.
+
+#### 2. Remote URL
+
+Use this mode if your OpenAPI spec is available from a stable remote URL, such as the OpenAPI spec endpoint provided by your backend API docs.
+
+init will first ask for the remote URL, such as `https://api.example.com/openapi.yaml`, and then ask for the local output path, such as `./openapi.yaml`.
+
+You can then run the following command to download the OpenAPI spec from the remote URL to your local path (`spec.url` → `spec.path`). Whenever the spec changes, just run it again to refresh:
 
 ```bash
 npx apifable@latest fetch

@@ -1,9 +1,11 @@
 import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { cancel, confirm, intro, isCancel, log, outro, text } from '@clack/prompts'
+import { cancel, confirm, intro, isCancel, log, outro, select, text } from '@clack/prompts'
 import c from 'picocolors'
 import { configExists, writeConfig } from '../config/config'
 import { showLogo } from '../logo'
+
+type SpecSetupMode = 'manual-file' | 'remote-url'
 
 export function buildGitignoreContent(existing: string, entries: string[]): string {
   const existingLines = existing.split('\n').map(l => l.trim())
@@ -28,6 +30,44 @@ export function buildGitignoreContent(existing: string, entries: string[]): stri
   return `${existing}${separator}# apifable\n${newEntries.join('\n')}\n`
 }
 
+function exitOnCancel(value: unknown): asserts value is string | SpecSetupMode {
+  if (isCancel(value)) {
+    cancel('Cancelled.')
+    process.exit(0)
+  }
+}
+
+function buildNextSteps(mode: SpecSetupMode, specPath: string): string {
+  const stepOne = mode === 'manual-file'
+    ? [
+        `${c.bold(c.cyan('1.'))} ${c.bold('Place your OpenAPI spec file')}`,
+        `   Place your OpenAPI spec file at ${c.cyan(specPath)}.`,
+      ]
+    : [
+        `${c.bold(c.cyan('1.'))} ${c.bold('Fetch your OpenAPI spec')}`,
+        `   Run ${c.cyan('`npx apifable@latest fetch`')} to download the latest OpenAPI spec to ${c.cyan(specPath)}.`,
+      ]
+
+  return [
+    c.bold('Next steps:'),
+    '',
+    ...stepOne,
+    '',
+    `${c.bold(c.cyan('2.'))} ${c.bold('Set up MCP')}`,
+    '   Add apifable to your AI agent\'s MCP config',
+    `   (e.g. ${c.cyan('.mcp.json')} for Claude Code):`,
+    '',
+    c.dim('   {'),
+    c.dim('     "mcpServers": {'),
+    c.dim('       "apifable": {'),
+    c.dim('         "command": "npx",'),
+    c.dim('         "args": ["-y", "apifable@latest", "mcp"]'),
+    c.dim('       }'),
+    c.dim('     }'),
+    c.dim('   }'),
+  ].join('\n')
+}
+
 export async function initialize(cwd?: string): Promise<void> {
   console.log()
   showLogo()
@@ -45,8 +85,42 @@ export async function initialize(cwd?: string): Promise<void> {
     }
   }
 
+  const mode = await select<SpecSetupMode>({
+    message: 'How would you like to set up your OpenAPI spec?',
+    options: [
+      {
+        value: 'manual-file',
+        label: 'Manual file',
+        hint: 'Place and update the local spec file yourself',
+      },
+      {
+        value: 'remote-url',
+        label: 'Remote URL',
+        hint: 'Fetch and refresh the local spec file from a URL',
+      },
+    ],
+  })
+
+  exitOnCancel(mode)
+
+  let specUrl: string | undefined
+  if (mode === 'remote-url') {
+    const remoteSpecUrl = await text({
+      message: 'Remote URL for your OpenAPI spec:',
+      placeholder: 'e.g. https://api.example.com/openapi.yaml',
+      validate: value => {
+        if (!value) return 'Spec URL is required'
+      },
+    })
+
+    exitOnCancel(remoteSpecUrl)
+    specUrl = remoteSpecUrl
+  }
+
   const spec = await text({
-    message: 'Path to OpenAPI spec file:',
+    message: mode === 'manual-file'
+      ? 'Local path for your OpenAPI spec file:'
+      : 'Local path for the downloaded OpenAPI spec:',
     initialValue: 'openapi.yaml',
     placeholder: 'e.g. openapi.yaml',
     validate: value => {
@@ -54,20 +128,7 @@ export async function initialize(cwd?: string): Promise<void> {
     },
   })
 
-  if (isCancel(spec)) {
-    cancel('Cancelled.')
-    process.exit(0)
-  }
-
-  const specUrl = await text({
-    message: 'URL to fetch OpenAPI spec from (optional, press Enter to skip):',
-    placeholder: 'e.g. https://api.example.com/openapi.yaml',
-  })
-
-  if (isCancel(specUrl)) {
-    cancel('Cancelled.')
-    process.exit(0)
-  }
+  exitOnCancel(spec)
 
   // Phase 2: Execute all file operations
 
@@ -103,25 +164,7 @@ export async function initialize(cwd?: string): Promise<void> {
   }
 
   log.message(
-    [
-      c.bold('Next steps:'),
-      '',
-      `${c.bold(c.cyan('1.'))} ${c.bold('Prepare your spec')}`,
-      `   Run ${c.cyan('`npx apifable@latest fetch`')} to download the OpenAPI spec locally.`,
-      '',
-      `${c.bold(c.cyan('2.'))} ${c.bold('Set up MCP')}`,
-      '   Add apifable to your AI agent\'s MCP config',
-      `   (e.g. ${c.cyan('.mcp.json')} for Claude Code):`,
-      '',
-      c.dim('   {'),
-      c.dim('     "mcpServers": {'),
-      c.dim('       "apifable": {'),
-      c.dim('         "command": "npx",'),
-      c.dim('         "args": ["-y", "apifable@latest", "mcp"]'),
-      c.dim('       }'),
-      c.dim('     }'),
-      c.dim('   }'),
-    ].join('\n'),
+    buildNextSteps(mode, spec),
   )
 
   outro('Done!')
