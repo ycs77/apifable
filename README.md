@@ -263,12 +263,6 @@ Example payloads:
 - `$ref` resolution only supports internal references to `#/components/schemas/`. External `$ref`s (e.g. references to other files or URLs) are not supported.
 - OpenAPI 2.0 (Swagger) is not supported. Only OpenAPI 3.0 and 3.1 specs are supported.
 
-## Why
-
-While using AI agents like Claude Code to assist in frontend development, I realized that backend API integration remained a major pain point. Whenever I needed to generate corresponding API code, I often had to manually copy and paste API paths and parameters for the agent to understand. That process was both tedious and inelegant.
-
-So I turned my attention to the OpenAPI spec and found it to be a format perfectly suited for AI collaboration. However, no existing MCP tool met my standards at the time: some were close in functionality but couldn't handle large `openapi.yaml` files (up to 2MB), while others offered a clunky experience. I decided to build **apifable** via "Vibe Coding" with Claude Code, making it easy to query API specs through AI agents and generate precise TypeScript types.
-
 ## Sponsor
 
 If you think this package has helped you, please consider [Becoming a sponsor](https://www.patreon.com/ycs77) to support my work~ and your avatar will be visible on my major projects.

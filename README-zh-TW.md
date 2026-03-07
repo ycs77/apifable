@@ -263,12 +263,6 @@ npx apifable@latest fetch
 - `$ref` 解析只支援指向 `#/components/schemas/` 的內部參照，不支援外部 `$ref`（例如指向其他檔案或 URL 的參照）。
 - 不支援 OpenAPI 2.0（Swagger），僅支援 OpenAPI 3.0 與 3.1 規格書。
 
-## 為什麼
-
-當我使用 Claude Code 等 AI Agent 協助開發前端專案時，發現後端 API 的整合始終是一大痛點。每當需要產生對應的 API 程式碼，往往只能手動複製貼上 API 路徑與參數來讓 Agent 理解，過程既繁瑣又不夠優雅。
-
-於是我將注意力轉向 OpenAPI 協定，發現這是一個非常適合與 Agent 協作的格式。然而，當時市面上並沒有任何 MCP 工具能達到我期望的標準：有些套件雖然功能接近，卻無法正常讀取高達 2MB 的 openapi.yaml 檔案；有些則是與 Agent 協作的體驗不夠流暢。因此，我透過 Claude Code 來 Vibe Coding 開發了 apifable，讓開發者能輕鬆透過 AI Agent 查詢 API 規格並精確產生 TypeScript 型別。
-
 ## 贊助
 
 如果我製作的套件對你有幫助，歡迎考慮[贊助我](https://www.patreon.com/ycs77)來支持我的工作~ 我會很感謝你~ 而且您的大頭貼還可以顯示在我的主要專案中。
