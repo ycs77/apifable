@@ -42,5 +42,5 @@
 - `get_types` returns self-contained TypeScript declarations as code text with no imports
 - `get_types` supports inline JSON request/response schemas through `src/tools/inline-schemas.ts`; names are `{PascalOperationId}Request|Response` or `{Method}{NormalizedPath}Request|Response` when there is no `operationId`
 - Inline schema extraction only promotes top-level non-`$ref` JSON request schemas and first 2xx response schemas to inline roots; nested `$ref` values still use normal dependency tracking
-- `readConfig` and `readAuth` validate JSON with Zod `.passthrough()` schemas; unknown keys are allowed, but invalid known field types must throw path-specific errors
+- Zod schemas use `.loose()` to allow unknown keys; path-specific errors for invalid known field types (not `.passthrough()` which is deprecated in Zod v4)
 - Auth headers live in `.apifable/auth.json` and are not version-controlled; `spec.headers` in config is for non-secret headers; auth values override config on key conflict; both support `${ENV_VAR}` expansion and keep undefined vars unchanged

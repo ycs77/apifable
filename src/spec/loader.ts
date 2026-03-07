@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
 import { extname } from 'node:path'
 import { parse } from 'yaml'
+import { validateOpenAPIDocument } from './validation'
 
 export async function loadSpecFile(specPath: string): Promise<{
   hash: string
@@ -28,6 +29,8 @@ export async function loadSpecFile(specPath: string): Promise<{
   } else {
     throw new Error('Unsupported file format. Please use .yaml, .yml, or .json')
   }
+
+  parsed = validateOpenAPIDocument(parsed, `spec file ${specPath}`)
 
   return { hash, parsed }
 }

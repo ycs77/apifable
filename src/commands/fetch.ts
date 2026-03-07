@@ -6,6 +6,7 @@ import c from 'picocolors'
 import { parse, stringify } from 'yaml'
 import { defaultConfig, readConfig } from '../config/config'
 import { resolveHeaders } from '../config/headers'
+import { validateOpenAPIDocument } from '../spec/validation'
 
 type SpecFormat = 'json' | 'yaml'
 
@@ -22,21 +23,27 @@ function getFormatByPath(filePath: string): SpecFormat {
   throw new Error('Unsupported output format. Please use .yaml, .yml, or .json')
 }
 
-function parseSpecContent(content: string): { format: SpecFormat, spec: OpenAPIObject } {
+export function parseSpecContent(content: string): { format: SpecFormat, spec: OpenAPIObject } {
+  let jsonParsed: unknown
   try {
-    return {
-      format: 'json',
-      spec: JSON.parse(content) as OpenAPIObject,
-    }
+    jsonParsed = JSON.parse(content)
   } catch {
+    let yamlParsed: unknown
     try {
-      return {
-        format: 'yaml',
-        spec: parse(content) as OpenAPIObject,
-      }
+      yamlParsed = parse(content)
     } catch (err) {
       throw new Error(`Failed to parse downloaded spec content: ${(err as Error).message}`)
     }
+
+    return {
+      format: 'yaml',
+      spec: validateOpenAPIDocument(yamlParsed, 'downloaded spec content'),
+    }
+  }
+
+  return {
+    format: 'json',
+    spec: validateOpenAPIDocument(jsonParsed, 'downloaded spec content'),
   }
 }
 
