@@ -51,15 +51,14 @@ cli
   .action(async (options: { spec?: string, cwd?: string }) => {
     const cwd = options.cwd ? resolve(options.cwd) : undefined
     const config = await readConfig(cwd)
-    if (!config) {
-      console.error('No apifable.config.json found. Run "apifable init" to initialize.')
+    const specSource = options.spec ?? config?.spec.path
+
+    if (!specSource) {
+      console.error('No OpenAPI spec path found. Provide --spec <path> or add spec.path to apifable.config.json.')
       process.exit(1)
     }
 
-    const specPath = resolve(
-      cwd ?? process.cwd(),
-      options.spec ?? config.spec.path
-    )
+    const specPath = resolve(cwd ?? process.cwd(), specSource)
 
     try {
       await access(specPath)
