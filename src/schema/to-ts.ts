@@ -112,8 +112,9 @@ export function generateFileContent(
 
   if (imports && imports.size > 0) {
     const importLines: string[] = []
-    for (const [path, types] of [...imports.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
-      const sorted = [...types].sort()
+
+    for (const [path, types] of [...imports.entries()].toSorted((a, b) => a[0].localeCompare(b[0]))) {
+      const sorted = types.toSorted()
       importLines.push(`import type { ${sorted.join(', ')} } from '${path}'`)
     }
     parts.push(importLines.join('\n'))

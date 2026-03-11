@@ -74,7 +74,7 @@ export function topologicalSort(
   }
 
   // Sort by name first for deterministic output
-  const sorted = [...names].sort()
+  const sorted = names.toSorted()
   for (const name of sorted) {
     visit(name)
   }

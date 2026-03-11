@@ -255,7 +255,7 @@ npx apifable@latest fetch
 
 <p align="center">
   <a href="https://www.patreon.com/ycs77">
-    <img src="https://cdn.jsdelivr.net/gh/ycs77/static/sponsors.svg"/>
+    <img src="https://cdn.jsdelivr.net/gh/ycs77/static/sponsors.svg" alt="Sponsors" />
   </a>
 </p>
 

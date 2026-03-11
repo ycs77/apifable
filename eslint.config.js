@@ -1,4 +1,4 @@
-import ycs77, { GLOB_MARKDOWN_CODE, GLOB_SRC } from '@ycs77/eslint-config'
+import ycs77, { GLOB_MARKDOWN_CODE } from '@ycs77/eslint-config'
 
 export default ycs77({
   typescript: true,
@@ -7,7 +7,6 @@ export default ycs77({
   ],
 })
   .append({
-    files: [GLOB_SRC],
     rules: {
       'no-console': 'off',
     },
