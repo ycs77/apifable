@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { searchEndpoints } from '../../src/tools/search-endpoints'
-import { createMockParsedSpec } from '../helpers'
+import { searchEndpoints } from '../../src/tools/search-endpoints.ts'
+import { createMockParsedSpec } from '../helpers.ts'
 
 describe('searchEndpoints', () => {
   it('returns exact matches ranked by relevance', () => {

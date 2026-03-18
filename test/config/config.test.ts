@@ -2,7 +2,7 @@
 import { join, resolve } from 'node:path'
 import { fs, vol } from 'memfs'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { configExists, defaultConfig, getConfigPath, readConfig, resolveConfig, writeConfig } from '../../src/config/config'
+import { configExists, defaultConfig, getConfigPath, readConfig, resolveConfig, writeConfig } from '../../src/config/config.ts'
 
 vi.mock('node:fs/promises')
 

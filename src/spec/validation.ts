@@ -1,4 +1,4 @@
-import type { OpenAPIObject } from '../types'
+import type { OpenAPIObject } from '../types.ts'
 import { z } from 'zod'
 
 const openAPIStructureSchema = z.object({

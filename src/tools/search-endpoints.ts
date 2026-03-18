@@ -1,4 +1,4 @@
-import type { EndpointEntry, ParsedSpec, SearchResultItem } from '../types'
+import type { EndpointEntry, ParsedSpec, SearchResultItem } from '../types.ts'
 import MiniSearch from 'minisearch'
 
 function scoreEndpoint(entry: EndpointEntry, query: string): number {

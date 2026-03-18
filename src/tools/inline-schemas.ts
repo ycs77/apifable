@@ -1,4 +1,4 @@
-import type { HttpMethod, OperationObject } from '../types'
+import type { HttpMethod, OperationObject } from '../types.ts'
 
 interface InlineSchemaEntry {
   name: string

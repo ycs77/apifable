@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { getEndpoint } from '../../src/tools/get-endpoint'
-import { createEmptyParsedSpec, createMockParsedSpec } from '../helpers'
+import { getEndpoint } from '../../src/tools/get-endpoint.ts'
+import { createEmptyParsedSpec, createMockParsedSpec } from '../helpers.ts'
 
 describe('getEndpoint', () => {
   describe('method + path mode', () => {

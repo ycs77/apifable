@@ -1,5 +1,5 @@
-import type { OperationObject, ParsedSpec } from '../types'
-import { HTTP_METHODS } from '../http-methods'
+import type { OperationObject, ParsedSpec } from '../types.ts'
+import { HTTP_METHODS } from '../http-methods.ts'
 
 export interface FoundOperation {
   method: (typeof HTTP_METHODS)[number]

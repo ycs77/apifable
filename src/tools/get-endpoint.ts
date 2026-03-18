@@ -1,8 +1,8 @@
-import type { HttpMethod, OperationObject, ParsedSpec } from '../types'
-import { HTTP_METHODS, isValidHttpMethod } from '../http-methods'
-import { resolveRefs } from '../spec/ref-resolver'
-import { findOperationByOperationId } from './find-operation'
-import { findSimilarNames } from './suggestions'
+import type { HttpMethod, OperationObject, ParsedSpec } from '../types.ts'
+import { HTTP_METHODS, isValidHttpMethod } from '../http-methods.ts'
+import { resolveRefs } from '../spec/ref-resolver.ts'
+import { findOperationByOperationId } from './find-operation.ts'
+import { findSimilarNames } from './suggestions.ts'
 
 interface GetEndpointInput {
   method?: string

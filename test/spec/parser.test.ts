@@ -1,6 +1,6 @@
-import type { OpenAPIObject } from '../../src/types'
+import type { OpenAPIObject } from '../../src/types.ts'
 import { describe, expect, it } from 'vitest'
-import { buildParsedSpec } from '../../src/spec/parser'
+import { buildParsedSpec } from '../../src/spec/parser.ts'
 
 describe('buildParsedSpec', () => {
   it('builds info, endpoint index, tags and schemas from raw spec', () => {

@@ -2,9 +2,9 @@
 import { resolve } from 'node:path'
 import { vol } from 'memfs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { getAuthPath } from '../../src/config/auth'
-import { getConfigPath } from '../../src/config/config'
-import { resolveHeaders } from '../../src/config/headers'
+import { getAuthPath } from '../../src/config/auth.ts'
+import { getConfigPath } from '../../src/config/config.ts'
+import { resolveHeaders } from '../../src/config/headers.ts'
 
 vi.mock('node:fs/promises')
 

@@ -1,4 +1,4 @@
-import type { OpenAPIObject } from '../types'
+import type { OpenAPIObject } from '../types.ts'
 
 export function resolveRefs(value: unknown, rawSpec: OpenAPIObject, visited: Set<string> = new Set()): unknown {
   return resolveRefsInternal(value, rawSpec, visited, false)

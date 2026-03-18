@@ -2,8 +2,8 @@ import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { cancel, confirm, intro, isCancel, log, outro, select, text } from '@clack/prompts'
 import c from 'picocolors'
-import { configExists, writeConfig } from '../config/config'
-import { showLogo } from '../logo'
+import { configExists, writeConfig } from '../config/config.ts'
+import { showLogo } from '../logo.ts'
 
 type SpecSetupMode = 'manual-file' | 'remote-url'
 

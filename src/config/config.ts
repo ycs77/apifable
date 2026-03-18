@@ -1,4 +1,4 @@
-import type { ApifableConfig, ApifableUserConfig } from '../types'
+import type { ApifableConfig, ApifableUserConfig } from '../types.ts'
 import { access, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { z } from 'zod'

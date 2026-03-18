@@ -1,6 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { expandEnvVars, expandHeaderValues } from '../../src/config/env'
+import { expandEnvVars, expandHeaderValues } from '../../src/config/env.ts'
 
 describe('expandEnvVars', () => {
   afterEach(() => {

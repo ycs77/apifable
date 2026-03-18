@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { getTypesTool } from '../../src/tools/get-types-tool'
-import { createEmptyParsedSpec, createMockParsedSpec } from '../helpers'
+import { getTypesTool } from '../../src/tools/get-types-tool.ts'
+import { createEmptyParsedSpec, createMockParsedSpec } from '../helpers.ts'
 
 describe('getTypesTool', () => {
   describe('input validation', () => {

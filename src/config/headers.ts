@@ -1,6 +1,6 @@
-import { readAuth } from './auth'
-import { readConfig } from './config'
-import { expandHeaderValues } from './env'
+import { readAuth } from './auth.ts'
+import { readConfig } from './config.ts'
+import { expandHeaderValues } from './env.ts'
 
 export async function resolveHeaders(cwd?: string): Promise<Record<string, string> | undefined> {
   const [config, auth] = await Promise.all([readConfig(cwd), readAuth(cwd)])

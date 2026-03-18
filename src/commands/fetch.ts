@@ -1,12 +1,12 @@
-import type { OpenAPIObject } from '../types'
+import type { OpenAPIObject } from '../types.ts'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, extname, resolve } from 'node:path'
 import { intro, log, outro, spinner } from '@clack/prompts'
 import c from 'picocolors'
 import { parse, stringify } from 'yaml'
-import { defaultConfig, readConfig } from '../config/config'
-import { resolveHeaders } from '../config/headers'
-import { validateOpenAPIDocument } from '../spec/validation'
+import { defaultConfig, readConfig } from '../config/config.ts'
+import { resolveHeaders } from '../config/headers.ts'
+import { validateOpenAPIDocument } from '../spec/validation.ts'
 
 type SpecFormat = 'json' | 'yaml'
 

@@ -1,6 +1,6 @@
-import type { ParsedSpec } from '../types'
-import { resolveRefs } from '../spec/ref-resolver'
-import { findSimilarNames } from './suggestions'
+import type { ParsedSpec } from '../types.ts'
+import { resolveRefs } from '../spec/ref-resolver.ts'
+import { findSimilarNames } from './suggestions.ts'
 
 export function getSchema(spec: ParsedSpec, name: string) {
   const schema = spec.schemas[name]

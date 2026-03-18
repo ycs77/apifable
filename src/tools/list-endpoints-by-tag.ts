@@ -1,5 +1,5 @@
-import type { ParsedSpec } from '../types'
-import { findSimilarNames } from './suggestions'
+import type { ParsedSpec } from '../types.ts'
+import { findSimilarNames } from './suggestions.ts'
 
 export function listEndpointsByTag(spec: ParsedSpec, tag: string, limit?: number, offset = 0) {
   const tagExists = spec.tags.some(t => t.name === tag)

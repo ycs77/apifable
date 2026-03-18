@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { getSpecInfo } from '../../src/tools/get-spec-info'
-import { createMockParsedSpec } from '../helpers'
+import { getSpecInfo } from '../../src/tools/get-spec-info.ts'
+import { createMockParsedSpec } from '../helpers.ts'
 
 describe('getSpecInfo', () => {
   it('returns normalized spec metadata and tag summary', () => {

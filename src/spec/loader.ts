@@ -1,9 +1,9 @@
-import type { OpenAPIObject } from '../types'
+import type { OpenAPIObject } from '../types.ts'
 import { createHash } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
 import { extname } from 'node:path'
 import { parse } from 'yaml'
-import { validateOpenAPIDocument } from './validation'
+import { validateOpenAPIDocument } from './validation.ts'
 
 export async function loadSpecFile(specPath: string): Promise<{
   hash: string

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { listEndpointsByTag } from '../../src/tools/list-endpoints-by-tag'
-import { createMockEndpoint, createMockParsedSpec, createMockTag } from '../helpers'
+import { listEndpointsByTag } from '../../src/tools/list-endpoints-by-tag.ts'
+import { createMockEndpoint, createMockParsedSpec, createMockTag } from '../helpers.ts'
 
 describe('listEndpointsByTag', () => {
   it('filters endpoints matching the requested tag', () => {

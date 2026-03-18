@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { addTransitiveDeps, buildDependencyGraph, collectRefs, topologicalSort } from '../../src/schema/dependency'
+import { addTransitiveDeps, buildDependencyGraph, collectRefs, topologicalSort } from '../../src/schema/dependency.ts'
 
 describe('dependency', () => {
   it('collects schema refs from nested structures', () => {

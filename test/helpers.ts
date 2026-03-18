@@ -1,4 +1,4 @@
-import type { EndpointEntry, OpenAPIObject, ParsedSpec, TagInfo } from '../src/types'
+import type { EndpointEntry, OpenAPIObject, ParsedSpec, TagInfo } from '../src/types.ts'
 
 export function createMockEndpoint(overrides: Partial<EndpointEntry> = {}): EndpointEntry {
   return {

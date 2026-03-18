@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { generateFileContent, schemaToTs, toValidIdentifier } from '../../src/schema/to-ts'
+import { generateFileContent, schemaToTs, toValidIdentifier } from '../../src/schema/to-ts.ts'
 
 describe('schema-to-ts', () => {
   it('converts invalid names to valid TypeScript identifiers', () => {

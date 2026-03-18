@@ -1,7 +1,7 @@
 import { join, resolve } from 'node:path'
 import { vol } from 'memfs'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { getAuthPath, readAuth } from '../../src/config/auth'
+import { getAuthPath, readAuth } from '../../src/config/auth.ts'
 
 vi.mock('node:fs/promises')
 

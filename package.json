@@ -35,7 +35,7 @@
     "build": "tsdown",
     "inspect": "npx -y @modelcontextprotocol/inspector node bin/apifable.js mcp",
     "lint": "eslint . --cache --concurrency auto",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc",
     "test": "vitest",
     "code-check": "pnpm lint && pnpm type-check && pnpm test --run",
     "release": "bumpp --commit \"Release v%s\"",
@@ -44,7 +44,7 @@
   "dependencies": {
     "@clack/prompts": "^1.1.0",
     "@modelcontextprotocol/sdk": "^1.27.1",
-    "cac": "^6.7.14",
+    "cac": "^7.0.0",
     "minisearch": "^7.2.0",
     "picocolors": "^1.1.1",
     "yaml": "^2.8.2",
@@ -52,11 +52,11 @@
   },
   "devDependencies": {
     "@types/node": "^24.12.0",
-    "@ycs77/eslint-config": "^7.2.2",
-    "bumpp": "^10.4.1",
+    "@ycs77/eslint-config": "^7.2.3",
+    "bumpp": "^11.0.1",
     "eslint": "^10.0.3",
     "memfs": "^4.56.11",
-    "tsdown": "^0.21.2",
+    "tsdown": "^0.21.4",
     "typescript": "~5.9.3",
     "vitest": "^4.1.0"
   }

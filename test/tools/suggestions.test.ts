@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { findSimilarNames } from '../../src/tools/suggestions'
+import { findSimilarNames } from '../../src/tools/suggestions.ts'
 
 describe('findSimilarNames', () => {
   it('returns substring matches before fuzzy matches', () => {

@@ -1,6 +1,6 @@
-import type { OpenAPIObject } from '../../src/types'
+import type { OpenAPIObject } from '../../src/types.ts'
 import { describe, expect, it } from 'vitest'
-import { resolveRefs } from '../../src/spec/ref-resolver'
+import { resolveRefs } from '../../src/spec/ref-resolver.ts'
 
 describe('resolveRefs', () => {
   const rawSpec: OpenAPIObject = {

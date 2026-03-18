@@ -1,6 +1,6 @@
-import type { OpenAPIObject } from '../../src/types'
+import type { OpenAPIObject } from '../../src/types.ts'
 import { describe, expect, it } from 'vitest'
-import { getFormatByPath, parseSpecContent, stringifySpecContent } from '../../src/commands/fetch'
+import { getFormatByPath, parseSpecContent, stringifySpecContent } from '../../src/commands/fetch.ts'
 
 const minimalSpec: OpenAPIObject = {
   openapi: '3.1.0',

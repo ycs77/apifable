@@ -1,4 +1,4 @@
-import type { ParsedSpec } from '../types'
+import type { ParsedSpec } from '../types.ts'
 
 export function getSpecInfo(spec: ParsedSpec) {
   const result: Record<string, unknown> = {

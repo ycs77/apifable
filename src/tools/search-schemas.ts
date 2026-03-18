@@ -4,7 +4,7 @@ import type {
   SchemaSearchResultItem,
   SearchSchemasFuzzyResult,
   SearchSchemasResult,
-} from '../types'
+} from '../types.ts'
 import MiniSearch from 'minisearch'
 
 export function buildSchemaEntries(schemas: Record<string, unknown>): SchemaEntry[] {

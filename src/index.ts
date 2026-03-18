@@ -1,23 +1,23 @@
-import type { OpenAPIObject, ParsedSpec } from './types'
+import type { OpenAPIObject, ParsedSpec } from './types.ts'
 import { access } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { cac } from 'cac'
 import { z } from 'zod'
-import { version } from '../package.json' with { type: 'json' }
-import { fetchSpec } from './commands/fetch'
-import { initialize } from './commands/init'
-import { readConfig } from './config/config'
-import { loadSpecFile } from './spec/loader'
-import { buildParsedSpec } from './spec/parser'
-import { getEndpoint } from './tools/get-endpoint'
-import { getSchema } from './tools/get-schema'
-import { getSpecInfo } from './tools/get-spec-info'
-import { getTypesTool } from './tools/get-types-tool'
-import { listEndpointsByTag } from './tools/list-endpoints-by-tag'
-import { searchEndpoints } from './tools/search-endpoints'
-import { searchSchemas } from './tools/search-schemas'
+import pkg from '../package.json' with { type: 'json' }
+import { fetchSpec } from './commands/fetch.ts'
+import { initialize } from './commands/init.ts'
+import { readConfig } from './config/config.ts'
+import { loadSpecFile } from './spec/loader.ts'
+import { buildParsedSpec } from './spec/parser.ts'
+import { getEndpoint } from './tools/get-endpoint.ts'
+import { getSchema } from './tools/get-schema.ts'
+import { getSpecInfo } from './tools/get-spec-info.ts'
+import { getTypesTool } from './tools/get-types-tool.ts'
+import { listEndpointsByTag } from './tools/list-endpoints-by-tag.ts'
+import { searchEndpoints } from './tools/search-endpoints.ts'
+import { searchSchemas } from './tools/search-schemas.ts'
 
 const cli = cac('apifable')
 
@@ -80,7 +80,7 @@ cli
 
     const server = new McpServer({
       name: 'apifable',
-      version,
+      version: pkg.version,
     })
 
     server.registerTool(
@@ -217,5 +217,5 @@ cli
   })
 
 cli.help()
-cli.version(version)
+cli.version(pkg.version)
 cli.parse()

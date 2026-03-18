@@ -1,11 +1,11 @@
-import type { HttpMethod, OperationObject, ParsedSpec } from '../types'
-import { HTTP_METHODS, isValidHttpMethod } from '../http-methods'
-import { addTransitiveDeps, buildDependencyGraph, collectRefs, topologicalSort } from '../schema/dependency'
-import { generateFileContent } from '../schema/to-ts'
-import { resolveNonSchemaComponentRefs } from '../spec/ref-resolver'
-import { findOperationByOperationId } from './find-operation'
-import { extractInlineSchemas } from './inline-schemas'
-import { findSimilarNames } from './suggestions'
+import type { HttpMethod, OperationObject, ParsedSpec } from '../types.ts'
+import { HTTP_METHODS, isValidHttpMethod } from '../http-methods.ts'
+import { addTransitiveDeps, buildDependencyGraph, collectRefs, topologicalSort } from '../schema/dependency.ts'
+import { generateFileContent } from '../schema/to-ts.ts'
+import { resolveNonSchemaComponentRefs } from '../spec/ref-resolver.ts'
+import { findOperationByOperationId } from './find-operation.ts'
+import { extractInlineSchemas } from './inline-schemas.ts'
+import { findSimilarNames } from './suggestions.ts'
 
 interface GetTypesInput {
   schemas?: string[]

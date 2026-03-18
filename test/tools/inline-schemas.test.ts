@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { extractInlineSchemas } from '../../src/tools/inline-schemas'
+import { extractInlineSchemas } from '../../src/tools/inline-schemas.ts'
 
 describe('extractInlineSchemas', () => {
   it('uses operationId-based names for inline request and response schemas', () => {

@@ -1,4 +1,4 @@
-import type { AuthConfig } from '../types'
+import type { AuthConfig } from '../types.ts'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { z } from 'zod'

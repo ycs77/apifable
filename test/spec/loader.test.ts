@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto'
 import { resolve } from 'node:path'
 import { vol } from 'memfs'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { loadSpecFile } from '../../src/spec/loader'
+import { loadSpecFile } from '../../src/spec/loader.ts'
 
 vi.mock('node:fs/promises')
 

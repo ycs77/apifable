@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { searchSchemas } from '../../src/tools/search-schemas'
-import { createMockParsedSpec } from '../helpers'
+import { searchSchemas } from '../../src/tools/search-schemas.ts'
+import { createMockParsedSpec } from '../helpers.ts'
 
 describe('searchSchemas', () => {
   it('returns exact matches ranked by relevance (name match > description match)', () => {

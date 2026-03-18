@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { getSchema } from '../../src/tools/get-schema'
-import { createMockParsedSpec } from '../helpers'
+import { getSchema } from '../../src/tools/get-schema.ts'
+import { createMockParsedSpec } from '../helpers.ts'
 
 describe('getSchema', () => {
   it('returns error when schema is missing', () => {

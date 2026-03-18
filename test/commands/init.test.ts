@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildGitignoreContent } from '../../src/commands/init'
+import { buildGitignoreContent } from '../../src/commands/init.ts'
 
 describe('buildGitignoreContent', () => {
   it('empty content + single entry', () => {

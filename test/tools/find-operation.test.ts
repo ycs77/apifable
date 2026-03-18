@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { findOperationByOperationId } from '../../src/tools/find-operation'
-import { createMockParsedSpec } from '../helpers'
+import { findOperationByOperationId } from '../../src/tools/find-operation.ts'
+import { createMockParsedSpec } from '../helpers.ts'
 
 describe('findOperationByOperationId', () => {
   it('finds a matching operation', () => {

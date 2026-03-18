@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { validateOpenAPIDocument } from '../../src/spec/validation'
+import { validateOpenAPIDocument } from '../../src/spec/validation.ts'
 
 describe('validateOpenAPIDocument', () => {
   it('accepts a minimal valid OpenAPI 3.x document', () => {
