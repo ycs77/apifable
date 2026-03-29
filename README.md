@@ -16,6 +16,10 @@ English | [繁體中文](README-zh-TW.md)
 
 ---
 
+## Hosted deployment
+
+A hosted deployment is available on [Fronteir AI](https://fronteir.ai/mcp/ycs77-apifable).
+
 ## Overview
 
 apifable is an MCP server that helps AI integrate APIs more smoothly into TypeScript frontend projects. It makes it easy to explore API structure, search endpoints, and generate TypeScript types, giving your AI agent the context it needs to write accurate integration code.
