@@ -4,3 +4,4 @@ trustPolicy: no-downgrade
 
 onlyBuiltDependencies:
   - esbuild
+  - simple-git-hooks

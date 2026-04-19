@@ -1,4 +1,3 @@
-/* eslint-disable no-template-curly-in-string */
 import { resolve } from 'node:path'
 import { vol } from 'memfs'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'

@@ -15,12 +15,6 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true
   },
-  "include": [
-    "./vitest.config.*",
-    "src/**/*",
-    "test/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["./vitest.config.*", "src/**/*", "test/**/*"],
+  "exclude": ["node_modules"]
 }

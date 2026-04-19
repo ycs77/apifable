@@ -1,6 +1,10 @@
 import type { OpenAPIObject } from '../../src/types.ts'
 import { describe, expect, it } from 'vitest'
-import { getFormatByPath, parseSpecContent, stringifySpecContent } from '../../src/commands/fetch.ts'
+import {
+  getFormatByPath,
+  parseSpecContent,
+  stringifySpecContent,
+} from '../../src/commands/fetch.ts'
 
 const minimalSpec: OpenAPIObject = {
   openapi: '3.1.0',
@@ -30,7 +34,9 @@ describe('getFormatByPath', () => {
 
 describe('stringifySpecContent', () => {
   it('stringifies json output with indentation and a trailing newline', () => {
-    expect(stringifySpecContent(minimalSpec, 'json')).toBe(`{\n  "openapi": "3.1.0",\n  "info": {\n    "title": "Example API",\n    "version": "1.0.0"\n  },\n  "paths": {}\n}\n`)
+    expect(stringifySpecContent(minimalSpec, 'json')).toBe(
+      `{\n  "openapi": "3.1.0",\n  "info": {\n    "title": "Example API",\n    "version": "1.0.0"\n  },\n  "paths": {}\n}\n`,
+    )
   })
 
   it('stringifies yaml output with a single trailing newline', () => {
@@ -53,7 +59,14 @@ describe('parseSpecContent', () => {
   })
 
   it('falls back to YAML when JSON parsing fails', () => {
-    const yamlContent = ['openapi: 3.1.0', 'info:', '  title: Example API', '  version: 1.0.0', 'paths: {}', ''].join('\n')
+    const yamlContent = [
+      'openapi: 3.1.0',
+      'info:',
+      '  title: Example API',
+      '  version: 1.0.0',
+      'paths: {}',
+      '',
+    ].join('\n')
 
     expect(parseSpecContent(yamlContent)).toEqual({
       format: 'yaml',
@@ -62,14 +75,17 @@ describe('parseSpecContent', () => {
   })
 
   it('surfaces validation errors for parsed content', () => {
-    expect(() => parseSpecContent(JSON.stringify({
-      openapi: '3.1.0',
-      paths: {},
-    }))).toThrowError(/Invalid OpenAPI document in downloaded spec content: info:/)
+    expect(() =>
+      parseSpecContent(
+        JSON.stringify({
+          openapi: '3.1.0',
+          paths: {},
+        }),
+      ),
+    ).toThrowError(/Invalid OpenAPI document in downloaded spec content: info:/)
   })
 
   it('throws a stable error when neither JSON nor YAML can be parsed', () => {
-    expect(() => parseSpecContent('{'))
-      .toThrowError(/Failed to parse downloaded spec content:/)
+    expect(() => parseSpecContent('{')).toThrowError(/Failed to parse downloaded spec content:/)
   })
 })

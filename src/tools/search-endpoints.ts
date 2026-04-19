@@ -66,15 +66,13 @@ export function searchEndpoints(spec: ParsedSpec, query: string, tag?: string, l
     .sort((a, b) => a.score - b.score)
 
   if (exactScored.length > 0) {
-    const results = exactScored
-      .slice(0, limit)
-      .map<SearchResultItem>(r => ({
-        method: r.entry.method,
-        path: r.entry.path,
-        operationId: r.entry.operationId,
-        summary: r.entry.summary,
-        tags: r.entry.tags,
-      }))
+    const results = exactScored.slice(0, limit).map<SearchResultItem>(r => ({
+      method: r.entry.method,
+      path: r.entry.path,
+      operationId: r.entry.operationId,
+      summary: r.entry.summary,
+      tags: r.entry.tags,
+    }))
 
     return {
       query,
@@ -107,7 +105,8 @@ export function searchEndpoints(spec: ParsedSpec, query: string, tag?: string, l
   }
 
   if (fuzzyResults.length === 0) {
-    fuzzyReturn.message = 'No endpoints found. Try different keywords or check available tags with get_spec_info.'
+    fuzzyReturn.message =
+      'No endpoints found. Try different keywords or check available tags with get_spec_info.'
   }
 
   return fuzzyReturn

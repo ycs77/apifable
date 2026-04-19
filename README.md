@@ -193,6 +193,7 @@ Returns the API title, version, description, servers, and all tags with their en
 ### `list_endpoints_by_tag`
 
 **Inputs:**
+
 - `tag` (string): The tag name to filter by
 - `limit` (number, optional): Max endpoints to return
 - `offset` (number, optional): Number of endpoints to skip (default: 0)
@@ -202,6 +203,7 @@ Returns all endpoints belonging to the given tag. The response includes `total`,
 ### `search_endpoints`
 
 **Inputs:**
+
 - `query` (string): Keyword to search for
 - `tag` (string, optional): Restrict search to a specific tag
 - `limit` (number, optional): Max results to return (default: 10)
@@ -211,6 +213,7 @@ Keyword search across operationId, path, summary, and description. Results are r
 ### `get_endpoint`
 
 **Inputs (choose one):**
+
 - `method` (string) + `path` (string): HTTP method and endpoint path (e.g. `get` + `/users/{id}`)
 - `operationId` (string): Operation ID (e.g. `listUsers`)
 
@@ -219,6 +222,7 @@ Returns the full endpoint object, including parameters, requestBody, and respons
 ### `search_schemas`
 
 **Inputs:**
+
 - `query` (string): Keyword to search for
 - `limit` (number, optional): Max results to return (default: 10)
 
@@ -227,6 +231,7 @@ Keyword search across schema name and description. Results are ranked by relevan
 ### `get_schema`
 
 **Inputs:**
+
 - `name` (string): Schema name from `components/schemas`
 
 Returns the full schema with supported internal component `$ref`s resolved.
@@ -234,6 +239,7 @@ Returns the full schema with supported internal component `$ref`s resolved.
 ### `get_types`
 
 **Inputs (choose one mode):**
+
 - `schemas` (string[]): Array of schema names from `components/schemas`
 - `method` (string) + `path` (string): HTTP method and endpoint path
 - `operationId` (string): Operation ID (e.g. `listUsers`)
@@ -241,6 +247,7 @@ Returns the full schema with supported internal component `$ref`s resolved.
 Generates self-contained TypeScript declarations as code text. In endpoint mode it follows supported internal component `$ref`s before collecting schema dependencies. It automatically includes transitive dependencies and does not include import statements.
 
 Mode rules:
+
 - Use exactly one mode per call: `schemas`, `method` + `path`, or `operationId`
 - Do not mix modes in the same call
 
@@ -278,6 +285,5 @@ If you think this package has helped you, please consider [Becoming a sponsor](h
 [ico-version]: https://img.shields.io/npm/v/apifable?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square
 [ico-downloads]: https://img.shields.io/npm/dt/apifable?style=flat-square
-
 [link-npm]: https://www.npmjs.com/package/apifable
 [link-downloads]: https://www.npmjs.com/package/apifable

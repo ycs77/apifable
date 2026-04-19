@@ -1,44 +1,42 @@
 {
   "name": "apifable",
-  "type": "module",
   "version": "1.1.3",
-  "packageManager": "pnpm@10.32.1",
   "description": "MCP server that helps AI agents explore OpenAPI specs, search endpoints, and generate TypeScript types.",
-  "license": "MIT",
+  "keywords": [
+    "agent",
+    "agentic",
+    "ai",
+    "api",
+    "llm",
+    "mcp",
+    "modelcontextprotocol",
+    "openapi",
+    "types",
+    "typescript"
+  ],
   "homepage": "https://github.com/ycs77/apifable",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ycs77/apifable.git"
   },
-  "keywords": [
-    "openapi",
-    "modelcontextprotocol",
-    "mcp",
-    "types",
-    "typescript",
-    "ai",
-    "agent",
-    "agentic",
-    "llm",
-    "api"
-  ],
   "bin": {
     "apifable": "./bin/apifable.js"
   },
   "files": [
     "dist"
   ],
-  "engines": {
-    "node": ">=22.0.0"
-  },
+  "type": "module",
   "scripts": {
     "build": "tsdown",
     "inspect": "npx -y @modelcontextprotocol/inspector node bin/apifable.js mcp",
-    "lint": "eslint . --cache --concurrency auto",
-    "type-check": "tsc",
+    "lint": "oxlint",
+    "fmt": "oxfmt",
+    "typecheck": "tsc",
     "test": "vitest",
-    "code-check": "pnpm lint && pnpm type-check && pnpm test --run",
+    "check": "pnpm lint && pnpm fmt --check && pnpm typecheck && pnpm test --run",
     "release": "bumpp --commit \"Release v%s\"",
+    "prepare": "simple-git-hooks",
     "prepack": "pnpm build"
   },
   "dependencies": {
@@ -52,12 +50,26 @@
   },
   "devDependencies": {
     "@types/node": "^24.12.0",
-    "@ycs77/eslint-config": "^7.2.3",
     "bumpp": "^11.0.1",
-    "eslint": "^10.0.3",
+    "lint-staged": "^16.4.0",
     "memfs": "^4.56.11",
+    "oxfmt": "^0.45.0",
+    "oxlint": "^1.60.0",
+    "oxlint-tsgolint": "^0.21.1",
+    "simple-git-hooks": "^2.13.1",
     "tsdown": "^0.21.4",
     "typescript": "~5.9.3",
     "vitest": "^4.1.0"
-  }
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*": "pnpm fmt --no-error-on-unmatched-pattern",
+    "*.{js,jsx,ts,tsx,mjs,cjs}": "pnpm lint"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "packageManager": "pnpm@10.32.1"
 }

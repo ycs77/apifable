@@ -57,7 +57,9 @@ function buildInlineSchemaBaseName(
   return `${methodPart}${pathPart}` || 'Operation'
 }
 
-function getJsonSchema(value: { content?: Record<string, { schema?: unknown }> } | undefined): unknown {
+function getJsonSchema(
+  value: { content?: Record<string, { schema?: unknown }> } | undefined,
+): unknown {
   return value?.content?.['application/json']?.schema
 }
 
@@ -66,13 +68,19 @@ function getFirstSuccessJsonSchema(responses: Record<string, unknown> | undefine
 
   const firstSuccess = Object.entries(responses)
     .filter(([statusCode]) => /^2\d\d$/.test(statusCode))
-    .sort((a, b) => a[0].localeCompare(b[0]))[0]?.[1] as { content?: Record<string, { schema?: unknown }> } | undefined
+    .sort((a, b) => a[0].localeCompare(b[0]))[0]?.[1] as
+    | { content?: Record<string, { schema?: unknown }> }
+    | undefined
 
   return getJsonSchema(firstSuccess)
 }
 
 function isInlineSchema(schema: unknown): schema is Record<string, unknown> {
-  return typeof schema === 'object' && schema !== null && typeof (schema as { $ref?: unknown }).$ref !== 'string'
+  return (
+    typeof schema === 'object' &&
+    schema !== null &&
+    typeof (schema as { $ref?: unknown }).$ref !== 'string'
+  )
 }
 
 function toPascalCase(value: string): string {

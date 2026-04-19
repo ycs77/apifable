@@ -21,7 +21,7 @@ describe('getEndpoint', () => {
 
       expect(result).toEqual({
         isError: true,
-        message: 'Path \'/missing\' not found in spec.',
+        message: "Path '/missing' not found in spec.",
       })
     })
 
@@ -32,7 +32,8 @@ describe('getEndpoint', () => {
 
       expect(result).toEqual({
         isError: true,
-        message: 'Invalid HTTP method \'fetch\'. Use one of: get, post, put, patch, delete, head, options, trace.',
+        message:
+          "Invalid HTTP method 'fetch'. Use one of: get, post, put, patch, delete, head, options, trace.",
       })
     })
 
@@ -53,7 +54,7 @@ describe('getEndpoint', () => {
 
       expect(result).toEqual({
         isError: true,
-        message: 'Method \'POST\' not found for path \'/users\'.',
+        message: "Method 'POST' not found for path '/users'.",
       })
     })
 
@@ -164,9 +165,7 @@ describe('getEndpoint', () => {
             '/users/{id}': {
               get: {
                 operationId: 'getUser',
-                parameters: [
-                  { $ref: '#/components/parameters/UserId' },
-                ],
+                parameters: [{ $ref: '#/components/parameters/UserId' }],
                 responses: {
                   200: { $ref: '#/components/responses/UserResponse' },
                 },
@@ -299,7 +298,7 @@ describe('getEndpoint', () => {
 
       expect(result).toEqual({
         isError: true,
-        message: 'Operation \'nonExistent\' not found in spec.',
+        message: "Operation 'nonExistent' not found in spec.",
       })
     })
 
@@ -330,7 +329,7 @@ describe('getEndpoint', () => {
 
       expect(result).toEqual({
         isError: true,
-        message: 'Operation \'listUser\' not found in spec. Did you mean: listUsers?',
+        message: "Operation 'listUser' not found in spec. Did you mean: listUsers?",
       })
     })
   })

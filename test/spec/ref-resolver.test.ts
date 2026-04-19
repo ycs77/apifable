@@ -59,9 +59,7 @@ describe('resolveRefs', () => {
 
   it('resolves nested refs inside objects and arrays', () => {
     const input = {
-      users: [
-        { $ref: '#/components/schemas/User' },
-      ],
+      users: [{ $ref: '#/components/schemas/User' }],
     }
 
     const result = resolveRefs(input, rawSpec)

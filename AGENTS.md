@@ -17,10 +17,12 @@
 ## Commands
 
 - `pnpm build`
-- `pnpm type-check`
-- `pnpm test --run`
 - `pnpm lint --fix`
-- `pnpm eslint [...files] --fix`
+- `pnpm lint [...files] --fix`
+- `pnpm fmt`
+- `pnpm fmt [...files]`
+- `pnpm typecheck`
+- `pnpm test --run`
 
 ## Rules
 

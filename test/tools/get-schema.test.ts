@@ -11,7 +11,7 @@ describe('getSchema', () => {
 
     expect(result).toEqual({
       isError: true,
-      message: 'Schema \'UnknownSchema\' not found.',
+      message: "Schema 'UnknownSchema' not found.",
     })
   })
 
@@ -81,7 +81,7 @@ describe('getSchema', () => {
 
     expect(result).toEqual({
       isError: true,
-      message: 'Schema \'Usr\' not found. Did you mean: User?',
+      message: "Schema 'Usr' not found. Did you mean: User?",
     })
   })
 })

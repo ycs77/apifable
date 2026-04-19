@@ -1,4 +1,11 @@
-import type { EndpointEntry, OpenAPIObject, ParsedSpec, SecuritySchemeInfo, SpecInfo, TagInfo } from '../types.ts'
+import type {
+  EndpointEntry,
+  OpenAPIObject,
+  ParsedSpec,
+  SecuritySchemeInfo,
+  SpecInfo,
+  TagInfo,
+} from '../types.ts'
 import { HTTP_METHODS } from '../http-methods.ts'
 
 export function buildParsedSpec(raw: OpenAPIObject): ParsedSpec {

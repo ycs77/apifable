@@ -8,13 +8,9 @@ describe('schema-to-ts', () => {
   })
 
   it('generates string enum aliases with escaped literals', () => {
-    const output = schemaToTs(
-      'Status',
-      { type: 'string', enum: ['ok', 'it\'s', 'a\\b'] },
-      {},
-    )
+    const output = schemaToTs('Status', { type: 'string', enum: ['ok', "it's", 'a\\b'] }, {})
 
-    expect(output).toBe('export type Status = \'ok\' | \'it\\\'s\' | \'a\\\\b\'')
+    expect(output).toBe("export type Status = 'ok' | 'it\\'s' | 'a\\\\b'")
   })
 
   it('generates allOf as interface extends when refs are present', () => {
@@ -35,11 +31,9 @@ describe('schema-to-ts', () => {
       {},
     )
 
-    expect(output).toBe([
-      'export interface AdminUser extends BaseUser {',
-      '  role: string',
-      '}',
-    ].join('\n'))
+    expect(output).toBe(
+      ['export interface AdminUser extends BaseUser {', '  role: string', '}'].join('\n'),
+    )
   })
 
   it('renders additionalProperties with precise union type when named properties exist', () => {
@@ -57,12 +51,11 @@ describe('schema-to-ts', () => {
       {},
     )
 
-    expect(output).toBe([
-      'export interface Meta {',
-      '  id?: string',
-      '  [key: string]: string | undefined',
-      '}',
-    ].join('\n'))
+    expect(output).toBe(
+      ['export interface Meta {', '  id?: string', '  [key: string]: string | undefined', '}'].join(
+        '\n',
+      ),
+    )
   })
 
   it('renders additionalProperties with heterogeneous property types as union index signature', () => {
@@ -82,13 +75,15 @@ describe('schema-to-ts', () => {
       {},
     )
 
-    expect(output).toBe([
-      'export interface Mixed {',
-      '  count: number',
-      '  label?: string',
-      '  [key: string]: boolean | number | string | undefined',
-      '}',
-    ].join('\n'))
+    expect(output).toBe(
+      [
+        'export interface Mixed {',
+        '  count: number',
+        '  label?: string',
+        '  [key: string]: boolean | number | string | undefined',
+        '}',
+      ].join('\n'),
+    )
   })
 
   it('renders additionalProperties type directly when no named properties (regression)', () => {
@@ -103,21 +98,14 @@ describe('schema-to-ts', () => {
       {},
     )
 
-    expect(output).toBe([
-      'export interface Attrs {',
-      '  [key: string]: number',
-      '}',
-    ].join('\n'))
+    expect(output).toBe(['export interface Attrs {', '  [key: string]: number', '}'].join('\n'))
   })
 
   it('generates discriminated union with explicit mapping', () => {
     const output = schemaToTs(
       'Pet',
       {
-        oneOf: [
-          { $ref: '#/components/schemas/Cat' },
-          { $ref: '#/components/schemas/Dog' },
-        ],
+        oneOf: [{ $ref: '#/components/schemas/Cat' }, { $ref: '#/components/schemas/Dog' }],
         discriminator: {
           propertyName: 'petType',
           mapping: {
@@ -129,19 +117,14 @@ describe('schema-to-ts', () => {
       {},
     )
 
-    expect(output).toBe(
-      'export type Pet = (Cat & { petType: \'cat\' }) | (Dog & { petType: \'dog\' })',
-    )
+    expect(output).toBe("export type Pet = (Cat & { petType: 'cat' }) | (Dog & { petType: 'dog' })")
   })
 
   it('generates discriminated union without mapping by inferring value from $ref', () => {
     const output = schemaToTs(
       'Shape',
       {
-        anyOf: [
-          { $ref: '#/components/schemas/Circle' },
-          { $ref: '#/components/schemas/Square' },
-        ],
+        anyOf: [{ $ref: '#/components/schemas/Circle' }, { $ref: '#/components/schemas/Square' }],
         discriminator: {
           propertyName: 'kind',
         },
@@ -150,7 +133,7 @@ describe('schema-to-ts', () => {
     )
 
     expect(output).toBe(
-      'export type Shape = (Circle & { kind: \'Circle\' }) | (Square & { kind: \'Square\' })',
+      "export type Shape = (Circle & { kind: 'Circle' }) | (Square & { kind: 'Square' })",
     )
   })
 
@@ -169,11 +152,9 @@ describe('schema-to-ts', () => {
       {},
     )
 
-    expect(output).toBe([
-      'export interface NullablePayload {',
-      '  nickname?: string | null',
-      '}',
-    ].join('\n'))
+    expect(output).toBe(
+      ['export interface NullablePayload {', '  nickname?: string | null', '}'].join('\n'),
+    )
   })
 
   it('escapes closing token in JSDoc description text', () => {
@@ -186,10 +167,9 @@ describe('schema-to-ts', () => {
       {},
     )
 
-    expect(output).toBe([
-      '/** line with *\\/ token */',
-      'export type DangerousComment = string',
-    ].join('\n'))
+    expect(output).toBe(
+      ['/** line with *\\/ token */', 'export type DangerousComment = string'].join('\n'),
+    )
   })
 
   it('sorts import paths and imported types in generated file content', () => {
@@ -212,15 +192,17 @@ describe('schema-to-ts', () => {
       ]),
     )
 
-    expect(output).toBe([
-      'import type { One, Two } from \'./a\'',
-      'import type { Alpha, Zeta } from \'./b\'',
-      '',
-      'export interface User {',
-      '  id?: string',
-      '}',
-      '',
-    ].join('\n'))
+    expect(output).toBe(
+      [
+        "import type { One, Two } from './a'",
+        "import type { Alpha, Zeta } from './b'",
+        '',
+        'export interface User {',
+        '  id?: string',
+        '}',
+        '',
+      ].join('\n'),
+    )
   })
 
   it('generates top-level nullable type alias', () => {
@@ -254,20 +236,14 @@ describe('schema-to-ts', () => {
       {},
     )
 
-    expect(output).toBe([
-      'export interface Foo {',
-      '  items?: (string | null)[]',
-      '}',
-    ].join('\n'))
+    expect(output).toBe(['export interface Foo {', '  items?: (string | null)[]', '}'].join('\n'))
   })
 
   it('generates nullable ref wrapped by allOf', () => {
     const output = schemaToTs(
       'Foo',
       {
-        allOf: [
-          { $ref: '#/components/schemas/Bar' },
-        ],
+        allOf: [{ $ref: '#/components/schemas/Bar' }],
         nullable: true,
       },
       {},
@@ -304,10 +280,6 @@ describe('schema-to-ts', () => {
       {},
     )
 
-    expect(output).toBe([
-      'export interface Foo {',
-      '  value?: string | null',
-      '}',
-    ].join('\n'))
+    expect(output).toBe(['export interface Foo {', '  value?: string | null', '}'].join('\n'))
   })
 })

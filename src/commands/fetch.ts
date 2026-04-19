@@ -23,7 +23,7 @@ export function getFormatByPath(filePath: string): SpecFormat {
   throw new Error('Unsupported output format. Please use .yaml, .yml, or .json')
 }
 
-export function parseSpecContent(content: string): { format: SpecFormat, spec: OpenAPIObject } {
+export function parseSpecContent(content: string): { format: SpecFormat; spec: OpenAPIObject } {
   let jsonParsed: unknown
   try {
     jsonParsed = JSON.parse(content)
@@ -56,7 +56,9 @@ export function stringifySpecContent(spec: OpenAPIObject, format: SpecFormat): s
   return yamlContent.endsWith('\n') ? yamlContent : `${yamlContent}\n`
 }
 
-export async function fetchAndWriteSpec(options: FetchOptions): Promise<{ outputPath: string, sourceFormat: SpecFormat, targetFormat: SpecFormat }> {
+export async function fetchAndWriteSpec(
+  options: FetchOptions,
+): Promise<{ outputPath: string; sourceFormat: SpecFormat; targetFormat: SpecFormat }> {
   const config = await readConfig(options.cwd)
   const url = options.url ?? config?.spec.url
 
@@ -66,7 +68,7 @@ export async function fetchAndWriteSpec(options: FetchOptions): Promise<{ output
 
   const outputPath = resolve(
     options.cwd || process.cwd(),
-    options.output ?? config?.spec.path ?? defaultConfig.spec.path
+    options.output ?? config?.spec.path ?? defaultConfig.spec.path,
   )
   const targetFormat = getFormatByPath(outputPath)
 
@@ -109,7 +111,9 @@ export async function fetchSpec(options: FetchOptions): Promise<void> {
     if (result.sourceFormat === result.targetFormat) {
       s.stop('Spec downloaded and saved')
     } else {
-      s.stop(`Spec downloaded, converted ${c.bold(result.sourceFormat.toUpperCase())} -> ${c.bold(result.targetFormat.toUpperCase())}, and saved`)
+      s.stop(
+        `Spec downloaded, converted ${c.bold(result.sourceFormat.toUpperCase())} -> ${c.bold(result.targetFormat.toUpperCase())}, and saved`,
+      )
     }
     log.success(`Saved to ${c.cyan(result.outputPath)}`)
   } catch (err) {

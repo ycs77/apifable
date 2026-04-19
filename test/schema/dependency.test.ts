@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { addTransitiveDeps, buildDependencyGraph, collectRefs, topologicalSort } from '../../src/schema/dependency.ts'
+import {
+  addTransitiveDeps,
+  buildDependencyGraph,
+  collectRefs,
+  topologicalSort,
+} from '../../src/schema/dependency.ts'
 
 describe('dependency', () => {
   it('collects schema refs from nested structures', () => {
@@ -11,10 +16,7 @@ describe('dependency', () => {
           },
         },
       },
-      responses: [
-        { $ref: '#/components/schemas/Error' },
-        { $ref: '#/components/parameters/Id' },
-      ],
+      responses: [{ $ref: '#/components/schemas/Error' }, { $ref: '#/components/parameters/Id' }],
     })
 
     expect(refs).toEqual(['User', 'Error'])

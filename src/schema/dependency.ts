@@ -47,10 +47,7 @@ export function addTransitiveDeps(
   }
 }
 
-export function topologicalSort(
-  names: string[],
-  depGraph: Map<string, string[]>,
-): string[] {
+export function topologicalSort(names: string[], depGraph: Map<string, string[]>): string[] {
   const nameSet = new Set(names)
   const visited = new Set<string>()
   const inStack = new Set<string>()

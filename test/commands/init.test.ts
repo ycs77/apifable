@@ -7,7 +7,9 @@ describe('buildGitignoreContent', () => {
   })
 
   it('empty content + two entries', () => {
-    expect(buildGitignoreContent('', ['.apifable/', 'openapi.yaml'])).toBe('# apifable\n.apifable/\nopenapi.yaml\n')
+    expect(buildGitignoreContent('', ['.apifable/', 'openapi.yaml'])).toBe(
+      '# apifable\n.apifable/\nopenapi.yaml\n',
+    )
   })
 
   it('existing content with trailing newline + new entry', () => {

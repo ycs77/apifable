@@ -6,8 +6,8 @@ export async function resolveHeaders(cwd?: string): Promise<Record<string, strin
   const [config, auth] = await Promise.all([readConfig(cwd), readAuth(cwd)])
 
   const merged = {
-    ...(config?.spec.headers ?? {}),
-    ...(auth?.headers ?? {}),
+    ...config?.spec.headers,
+    ...auth?.headers,
   }
 
   if (Object.keys(merged).length === 0) return undefined

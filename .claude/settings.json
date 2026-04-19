@@ -5,9 +5,12 @@
       "Edit",
       "Write",
       "Bash(pnpm build)",
-      "Bash(pnpm lint --fix)",
-      "Bash(pnpm eslint *)",
-      "Bash(pnpm type-check)"
+      "Bash(pnpm lint *)",
+      "Bash(pnpm fmt)",
+      "Bash(pnpm fmt *)",
+      "Bash(pnpm typecheck)",
+      "Bash(pnpm test)",
+      "Bash(pnpm test *)"
     ]
   }
 }

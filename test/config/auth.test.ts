@@ -55,6 +55,8 @@ describe('readAuth', () => {
       }),
     })
 
-    await expect(readAuth(cwd)).rejects.toThrowError(/Invalid auth config in .*auth\.json: headers\.Authorization:/)
+    await expect(readAuth(cwd)).rejects.toThrowError(
+      /Invalid auth config in .*auth\.json: headers\.Authorization:/,
+    )
   })
 })

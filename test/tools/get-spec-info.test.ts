@@ -13,9 +13,7 @@ describe('getSpecInfo', () => {
         security: [],
         securitySchemes: [],
       },
-      tags: [
-        { name: 'orders', description: 'Order endpoints', endpointCount: 3 },
-      ],
+      tags: [{ name: 'orders', description: 'Order endpoints', endpointCount: 3 }],
     })
 
     const result = getSpecInfo(spec)
@@ -25,9 +23,7 @@ describe('getSpecInfo', () => {
       version: '2.0.0',
       description: 'Store description',
       servers: ['https://store.example.com'],
-      tags: [
-        { name: 'orders', description: 'Order endpoints', endpointCount: 3 },
-      ],
+      tags: [{ name: 'orders', description: 'Order endpoints', endpointCount: 3 }],
     })
   })
 
@@ -39,9 +35,7 @@ describe('getSpecInfo', () => {
         description: '',
         servers: [],
         security: [{ http: [] }],
-        securitySchemes: [
-          { name: 'http', type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
-        ],
+        securitySchemes: [{ name: 'http', type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }],
       },
     })
 
@@ -52,12 +46,8 @@ describe('getSpecInfo', () => {
       version: '1.0.0',
       description: '',
       servers: [],
-      tags: [
-        { name: 'items', description: 'Items endpoints', endpointCount: 1 },
-      ],
-      securitySchemes: [
-        { name: 'http', type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
-      ],
+      tags: [{ name: 'items', description: 'Items endpoints', endpointCount: 1 }],
+      securitySchemes: [{ name: 'http', type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }],
       security: [{ http: [] }],
     })
   })

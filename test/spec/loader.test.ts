@@ -43,7 +43,14 @@ describe('loadSpecFile', () => {
 
   it('loads and validates a YAML OpenAPI file', async () => {
     const filePath = resolve(cwd, 'openapi.yaml')
-    const content = ['openapi: 3.1.0', 'info:', '  title: YAML API', '  version: 1.0.0', 'paths: {}', ''].join('\n')
+    const content = [
+      'openapi: 3.1.0',
+      'info:',
+      '  title: YAML API',
+      '  version: 1.0.0',
+      'paths: {}',
+      '',
+    ].join('\n')
 
     vol.fromJSON({
       [filePath]: content,
@@ -66,7 +73,14 @@ describe('loadSpecFile', () => {
     const filePath = resolve(cwd, 'openapi.yml')
 
     vol.fromJSON({
-      [filePath]: ['openapi: 3.1.0', 'info:', '  title: YML API', '  version: 1.0.0', 'paths: {}', ''].join('\n'),
+      [filePath]: [
+        'openapi: 3.1.0',
+        'info:',
+        '  title: YML API',
+        '  version: 1.0.0',
+        'paths: {}',
+        '',
+      ].join('\n'),
     })
 
     await expect(loadSpecFile(filePath)).resolves.toEqual({

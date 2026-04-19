@@ -141,14 +141,16 @@ describe('getTypesTool', () => {
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
-        expect(result.code).toBe([
-          '// Generated from schemas: User',
-          '',
-          'export interface User {',
-          '  id?: string',
-          '}',
-          '',
-        ].join('\n'))
+        expect(result.code).toBe(
+          [
+            '// Generated from schemas: User',
+            '',
+            'export interface User {',
+            '  id?: string',
+            '}',
+            '',
+          ].join('\n'),
+        )
       }
     })
 
@@ -174,18 +176,20 @@ describe('getTypesTool', () => {
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
-        expect(result.code).toBe([
-          '// Generated from schemas: Address, User',
-          '',
-          'export interface Address {',
-          '  city?: string',
-          '}',
-          '',
-          'export interface User {',
-          '  id?: string',
-          '}',
-          '',
-        ].join('\n'))
+        expect(result.code).toBe(
+          [
+            '// Generated from schemas: Address, User',
+            '',
+            'export interface Address {',
+            '  city?: string',
+            '}',
+            '',
+            'export interface User {',
+            '  id?: string',
+            '}',
+            '',
+          ].join('\n'),
+        )
       }
     })
 
@@ -211,18 +215,20 @@ describe('getTypesTool', () => {
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
-        expect(result.code).toBe([
-          '// Generated from schemas: Profile, User',
-          '',
-          'export interface Profile {',
-          '  id?: string',
-          '}',
-          '',
-          'export interface User {',
-          '  profile?: Profile',
-          '}',
-          '',
-        ].join('\n'))
+        expect(result.code).toBe(
+          [
+            '// Generated from schemas: Profile, User',
+            '',
+            'export interface Profile {',
+            '  id?: string',
+            '}',
+            '',
+            'export interface User {',
+            '  profile?: Profile',
+            '}',
+            '',
+          ].join('\n'),
+        )
       }
     })
 
@@ -314,7 +320,7 @@ describe('getTypesTool', () => {
 
       expect(result).toEqual({
         isError: true,
-        message: 'Path \'/missing\' not found in spec.',
+        message: "Path '/missing' not found in spec.",
       })
     })
 
@@ -328,7 +334,8 @@ describe('getTypesTool', () => {
 
       expect(result).toEqual({
         isError: true,
-        message: 'Invalid HTTP method \'fetch\'. Use one of: get, post, put, patch, delete, head, options, trace.',
+        message:
+          "Invalid HTTP method 'fetch'. Use one of: get, post, put, patch, delete, head, options, trace.",
       })
     })
 
@@ -352,7 +359,7 @@ describe('getTypesTool', () => {
 
       expect(result).toEqual({
         isError: true,
-        message: 'Method \'POST\' not found for path \'/users\'.',
+        message: "Method 'POST' not found for path '/users'.",
       })
     })
 
@@ -381,7 +388,7 @@ describe('getTypesTool', () => {
 
       expect(result).toEqual({
         isError: true,
-        message: 'No schema references or inline schemas found for endpoint \'GET /users\'.',
+        message: "No schema references or inline schemas found for endpoint 'GET /users'.",
       })
     })
 
@@ -431,19 +438,21 @@ describe('getTypesTool', () => {
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
-        expect(result.code).toBe([
-          '// Generated from endpoint: updateUser POST /users/{id}',
-          '// Includes schemas: UpdateUserRequest, UpdateUserResponse',
-          '',
-          'export interface UpdateUserRequest {',
-          '  name?: string',
-          '}',
-          '',
-          'export interface UpdateUserResponse {',
-          '  id?: string',
-          '}',
-          '',
-        ].join('\n'))
+        expect(result.code).toBe(
+          [
+            '// Generated from endpoint: updateUser POST /users/{id}',
+            '// Includes schemas: UpdateUserRequest, UpdateUserResponse',
+            '',
+            'export interface UpdateUserRequest {',
+            '  name?: string',
+            '}',
+            '',
+            'export interface UpdateUserResponse {',
+            '  id?: string',
+            '}',
+            '',
+          ].join('\n'),
+        )
       }
     })
 
@@ -536,15 +545,17 @@ describe('getTypesTool', () => {
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
-        expect(result.code).toBe([
-          '// Generated from endpoint: POST /users',
-          '// Includes schemas: CreateUserRequest',
-          '',
-          'export interface CreateUserRequest {',
-          '  name?: string',
-          '}',
-          '',
-        ].join('\n'))
+        expect(result.code).toBe(
+          [
+            '// Generated from endpoint: POST /users',
+            '// Includes schemas: CreateUserRequest',
+            '',
+            'export interface CreateUserRequest {',
+            '  name?: string',
+            '}',
+            '',
+          ].join('\n'),
+        )
       }
     })
 
@@ -584,15 +595,17 @@ describe('getTypesTool', () => {
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
-        expect(result.code).toBe([
-          '// Generated from endpoint: GET /users/{id}',
-          '// Includes schemas: User',
-          '',
-          'export interface User {',
-          '  id?: string',
-          '}',
-          '',
-        ].join('\n'))
+        expect(result.code).toBe(
+          [
+            '// Generated from endpoint: GET /users/{id}',
+            '// Includes schemas: User',
+            '',
+            'export interface User {',
+            '  id?: string',
+            '}',
+            '',
+          ].join('\n'),
+        )
       }
     })
 
@@ -658,19 +671,21 @@ describe('getTypesTool', () => {
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
-        expect(result.code).toBe([
-          '// Generated from endpoint: GET /users/{id}',
-          '// Includes schemas: Profile, User',
-          '',
-          'export interface Profile {',
-          '  name?: string',
-          '}',
-          '',
-          'export interface User {',
-          '  profile?: Profile',
-          '}',
-          '',
-        ].join('\n'))
+        expect(result.code).toBe(
+          [
+            '// Generated from endpoint: GET /users/{id}',
+            '// Includes schemas: Profile, User',
+            '',
+            'export interface Profile {',
+            '  name?: string',
+            '}',
+            '',
+            'export interface User {',
+            '  profile?: Profile',
+            '}',
+            '',
+          ].join('\n'),
+        )
       }
     })
 
@@ -734,15 +749,17 @@ describe('getTypesTool', () => {
 
       expect('code' in result).toBe(true)
       if ('code' in result) {
-        expect(result.code).toBe([
-          '// Generated from endpoint: createUser POST /users',
-          '// Includes schemas: CreateUserRequest',
-          '',
-          'export interface CreateUserRequest {',
-          '  name?: string',
-          '}',
-          '',
-        ].join('\n'))
+        expect(result.code).toBe(
+          [
+            '// Generated from endpoint: createUser POST /users',
+            '// Includes schemas: CreateUserRequest',
+            '',
+            'export interface CreateUserRequest {',
+            '  name?: string',
+            '}',
+            '',
+          ].join('\n'),
+        )
       }
     })
 
@@ -1076,7 +1093,7 @@ describe('getTypesTool', () => {
 
       expect(result).toEqual({
         isError: true,
-        message: 'Operation \'nonExistent\' not found in spec.',
+        message: "Operation 'nonExistent' not found in spec.",
       })
     })
 
@@ -1107,7 +1124,7 @@ describe('getTypesTool', () => {
 
       expect(result).toEqual({
         isError: true,
-        message: 'Operation \'listUser\' not found in spec. Did you mean: listUsers?',
+        message: "Operation 'listUser' not found in spec. Did you mean: listUsers?",
       })
     })
 
@@ -1133,7 +1150,7 @@ describe('getTypesTool', () => {
 
       expect(result).toEqual({
         isError: true,
-        message: 'No schema references or inline schemas found for endpoint \'GET /users\'.',
+        message: "No schema references or inline schemas found for endpoint 'GET /users'.",
       })
     })
   })

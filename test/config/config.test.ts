@@ -1,8 +1,14 @@
-/* eslint-disable no-template-curly-in-string */
 import { join, resolve } from 'node:path'
 import { fs, vol } from 'memfs'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { configExists, defaultConfig, getConfigPath, readConfig, resolveConfig, writeConfig } from '../../src/config/config.ts'
+import {
+  configExists,
+  defaultConfig,
+  getConfigPath,
+  readConfig,
+  resolveConfig,
+  writeConfig,
+} from '../../src/config/config.ts'
 
 vi.mock('node:fs/promises')
 
@@ -31,13 +37,15 @@ describe('resolveConfig', () => {
   })
 
   it('keeps explicit spec values', () => {
-    expect(resolveConfig({
-      spec: {
-        path: 'specs/internal.yaml',
-        url: 'https://api.example.com/openapi.yaml',
-        headers: { Authorization: 'Bearer token' },
-      },
-    })).toEqual({
+    expect(
+      resolveConfig({
+        spec: {
+          path: 'specs/internal.yaml',
+          url: 'https://api.example.com/openapi.yaml',
+          headers: { Authorization: 'Bearer token' },
+        },
+      }),
+    ).toEqual({
       spec: {
         path: 'specs/internal.yaml',
         url: 'https://api.example.com/openapi.yaml',
@@ -51,7 +59,9 @@ describe('writeConfig', () => {
   it('writes formatted JSON with a trailing newline', async () => {
     await writeConfig({ spec: { path: 'specs/openapi.yaml' } }, cwd)
 
-    expect(fs.readFileSync(getConfigPath(cwd), 'utf-8')).toBe(`{\n  "spec": {\n    "path": "specs/openapi.yaml"\n  }\n}\n`)
+    expect(fs.readFileSync(getConfigPath(cwd), 'utf-8')).toBe(
+      `{\n  "spec": {\n    "path": "specs/openapi.yaml"\n  }\n}\n`,
+    )
   })
 })
 
@@ -90,14 +100,18 @@ describe('readConfig', () => {
 
   it('reads config values and applies default path when omitted', async () => {
     vol.fromJSON({
-      [getConfigPath(cwd)]: JSON.stringify({
-        spec: {
-          url: 'https://api.example.com/openapi.yaml',
-          headers: {
-            Authorization: 'Bearer ${TOKEN}',
+      [getConfigPath(cwd)]: JSON.stringify(
+        {
+          spec: {
+            url: 'https://api.example.com/openapi.yaml',
+            headers: {
+              Authorization: 'Bearer ${TOKEN}',
+            },
           },
         },
-      }, null, 2),
+        null,
+        2,
+      ),
     })
 
     await expect(readConfig(cwd)).resolves.toEqual({
@@ -124,7 +138,9 @@ describe('readConfig', () => {
       [getConfigPath(cwd)]: JSON.stringify({ spec: { path: 123 } }),
     })
 
-    await expect(readConfig(cwd)).rejects.toThrowError(/Invalid config in .*apifable\.config\.json: spec\.path:/)
+    await expect(readConfig(cwd)).rejects.toThrowError(
+      /Invalid config in .*apifable\.config\.json: spec\.path:/,
+    )
   })
 
   it('throws a stable error for invalid header value types', async () => {
@@ -138,6 +154,8 @@ describe('readConfig', () => {
       }),
     })
 
-    await expect(readConfig(cwd)).rejects.toThrowError(/Invalid config in .*apifable\.config\.json: spec\.headers\.Authorization:/)
+    await expect(readConfig(cwd)).rejects.toThrowError(
+      /Invalid config in .*apifable\.config\.json: spec\.headers\.Authorization:/,
+    )
   })
 })

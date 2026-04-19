@@ -1,4 +1,3 @@
-/* eslint-disable no-template-curly-in-string */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { expandEnvVars, expandHeaderValues } from '../../src/config/env.ts'
 
@@ -34,10 +33,12 @@ describe('expandHeaderValues', () => {
 
   it('expands all header values', () => {
     vi.stubEnv('TOKEN', 'abc')
-    expect(expandHeaderValues({
-      Authorization: 'Bearer ${TOKEN}',
-      'X-Static': 'plain',
-    })).toEqual({
+    expect(
+      expandHeaderValues({
+        Authorization: 'Bearer ${TOKEN}',
+        'X-Static': 'plain',
+      }),
+    ).toEqual({
       Authorization: 'Bearer abc',
       'X-Static': 'plain',
     })

@@ -3,13 +3,18 @@ import { access, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { z } from 'zod'
 
-const apifableUserConfigSchema = z.object({
-  spec: z.object({
-    path: z.string().optional(),
-    url: z.string().optional(),
-    headers: z.record(z.string(), z.string()).optional(),
-  }).loose().optional(),
-}).loose()
+const apifableUserConfigSchema = z
+  .object({
+    spec: z
+      .object({
+        path: z.string().optional(),
+        url: z.string().optional(),
+        headers: z.record(z.string(), z.string()).optional(),
+      })
+      .loose()
+      .optional(),
+  })
+  .loose()
 
 export const defaultConfig: ApifableConfig = {
   spec: {

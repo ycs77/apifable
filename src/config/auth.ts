@@ -3,9 +3,11 @@ import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { z } from 'zod'
 
-const authConfigSchema = z.object({
-  headers: z.record(z.string(), z.string()).optional(),
-}).loose()
+const authConfigSchema = z
+  .object({
+    headers: z.record(z.string(), z.string()).optional(),
+  })
+  .loose()
 
 export function getAuthPath(cwd = process.cwd()): string {
   return join(cwd, '.apifable', 'auth.json')

@@ -17,20 +17,22 @@ export function buildGitignoreContent(existing: string, entries: string[]): stri
   if (blockStart !== -1) {
     const lines = existing.split('\n')
     let insertAt = blockStart + 1
-    while (insertAt < lines.length && lines[insertAt].trim() !== '' && !lines[insertAt].startsWith('#')) {
+    while (
+      insertAt < lines.length &&
+      lines[insertAt].trim() !== '' &&
+      !lines[insertAt].startsWith('#')
+    ) {
       insertAt++
     }
     lines.splice(insertAt, 0, ...newEntries)
     return lines.join('\n')
   }
 
-  const separator = existing
-    ? (existing.endsWith('\n') ? '\n' : '\n\n')
-    : ''
+  const separator = existing ? (existing.endsWith('\n') ? '\n' : '\n\n') : ''
   return `${existing}${separator}# apifable\n${newEntries.join('\n')}\n`
 }
 
-function exitOnCancel(value: unknown): asserts value is string | SpecSetupMode {
+function exitOnCancel(value: unknown): asserts value is string {
   if (isCancel(value)) {
     cancel('Cancelled.')
     process.exit(0)
@@ -38,15 +40,16 @@ function exitOnCancel(value: unknown): asserts value is string | SpecSetupMode {
 }
 
 function buildNextSteps(mode: SpecSetupMode, specPath: string): string {
-  const stepOne = mode === 'manual-file'
-    ? [
-        `${c.bold(c.cyan('1.'))} ${c.bold('Place your OpenAPI spec file')}`,
-        `   Place your OpenAPI spec file at ${c.cyan(specPath)}.`,
-      ]
-    : [
-        `${c.bold(c.cyan('1.'))} ${c.bold('Fetch your OpenAPI spec')}`,
-        `   Run ${c.cyan('`npx apifable@latest fetch`')} to download the latest OpenAPI spec to ${c.cyan(specPath)}.`,
-      ]
+  const stepOne =
+    mode === 'manual-file'
+      ? [
+          `${c.bold(c.cyan('1.'))} ${c.bold('Place your OpenAPI spec file')}`,
+          `   Place your OpenAPI spec file at ${c.cyan(specPath)}.`,
+        ]
+      : [
+          `${c.bold(c.cyan('1.'))} ${c.bold('Fetch your OpenAPI spec')}`,
+          `   Run ${c.cyan('`npx apifable@latest fetch`')} to download the latest OpenAPI spec to ${c.cyan(specPath)}.`,
+        ]
 
   return [
     c.bold('Next steps:'),
@@ -54,7 +57,7 @@ function buildNextSteps(mode: SpecSetupMode, specPath: string): string {
     ...stepOne,
     '',
     `${c.bold(c.cyan('2.'))} ${c.bold('Set up MCP')}`,
-    '   Add apifable to your AI agent\'s MCP config',
+    "   Add apifable to your AI agent's MCP config",
     `   (e.g. ${c.cyan('.mcp.json')} for Claude Code):`,
     '',
     c.dim('   {'),
@@ -78,7 +81,9 @@ export async function initialize(cwd?: string): Promise<void> {
   // Phase 1: Collect all user input
 
   if (await configExists(cwd)) {
-    const shouldOverwrite = await confirm({ message: 'apifable.config.json already exists. Overwrite?' })
+    const shouldOverwrite = await confirm({
+      message: 'apifable.config.json already exists. Overwrite?',
+    })
     if (isCancel(shouldOverwrite) || !shouldOverwrite) {
       outro('Aborted.')
       return
@@ -118,9 +123,10 @@ export async function initialize(cwd?: string): Promise<void> {
   }
 
   const spec = await text({
-    message: mode === 'manual-file'
-      ? 'Local path for your OpenAPI spec file:'
-      : 'Local path for the downloaded OpenAPI spec:',
+    message:
+      mode === 'manual-file'
+        ? 'Local path for your OpenAPI spec file:'
+        : 'Local path for the downloaded OpenAPI spec:',
     initialValue: 'openapi.yaml',
     placeholder: 'e.g. openapi.yaml',
     validate: value => {
@@ -132,12 +138,15 @@ export async function initialize(cwd?: string): Promise<void> {
 
   // Phase 2: Execute all file operations
 
-  await writeConfig({
-    spec: {
-      path: spec,
-      ...(specUrl && { url: specUrl }),
+  await writeConfig(
+    {
+      spec: {
+        path: spec,
+        ...(specUrl && { url: specUrl }),
+      },
     },
-  }, cwd)
+    cwd,
+  )
   log.success('Created apifable.config.json')
 
   const gitignorePath = join(cwd ?? process.cwd(), '.gitignore')
@@ -163,9 +172,7 @@ export async function initialize(cwd?: string): Promise<void> {
     log.success('Updated .gitignore')
   }
 
-  log.message(
-    buildNextSteps(mode, spec),
-  )
+  log.message(buildNextSteps(mode, spec))
 
   outro('Done!')
 }

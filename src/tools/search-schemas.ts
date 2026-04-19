@@ -10,7 +10,7 @@ import MiniSearch from 'minisearch'
 export function buildSchemaEntries(schemas: Record<string, unknown>): SchemaEntry[] {
   return Object.entries(schemas).map(([name, schema]) => ({
     name,
-    description: (schema as Record<string, unknown>)?.description as string ?? '',
+    description: ((schema as Record<string, unknown>)?.description as string) ?? '',
   }))
 }
 
@@ -22,7 +22,10 @@ export function scoreSchema(entry: SchemaEntry, query: string): number {
   return -1
 }
 
-export function fuzzySearchSchemas(candidates: SchemaEntry[], query: string): SchemaSearchResultItem[] {
+export function fuzzySearchSchemas(
+  candidates: SchemaEntry[],
+  query: string,
+): SchemaSearchResultItem[] {
   const candidateMap = new Map(candidates.map(e => [e.name, e]))
 
   const ms = new MiniSearch({
@@ -64,12 +67,10 @@ export function searchSchemas(spec: ParsedSpec, query: string, limit = 10): Sear
     .sort((a, b) => a.score - b.score)
 
   if (exactScored.length > 0) {
-    const results = exactScored
-      .slice(0, limit)
-      .map<SchemaSearchResultItem>(r => ({
-        name: r.entry.name,
-        description: r.entry.description,
-      }))
+    const results = exactScored.slice(0, limit).map<SchemaSearchResultItem>(r => ({
+      name: r.entry.name,
+      description: r.entry.description,
+    }))
 
     return {
       query,
@@ -92,7 +93,8 @@ export function searchSchemas(spec: ParsedSpec, query: string, limit = 10): Sear
   }
 
   if (fuzzyResults.length === 0) {
-    fuzzyReturn.message = 'No schemas found. Try different keywords or inspect related endpoints with get_endpoint to discover schema names.'
+    fuzzyReturn.message =
+      'No schemas found. Try different keywords or inspect related endpoints with get_endpoint to discover schema names.'
   }
 
   return fuzzyReturn

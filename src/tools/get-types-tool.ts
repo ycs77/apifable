@@ -1,6 +1,11 @@
 import type { HttpMethod, OperationObject, ParsedSpec } from '../types.ts'
 import { HTTP_METHODS, isValidHttpMethod } from '../http-methods.ts'
-import { addTransitiveDeps, buildDependencyGraph, collectRefs, topologicalSort } from '../schema/dependency.ts'
+import {
+  addTransitiveDeps,
+  buildDependencyGraph,
+  collectRefs,
+  topologicalSort,
+} from '../schema/dependency.ts'
 import { generateFileContent } from '../schema/to-ts.ts'
 import { resolveNonSchemaComponentRefs } from '../spec/ref-resolver.ts'
 import { findOperationByOperationId } from './find-operation.ts'
@@ -32,6 +37,7 @@ export function getTypesTool(
   const hasPath = input.path !== undefined
   const hasOperationId = input.operationId !== undefined
 
+  // oxfmt-ignore
   const modeCount =
     (hasSchemas ? 1 : 0) +
     (hasMethod || hasPath ? 1 : 0) +
@@ -69,7 +75,7 @@ export function getTypesTool(
   let endpointMethod: string | undefined
   let endpointPath: string | undefined
   let endpointOperationId: string | undefined
-  let inlineSchemas: { name: string, schema: unknown }[] = []
+  let inlineSchemas: { name: string; schema: unknown }[] = []
 
   if (hasSchemas) {
     rootSchemaNames = [...new Set(input.schemas)]
@@ -100,7 +106,10 @@ export function getTypesTool(
 
         return {
           isError: true,
-          message: buildNotFoundMessage(`Operation '${input.operationId}' not found in spec.`, suggestions),
+          message: buildNotFoundMessage(
+            `Operation '${input.operationId}' not found in spec.`,
+            suggestions,
+          ),
         }
       }
       operation = found.operation
@@ -152,11 +161,13 @@ export function getTypesTool(
       endpointPath,
     )
 
-    rootSchemaNames = [...new Set([
-      ...collectRefs(resolvedOperation.requestBody),
-      ...collectRefs(resolvedOperation.responses),
-      ...collectRefs(resolvedOperation.parameters),
-    ])]
+    rootSchemaNames = [
+      ...new Set([
+        ...collectRefs(resolvedOperation.requestBody),
+        ...collectRefs(resolvedOperation.responses),
+        ...collectRefs(resolvedOperation.parameters),
+      ]),
+    ]
 
     if (rootSchemaNames.length === 0 && inlineSchemas.length === 0) {
       return {
@@ -199,13 +210,10 @@ export function getTypesTool(
     schema: spec.schemas[name],
   }))
   const generatedSchemas = [...referencedSchemas, ...inlineSchemas]
-  const code = generateFileContent(
-    generatedSchemas,
-    {
-      ...spec.schemas,
-      ...Object.fromEntries(inlineSchemas.map(schema => [schema.name, schema.schema])),
-    },
-  )
+  const code = generateFileContent(generatedSchemas, {
+    ...spec.schemas,
+    ...Object.fromEntries(inlineSchemas.map(schema => [schema.name, schema.schema])),
+  })
 
   const headerLines: string[] = []
   if (hasSchemas) {
@@ -213,24 +221,20 @@ export function getTypesTool(
   } else {
     const includedNames = [...sortedNames, ...inlineSchemas.map(schema => schema.name)]
     const operationIdPrefix = endpointOperationId ? `${endpointOperationId} ` : ''
-    headerLines.push(`// Generated from endpoint: ${operationIdPrefix}${endpointMethod!.toUpperCase()} ${endpointPath}`)
+    headerLines.push(
+      `// Generated from endpoint: ${operationIdPrefix}${endpointMethod!.toUpperCase()} ${endpointPath}`,
+    )
     headerLines.push(`// Includes schemas: ${includedNames.join(', ')}`)
   }
 
   return { code: `${headerLines.join('\n')}\n\n${code}` }
 }
 
-function findMissingSchemas(
-  names: string[],
-  schemas: Record<string, unknown>,
-): string[] {
+function findMissingSchemas(names: string[], schemas: Record<string, unknown>): string[] {
   return names.filter(name => !(name in schemas)).sort((a, b) => a.localeCompare(b))
 }
 
-function buildMissingSchemaMessage(
-  missing: string[],
-  schemas: Record<string, unknown>,
-): string {
+function buildMissingSchemaMessage(missing: string[], schemas: Record<string, unknown>): string {
   const message = `Schema not found: ${missing.join(', ')}.`
   if (missing.length !== 1) return message
 
@@ -246,8 +250,12 @@ function buildNotFoundMessage(message: string, suggestions: string[]): string {
 function resolveOperationComponents(operation: OperationObject, spec: ParsedSpec): OperationObject {
   return {
     ...operation,
-    parameters: resolveNonSchemaComponentRefs(operation.parameters, spec.rawSpec) as unknown[] | undefined,
+    parameters: resolveNonSchemaComponentRefs(operation.parameters, spec.rawSpec) as
+      | unknown[]
+      | undefined,
     requestBody: resolveNonSchemaComponentRefs(operation.requestBody, spec.rawSpec),
-    responses: resolveNonSchemaComponentRefs(operation.responses, spec.rawSpec) as Record<string, unknown> | undefined,
+    responses: resolveNonSchemaComponentRefs(operation.responses, spec.rawSpec) as
+      | Record<string, unknown>
+      | undefined,
   }
 }

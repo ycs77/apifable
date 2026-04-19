@@ -64,7 +64,9 @@ export function schemaToTs(
   // oneOf / anyOf
   if (Array.isArray(s.oneOf) || Array.isArray(s.anyOf)) {
     const variants = (s.oneOf ?? s.anyOf) as Schema[]
-    const discriminator = s.discriminator as { propertyName: string, mapping?: Record<string, string> } | undefined
+    const discriminator = s.discriminator as
+      | { propertyName: string; mapping?: Record<string, string> }
+      | undefined
     let members: string[]
     if (discriminator) {
       const { propertyName, mapping } = discriminator
@@ -112,8 +114,9 @@ export function generateFileContent(
 
   if (imports && imports.size > 0) {
     const importLines: string[] = []
+    const importsEntries = [...imports.entries()].toSorted((a, b) => a[0].localeCompare(b[0]))
 
-    for (const [path, types] of [...imports.entries()].toSorted((a, b) => a[0].localeCompare(b[0]))) {
+    for (const [path, types] of importsEntries) {
       const sorted = types.toSorted()
       importLines.push(`import type { ${sorted.join(', ')} } from '${path}'`)
     }
@@ -246,7 +249,7 @@ function resolveTypeString(schema: Schema, allSchemas: Record<string, unknown>):
     const hasNull = (schema.type as string[]).includes('null')
     const types = (schema.type as string[]).filter(t => t !== 'null')
     const tsTypes = types.map(t => mapPrimitiveType(t))
-    const base = tsTypes.length > 1 ? tsTypes.join(' | ') : tsTypes[0] ?? 'unknown'
+    const base = tsTypes.length > 1 ? tsTypes.join(' | ') : (tsTypes[0] ?? 'unknown')
     baseType = hasNull ? `${base} | null` : base
     return appendNullable(baseType, schema)
   }
@@ -255,7 +258,8 @@ function resolveTypeString(schema: Schema, allSchemas: Record<string, unknown>):
 }
 
 function appendNullable(typeString: string, schema: Schema): string {
-  const hasNullInTypeArray = Array.isArray(schema.type) && (schema.type as string[]).includes('null')
+  const hasNullInTypeArray =
+    Array.isArray(schema.type) && (schema.type as string[]).includes('null')
   const shouldBeNullable = schema.nullable === true || hasNullInTypeArray
   const alreadyNullable = /\|\s*null\b/.test(typeString)
 
@@ -271,7 +275,10 @@ function extractRefName(ref: string): string {
   return match ? toValidIdentifier(match[1]) : ref
 }
 
-function resolveDiscriminatorValue(ref: string, mapping?: Record<string, string>): string | undefined {
+function resolveDiscriminatorValue(
+  ref: string,
+  mapping?: Record<string, string>,
+): string | undefined {
   if (mapping) {
     for (const [key, value] of Object.entries(mapping)) {
       if (value === ref) return key
@@ -283,18 +290,24 @@ function resolveDiscriminatorValue(ref: string, mapping?: Record<string, string>
 
 function mapPrimitiveType(type: string): string {
   switch (type) {
-    case 'string': return 'string'
+    case 'string':
+      return 'string'
     case 'integer':
-    case 'number': return 'number'
-    case 'boolean': return 'boolean'
-    case 'object': return 'Record<string, unknown>'
-    case 'array': return 'unknown[]'
-    default: return 'unknown'
+    case 'number':
+      return 'number'
+    case 'boolean':
+      return 'boolean'
+    case 'object':
+      return 'Record<string, unknown>'
+    case 'array':
+      return 'unknown[]'
+    default:
+      return 'unknown'
   }
 }
 
 function escapeStringLiteral(value: string): string {
-  return value.replace(/\\/g, '\\\\').replace(/'/g, '\\\'')
+  return value.replace(/\\/g, '\\\\').replace(/'/g, "\\'")
 }
 
 export function toValidIdentifier(name: string): string {
@@ -311,9 +324,5 @@ function formatJsDoc(text: string, indent = ''): string {
   if (lines.length === 1) {
     return `${indent}/** ${escaped} */`
   }
-  return [
-    `${indent}/**`,
-    ...lines.map(l => `${indent} * ${l}`),
-    `${indent} */`,
-  ].join('\n')
+  return [`${indent}/**`, ...lines.map(l => `${indent} * ${l}`), `${indent} */`].join('\n')
 }

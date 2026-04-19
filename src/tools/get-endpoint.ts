@@ -59,7 +59,10 @@ export function getEndpoint(spec: ParsedSpec, input: GetEndpointInput) {
 
       return {
         isError: true,
-        message: buildNotFoundMessage(`Operation '${input.operationId}' not found in spec.`, suggestions),
+        message: buildNotFoundMessage(
+          `Operation '${input.operationId}' not found in spec.`,
+          suggestions,
+        ),
       }
     }
 

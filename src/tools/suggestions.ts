@@ -9,7 +9,10 @@ export function findSimilarNames(input: string, candidates: string[], limit = 5)
   const substringMatches = uniqueCandidates
     .filter(candidate => {
       const normalizedCandidate = candidate.toLowerCase()
-      return normalizedCandidate.includes(normalizedInput) || normalizedInput.includes(normalizedCandidate)
+      return (
+        normalizedCandidate.includes(normalizedInput) ||
+        normalizedInput.includes(normalizedCandidate)
+      )
     })
     .sort((a, b) => {
       const aStarts = a.toLowerCase().startsWith(normalizedInput) ? 0 : 1

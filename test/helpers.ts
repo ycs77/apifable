@@ -55,17 +55,17 @@ export function createEmptyParsedSpec(overrides: Partial<ParsedSpec> = {}): Pars
     ...overrides,
     info: {
       ...base.info,
-      ...(overrides.info ?? {}),
+      ...overrides.info,
     },
     tags: overrides.tags ?? base.tags,
     endpointIndex: overrides.endpointIndex ?? base.endpointIndex,
     schemas: overrides.schemas ?? base.schemas,
     rawSpec: {
       ...base.rawSpec,
-      ...(overrides.rawSpec ?? {}),
+      ...overrides.rawSpec,
       info: {
-        ...(base.rawSpec.info ?? {}),
-        ...((overrides.rawSpec?.info as OpenAPIObject['info']) ?? {}),
+        ...base.rawSpec.info,
+        ...(overrides.rawSpec?.info as OpenAPIObject['info']),
       },
       paths: overrides.rawSpec?.paths ?? base.rawSpec.paths,
       components: overrides.rawSpec?.components ?? base.rawSpec.components,
@@ -139,17 +139,17 @@ export function createMockParsedSpec(overrides: Partial<ParsedSpec> = {}): Parse
     ...overrides,
     info: {
       ...base.info,
-      ...(overrides.info ?? {}),
+      ...overrides.info,
     },
     tags: overrides.tags ?? base.tags,
     endpointIndex: overrides.endpointIndex ?? base.endpointIndex,
     schemas: overrides.schemas ?? base.schemas,
     rawSpec: {
       ...base.rawSpec,
-      ...(overrides.rawSpec ?? {}),
+      ...overrides.rawSpec,
       info: {
-        ...(base.rawSpec.info ?? {}),
-        ...((overrides.rawSpec?.info as OpenAPIObject['info']) ?? {}),
+        ...base.rawSpec.info,
+        ...(overrides.rawSpec?.info as OpenAPIObject['info']),
       },
       paths: overrides.rawSpec?.paths ?? base.rawSpec.paths,
       components: overrides.rawSpec?.components ?? base.rawSpec.components,

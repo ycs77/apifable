@@ -193,6 +193,7 @@ npx apifable@latest fetch
 ### `list_endpoints_by_tag`
 
 **輸入：**
+
 - `tag`（string）：要篩選的 Tag 名稱
 - `limit`（number，optional）：最多回傳幾筆 Endpoint
 - `offset`（number，optional）：略過幾筆 Endpoint（預設：0）
@@ -202,6 +203,7 @@ npx apifable@latest fetch
 ### `search_endpoints`
 
 **輸入：**
+
 - `query`（string）：搜尋關鍵字
 - `tag`（string，optional）：將搜尋限制在特定 Tag 內
 - `limit`（number，optional）：最多回傳幾筆結果（預設：10）
@@ -211,6 +213,7 @@ npx apifable@latest fetch
 ### `get_endpoint`
 
 **輸入（擇一）：**
+
 - `method`（string）+ `path`（string）：HTTP 方法與 Endpoint 路徑（例如 `get` + `/users/{id}`）
 - `operationId`（string）：Operation ID（例如 `listUsers`）
 
@@ -219,6 +222,7 @@ npx apifable@latest fetch
 ### `search_schemas`
 
 **輸入：**
+
 - `query`（string）：搜尋關鍵字
 - `limit`（number，optional）：最多回傳幾筆結果（預設：10）
 
@@ -227,6 +231,7 @@ npx apifable@latest fetch
 ### `get_schema`
 
 **輸入：**
+
 - `name`（string）：`components/schemas` 中的 Schema 名稱
 
 回傳支援的內部 component `$ref` 均已解析的完整 Schema。
@@ -234,6 +239,7 @@ npx apifable@latest fetch
 ### `get_types`
 
 **輸入（擇一模式）：**
+
 - `schemas`（string[]）：`components/schemas` 中的 Schema 名稱陣列
 - `method`（string）+ `path`（string）：HTTP 方法與 Endpoint 路徑
 - `operationId`（string）：Operation ID（例如 `listUsers`）
@@ -241,6 +247,7 @@ npx apifable@latest fetch
 回傳 self-contained 的 TypeScript 宣告程式碼文字。在 endpoint 模式下，會先沿著支援的內部 component `$ref` 展開，再收集傳遞相依型別，且不包含 import 陳述式。
 
 模式規則：
+
 - 一次呼叫只能使用一種模式：`schemas`、`method` + `path`、或 `operationId`
 - 不能在同一個呼叫中混用不同模式
 
@@ -278,6 +285,5 @@ npx apifable@latest fetch
 [ico-version]: https://img.shields.io/npm/v/apifable?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square
 [ico-downloads]: https://img.shields.io/npm/dt/apifable?style=flat-square
-
 [link-npm]: https://www.npmjs.com/package/apifable
 [link-downloads]: https://www.npmjs.com/package/apifable

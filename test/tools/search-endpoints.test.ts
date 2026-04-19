@@ -112,7 +112,8 @@ describe('searchEndpoints', () => {
       results: [],
       total: 0,
       hasMore: false,
-      message: 'No endpoints found. Try different keywords or check available tags with get_spec_info.',
+      message:
+        'No endpoints found. Try different keywords or check available tags with get_spec_info.',
     })
   })
 

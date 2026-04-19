@@ -16,9 +16,9 @@ describe('validateOpenAPIDocument', () => {
   })
 
   it('rejects parsed payloads that are not OpenAPI documents', () => {
-    expect(() => validateOpenAPIDocument({ message: 'forbidden' }, 'downloaded spec content')).toThrowError(
-      /^Invalid OpenAPI document in downloaded spec content: openapi:/,
-    )
+    expect(() =>
+      validateOpenAPIDocument({ message: 'forbidden' }, 'downloaded spec content'),
+    ).toThrowError(/^Invalid OpenAPI document in downloaded spec content: openapi:/)
   })
 
   it('rejects documents missing the info object', () => {
@@ -28,7 +28,9 @@ describe('validateOpenAPIDocument', () => {
       paths: {},
     }
 
-    expect(() => validateOpenAPIDocument(spec, 'missing info')).toThrowError(/^Invalid OpenAPI document/)
+    expect(() => validateOpenAPIDocument(spec, 'missing info')).toThrowError(
+      /^Invalid OpenAPI document/,
+    )
   })
 
   it('rejects documents with info missing title', () => {
@@ -41,7 +43,9 @@ describe('validateOpenAPIDocument', () => {
       paths: {},
     }
 
-    expect(() => validateOpenAPIDocument(spec, 'missing title')).toThrowError(/^Invalid OpenAPI document/)
+    expect(() => validateOpenAPIDocument(spec, 'missing title')).toThrowError(
+      /^Invalid OpenAPI document/,
+    )
   })
 
   it('rejects documents with info missing version', () => {
@@ -54,7 +58,9 @@ describe('validateOpenAPIDocument', () => {
       paths: {},
     }
 
-    expect(() => validateOpenAPIDocument(spec, 'missing version')).toThrowError(/^Invalid OpenAPI document/)
+    expect(() => validateOpenAPIDocument(spec, 'missing version')).toThrowError(
+      /^Invalid OpenAPI document/,
+    )
   })
 
   it('rejects documents with invalid paths type', () => {
@@ -68,7 +74,9 @@ describe('validateOpenAPIDocument', () => {
       paths: [] as any,
     }
 
-    expect(() => validateOpenAPIDocument(spec, 'invalid paths')).toThrowError(/^Invalid OpenAPI document/)
+    expect(() => validateOpenAPIDocument(spec, 'invalid paths')).toThrowError(
+      /^Invalid OpenAPI document/,
+    )
   })
 
   it('rejects documents with empty string fields that must be non-empty', () => {
@@ -99,8 +107,14 @@ describe('validateOpenAPIDocument', () => {
       paths: {},
     }
 
-    expect(() => validateOpenAPIDocument(emptyOpenapi, 'empty openapi')).toThrowError(/^Invalid OpenAPI document/)
-    expect(() => validateOpenAPIDocument(emptyTitle, 'empty title')).toThrowError(/^Invalid OpenAPI document/)
-    expect(() => validateOpenAPIDocument(emptyVersion, 'empty version')).toThrowError(/^Invalid OpenAPI document/)
+    expect(() => validateOpenAPIDocument(emptyOpenapi, 'empty openapi')).toThrowError(
+      /^Invalid OpenAPI document/,
+    )
+    expect(() => validateOpenAPIDocument(emptyTitle, 'empty title')).toThrowError(
+      /^Invalid OpenAPI document/,
+    )
+    expect(() => validateOpenAPIDocument(emptyVersion, 'empty version')).toThrowError(
+      /^Invalid OpenAPI document/,
+    )
   })
 })
