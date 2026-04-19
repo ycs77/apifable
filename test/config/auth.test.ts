@@ -43,7 +43,7 @@ describe('readAuth', () => {
       [getAuthPath(cwd)]: '{"headers":',
     })
 
-    await expect(readAuth(cwd)).rejects.toThrowError(/Invalid JSON in .*auth\.json:/)
+    await expect(readAuth(cwd)).rejects.toThrow(/Invalid JSON in .*auth\.json:/)
   })
 
   it('throws a stable error for schema validation failures', async () => {
@@ -55,7 +55,7 @@ describe('readAuth', () => {
       }),
     })
 
-    await expect(readAuth(cwd)).rejects.toThrowError(
+    await expect(readAuth(cwd)).rejects.toThrow(
       /Invalid auth config in .*auth\.json: headers\.Authorization:/,
     )
   })

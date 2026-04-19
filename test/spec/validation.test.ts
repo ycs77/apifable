@@ -18,7 +18,7 @@ describe('validateOpenAPIDocument', () => {
   it('rejects parsed payloads that are not OpenAPI documents', () => {
     expect(() =>
       validateOpenAPIDocument({ message: 'forbidden' }, 'downloaded spec content'),
-    ).toThrowError(/^Invalid OpenAPI document in downloaded spec content: openapi:/)
+    ).toThrow(/^Invalid OpenAPI document in downloaded spec content: openapi:/)
   })
 
   it('rejects documents missing the info object', () => {
@@ -28,9 +28,7 @@ describe('validateOpenAPIDocument', () => {
       paths: {},
     }
 
-    expect(() => validateOpenAPIDocument(spec, 'missing info')).toThrowError(
-      /^Invalid OpenAPI document/,
-    )
+    expect(() => validateOpenAPIDocument(spec, 'missing info')).toThrow(/^Invalid OpenAPI document/)
   })
 
   it('rejects documents with info missing title', () => {
@@ -43,7 +41,7 @@ describe('validateOpenAPIDocument', () => {
       paths: {},
     }
 
-    expect(() => validateOpenAPIDocument(spec, 'missing title')).toThrowError(
+    expect(() => validateOpenAPIDocument(spec, 'missing title')).toThrow(
       /^Invalid OpenAPI document/,
     )
   })
@@ -58,7 +56,7 @@ describe('validateOpenAPIDocument', () => {
       paths: {},
     }
 
-    expect(() => validateOpenAPIDocument(spec, 'missing version')).toThrowError(
+    expect(() => validateOpenAPIDocument(spec, 'missing version')).toThrow(
       /^Invalid OpenAPI document/,
     )
   })
@@ -74,7 +72,7 @@ describe('validateOpenAPIDocument', () => {
       paths: [] as any,
     }
 
-    expect(() => validateOpenAPIDocument(spec, 'invalid paths')).toThrowError(
+    expect(() => validateOpenAPIDocument(spec, 'invalid paths')).toThrow(
       /^Invalid OpenAPI document/,
     )
   })
@@ -107,13 +105,13 @@ describe('validateOpenAPIDocument', () => {
       paths: {},
     }
 
-    expect(() => validateOpenAPIDocument(emptyOpenapi, 'empty openapi')).toThrowError(
+    expect(() => validateOpenAPIDocument(emptyOpenapi, 'empty openapi')).toThrow(
       /^Invalid OpenAPI document/,
     )
-    expect(() => validateOpenAPIDocument(emptyTitle, 'empty title')).toThrowError(
+    expect(() => validateOpenAPIDocument(emptyTitle, 'empty title')).toThrow(
       /^Invalid OpenAPI document/,
     )
-    expect(() => validateOpenAPIDocument(emptyVersion, 'empty version')).toThrowError(
+    expect(() => validateOpenAPIDocument(emptyVersion, 'empty version')).toThrow(
       /^Invalid OpenAPI document/,
     )
   })

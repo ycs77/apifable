@@ -130,7 +130,7 @@ describe('readConfig', () => {
       [getConfigPath(cwd)]: '{"spec":',
     })
 
-    await expect(readConfig(cwd)).rejects.toThrowError(/Invalid JSON in .*apifable\.config\.json:/)
+    await expect(readConfig(cwd)).rejects.toThrow(/Invalid JSON in .*apifable\.config\.json:/)
   })
 
   it('throws a stable error for schema validation failures', async () => {
@@ -138,7 +138,7 @@ describe('readConfig', () => {
       [getConfigPath(cwd)]: JSON.stringify({ spec: { path: 123 } }),
     })
 
-    await expect(readConfig(cwd)).rejects.toThrowError(
+    await expect(readConfig(cwd)).rejects.toThrow(
       /Invalid config in .*apifable\.config\.json: spec\.path:/,
     )
   })
@@ -154,7 +154,7 @@ describe('readConfig', () => {
       }),
     })
 
-    await expect(readConfig(cwd)).rejects.toThrowError(
+    await expect(readConfig(cwd)).rejects.toThrow(
       /Invalid config in .*apifable\.config\.json: spec\.headers\.Authorization:/,
     )
   })

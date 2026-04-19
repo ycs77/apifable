@@ -26,7 +26,7 @@ describe('getFormatByPath', () => {
   })
 
   it('throws for unsupported output paths', () => {
-    expect(() => getFormatByPath('specs/openapi.txt')).toThrowError(
+    expect(() => getFormatByPath('specs/openapi.txt')).toThrow(
       'Unsupported output format. Please use .yaml, .yml, or .json',
     )
   })
@@ -82,10 +82,10 @@ describe('parseSpecContent', () => {
           paths: {},
         }),
       ),
-    ).toThrowError(/Invalid OpenAPI document in downloaded spec content: info:/)
+    ).toThrow(/Invalid OpenAPI document in downloaded spec content: info:/)
   })
 
   it('throws a stable error when neither JSON nor YAML can be parsed', () => {
-    expect(() => parseSpecContent('{')).toThrowError(/Failed to parse downloaded spec content:/)
+    expect(() => parseSpecContent('{')).toThrow(/Failed to parse downloaded spec content:/)
   })
 })

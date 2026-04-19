@@ -103,7 +103,7 @@ describe('loadSpecFile', () => {
       [filePath]: 'openapi: 3.1.0',
     })
 
-    await expect(loadSpecFile(filePath)).rejects.toThrowError(
+    await expect(loadSpecFile(filePath)).rejects.toThrow(
       'Unsupported file format. Please use .yaml, .yml, or .json',
     )
   })
@@ -115,7 +115,7 @@ describe('loadSpecFile', () => {
       [filePath]: '{"openapi":',
     })
 
-    await expect(loadSpecFile(filePath)).rejects.toThrowError(/Failed to parse JSON:/)
+    await expect(loadSpecFile(filePath)).rejects.toThrow(/Failed to parse JSON:/)
   })
 
   it('throws a stable error for invalid YAML', async () => {
@@ -125,7 +125,7 @@ describe('loadSpecFile', () => {
       [filePath]: 'openapi: [',
     })
 
-    await expect(loadSpecFile(filePath)).rejects.toThrowError(/Failed to parse YAML:/)
+    await expect(loadSpecFile(filePath)).rejects.toThrow(/Failed to parse YAML:/)
   })
 
   it('surfaces validation errors after parsing', async () => {
@@ -138,7 +138,7 @@ describe('loadSpecFile', () => {
       }),
     })
 
-    await expect(loadSpecFile(filePath)).rejects.toThrowError(
+    await expect(loadSpecFile(filePath)).rejects.toThrow(
       /Invalid OpenAPI document in spec file .*openapi\.json: info:/,
     )
   })
