@@ -40,26 +40,26 @@
     "prepack": "pnpm build"
   },
   "dependencies": {
-    "@clack/prompts": "^1.1.0",
-    "@modelcontextprotocol/sdk": "^1.27.1",
+    "@clack/prompts": "^1.6.0",
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "cac": "^7.0.0",
     "minisearch": "^7.2.0",
     "picocolors": "^1.1.1",
-    "yaml": "^2.8.2",
-    "zod": "^4.3.6"
+    "yaml": "^2.9.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@types/node": "^24.12.0",
-    "bumpp": "^11.0.1",
+    "@types/node": "^24.13.2",
+    "bumpp": "^11.1.0",
     "lint-staged": "^16.4.0",
-    "memfs": "^4.56.11",
-    "oxfmt": "^0.45.0",
-    "oxlint": "^1.60.0",
-    "oxlint-tsgolint": "^0.21.1",
+    "memfs": "^4.57.8",
+    "oxfmt": "^0.56.0",
+    "oxlint": "^1.71.0",
+    "oxlint-tsgolint": "^0.23.0",
     "simple-git-hooks": "^2.13.1",
-    "tsdown": "^0.21.4",
-    "typescript": "~5.9.3",
-    "vitest": "^4.1.0"
+    "tsdown": "^0.22.3",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"

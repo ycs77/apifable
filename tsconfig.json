@@ -15,6 +15,6 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true
   },
-  "include": ["./vitest.config.*", "src/**/*", "test/**/*"],
+  "include": ["tsdown.config.*", "vitest.config.*", "src/**/*", "test/**/*"],
   "exclude": ["node_modules"]
 }
