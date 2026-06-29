@@ -1,4 +1,4 @@
-import type { HttpMethod, OperationObject, ParsedSpec } from '../types.ts'
+import type { HttpMethod, OperationObject, ParsedSpec, PathItemObject } from '../types.ts'
 import { HTTP_METHODS, isValidHttpMethod } from '../http-methods.ts'
 import {
   addTransitiveDeps,
@@ -7,6 +7,7 @@ import {
   topologicalSort,
 } from '../schema/dependency.ts'
 import { generateFileContent } from '../schema/to-ts.ts'
+import { mergePathItemParameters } from '../spec/operation-parameters.ts'
 import { resolveNonSchemaComponentRefs } from '../spec/ref-resolver.ts'
 import { findOperationByOperationId } from './find-operation.ts'
 import { extractInlineSchemas } from './inline-schemas.ts'
@@ -152,7 +153,8 @@ export function getTypesTool(
       endpointOperationId = operation.operationId
     }
 
-    const resolvedOperation = resolveOperationComponents(operation, spec)
+    const pathItem = endpointPath ? spec.rawSpec.paths?.[endpointPath] : undefined
+    const resolvedOperation = resolveOperationComponents(operation, pathItem, spec)
 
     inlineSchemas = extractInlineSchemas(
       resolvedOperation,
@@ -247,12 +249,16 @@ function buildNotFoundMessage(message: string, suggestions: string[]): string {
   return `${message} Did you mean: ${suggestions.join(', ')}?`
 }
 
-function resolveOperationComponents(operation: OperationObject, spec: ParsedSpec): OperationObject {
+function resolveOperationComponents(
+  operation: OperationObject,
+  pathItem: PathItemObject | undefined,
+  spec: ParsedSpec,
+): OperationObject {
   return {
     ...operation,
-    parameters: resolveNonSchemaComponentRefs(operation.parameters, spec.rawSpec) as
-      | unknown[]
-      | undefined,
+    parameters: mergePathItemParameters(pathItem, operation, parameters =>
+      resolveNonSchemaComponentRefs(parameters, spec.rawSpec),
+    ),
     requestBody: resolveNonSchemaComponentRefs(operation.requestBody, spec.rawSpec),
     responses: resolveNonSchemaComponentRefs(operation.responses, spec.rawSpec) as
       | Record<string, unknown>

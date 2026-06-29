@@ -238,6 +238,88 @@ describe('getEndpoint', () => {
         },
       })
     })
+
+    it('merges path-level parameters before operation parameters', () => {
+      const spec = createMockParsedSpec({
+        rawSpec: {
+          paths: {
+            '/orgs/{orgId}/users': {
+              parameters: [
+                { $ref: '#/components/parameters/OrgId' },
+                {
+                  name: 'X-Trace-Id',
+                  in: 'header',
+                  schema: { type: 'string' },
+                },
+              ],
+              get: {
+                operationId: 'listOrgUsers',
+                parameters: [
+                  {
+                    name: 'X-Trace-Id',
+                    in: 'header',
+                    required: true,
+                    schema: { type: 'string' },
+                  },
+                  {
+                    name: 'page',
+                    in: 'query',
+                    schema: { type: 'integer' },
+                  },
+                ],
+                responses: {
+                  200: { description: 'OK' },
+                },
+              },
+            },
+          },
+          components: {
+            parameters: {
+              OrgId: {
+                name: 'orgId',
+                in: 'path',
+                required: true,
+                schema: { type: 'string' },
+              },
+            },
+          },
+        },
+      })
+
+      const result = getEndpoint(spec, { method: 'get', path: '/orgs/{orgId}/users' })
+
+      expect(result).toEqual({
+        method: 'get',
+        path: '/orgs/{orgId}/users',
+        operationId: 'listOrgUsers',
+        summary: '',
+        description: '',
+        tags: [],
+        parameters: [
+          {
+            name: 'orgId',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+          {
+            name: 'X-Trace-Id',
+            in: 'header',
+            required: true,
+            schema: { type: 'string' },
+          },
+          {
+            name: 'page',
+            in: 'query',
+            schema: { type: 'integer' },
+          },
+        ],
+        requestBody: undefined,
+        responses: {
+          200: { description: 'OK' },
+        },
+      })
+    })
   })
 
   describe('operationId mode', () => {

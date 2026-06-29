@@ -1,5 +1,6 @@
-import type { HttpMethod, OperationObject, ParsedSpec } from '../types.ts'
+import type { HttpMethod, OperationObject, ParsedSpec, PathItemObject } from '../types.ts'
 import { HTTP_METHODS, isValidHttpMethod } from '../http-methods.ts'
+import { mergePathItemParameters } from '../spec/operation-parameters.ts'
 import { resolveRefs } from '../spec/ref-resolver.ts'
 import { findOperationByOperationId } from './find-operation.ts'
 import { findSimilarNames } from './suggestions.ts'
@@ -41,6 +42,7 @@ export function getEndpoint(spec: ParsedSpec, input: GetEndpointInput) {
   let normalizedMethod: HttpMethod
   let path: string
   let operation: OperationObject
+  let pathItem: PathItemObject | undefined
 
   if (hasOperationId) {
     if (input.operationId!.trim() === '') {
@@ -69,6 +71,7 @@ export function getEndpoint(spec: ParsedSpec, input: GetEndpointInput) {
     normalizedMethod = found.method
     path = found.path
     operation = found.operation
+    pathItem = spec.rawSpec.paths?.[path]
   } else {
     const method = input.method!.toLowerCase()
     if (!isValidHttpMethod(method)) {
@@ -81,7 +84,7 @@ export function getEndpoint(spec: ParsedSpec, input: GetEndpointInput) {
     normalizedMethod = method
     path = input.path!
 
-    const pathItem = spec.rawSpec.paths?.[path]
+    pathItem = spec.rawSpec.paths?.[path]
     if (!pathItem) {
       const suggestions = findSimilarNames(path, Object.keys(spec.rawSpec.paths ?? {}))
 
@@ -108,7 +111,9 @@ export function getEndpoint(spec: ParsedSpec, input: GetEndpointInput) {
     summary: operation.summary ?? '',
     description: operation.description ?? '',
     tags: operation.tags ?? [],
-    parameters: resolveRefs(operation.parameters, spec.rawSpec),
+    parameters: mergePathItemParameters(pathItem, operation, parameters =>
+      resolveRefs(parameters, spec.rawSpec),
+    ),
     requestBody: resolveRefs(operation.requestBody, spec.rawSpec),
     responses: resolveRefs(operation.responses, spec.rawSpec),
   }
