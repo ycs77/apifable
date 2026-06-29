@@ -33,6 +33,9 @@ importers:
       '@types/node':
         specifier: ^24.13.2
         version: 24.13.2
+      actionspack:
+        specifier: ^0.1.5
+        version: 0.1.5
       bumpp:
         specifier: ^11.1.0
         version: 11.1.0
@@ -65,6 +68,14 @@ importers:
         version: 4.1.9(@types/node@24.13.2)(vite@8.1.0(@types/node@24.13.2)(jiti@2.7.0)(yaml@2.9.0))
 
 packages:
+
+  '@actions/expressions@0.3.58':
+    resolution: {integrity: sha512-akOPmhjI/a4TRArNR0nQqfsE+5/xNvhZWOKbT8QkHCEsoLC19L/uCZfxhjyvWLLh17tGG4jjdo5RHCvkfQBdNA==}
+    engines: {node: '>= 20'}
+
+  '@actions/workflow-parser@0.3.58':
+    resolution: {integrity: sha512-79TeA1xsu15E0Enzbt6QZCxTztF3sSdj0/QsA8aC6OHt3dVdnXWRymgkHRQu5sOGyEPCsBAg6uO5jdVP6wVKdA==}
+    engines: {node: '>= 20'}
 
   '@babel/generator@8.0.0':
     resolution: {integrity: sha512-NT9NrVwJsbSV6Y2FSstWa71EETOnzrjkL5/wX3D2mYHtKM+qvqB1DvR4D0Setb/gDBsHzRICifwEWMO8CnTF6g==}
@@ -691,6 +702,11 @@ packages:
     resolution: {integrity: sha512-5cvg6CtKwfgdmVqY1WIiXKc3Q1bkRqGLi+2W/6ao+6Y7gu/RCwRuAhGEzh5B4KlszSuTLgZYuqFqo5bImjNKng==}
     engines: {node: '>= 0.6'}
 
+  actionspack@0.1.5:
+    resolution: {integrity: sha512-iREZRxgkghUOKNVeQhO5r7/u+Vn482/yJbfIvpaULgls9SERLtzWKGHV4IAJz2PKkwrNx1TPi0SPqEdb/OGeVA==}
+    engines: {node: '>=22.18.0'}
+    hasBin: true
+
   ajv-formats@3.0.1:
     resolution: {integrity: sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==}
     peerDependencies:
@@ -802,6 +818,10 @@ packages:
   cors@2.8.6:
     resolution: {integrity: sha512-tJtZBBHA6vjIAaF6EnIaq6laBBP9aq/Y3ouVJjEfoHbRBcHBAHYcMh/w8LDrk2PvIMMq8gmopa5D4V8RmbrxGw==}
     engines: {node: '>= 0.10'}
+
+  cronstrue@2.59.0:
+    resolution: {integrity: sha512-YKGmAy84hKH+hHIIER07VCAHf9u0Ldelx1uU6EBxsRPDXIA1m5fsKmJfyC3xBhw6cVC/1i83VdbL4PvepTrt8A==}
+    hasBin: true
 
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
@@ -1644,6 +1664,14 @@ packages:
 
 snapshots:
 
+  '@actions/expressions@0.3.58': {}
+
+  '@actions/workflow-parser@0.3.58':
+    dependencies:
+      '@actions/expressions': 0.3.58
+      cronstrue: 2.59.0
+      yaml: 2.9.0
+
   '@babel/generator@8.0.0':
     dependencies:
       '@babel/parser': 8.0.0
@@ -2125,6 +2153,13 @@ snapshots:
       mime-types: 3.0.2
       negotiator: 1.0.0
 
+  actionspack@0.1.5:
+    dependencies:
+      '@actions/expressions': 0.3.58
+      '@actions/workflow-parser': 0.3.58
+      cac: 7.0.0
+      yaml: 2.9.0
+
   ajv-formats@3.0.1(ajv@8.20.0):
     optionalDependencies:
       ajv: 8.20.0
@@ -2229,6 +2264,8 @@ snapshots:
     dependencies:
       object-assign: 4.1.1
       vary: 1.1.2
+
+  cronstrue@2.59.0: {}
 
   cross-spawn@7.0.6:
     dependencies:

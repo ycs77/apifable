@@ -1,0 +1,5 @@
+{
+  "files.readonlyInclude": {
+    ".github/workflows/*.yml": true
+  }
+}

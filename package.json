@@ -35,6 +35,7 @@
     "typecheck": "tsc",
     "test": "vitest",
     "check": "pnpm lint && pnpm fmt --check && pnpm typecheck && pnpm test --run",
+    "update-actions": "actionspack update",
     "release": "bumpp --commit \"Release v%s\"",
     "prepare": "simple-git-hooks",
     "prepack": "pnpm build"
@@ -50,6 +51,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.13.2",
+    "actionspack": "^0.1.5",
     "bumpp": "^11.1.0",
     "lint-staged": "^16.4.0",
     "memfs": "^4.57.8",
