@@ -9,7 +9,7 @@ entries:
         requested: v6
         foundAt: .github/workflows/src/ci.yml#jobs.code-check.steps[0].uses
       - package: github:pnpm/action-setup
-        requested: v4
+        requested: v6
         foundAt: .github/workflows/src/ci.yml#jobs.code-check.steps[1].uses
       - package: github:actions/setup-node
         requested: v6
@@ -21,7 +21,7 @@ entries:
         requested: v6
         foundAt: .github/workflows/src/release.yml#jobs.release.steps[0].uses
       - package: github:pnpm/action-setup
-        requested: v4
+        requested: v6
         foundAt: .github/workflows/src/release.yml#jobs.release.steps[1].uses
       - package: github:actions/setup-node
         requested: v6
@@ -56,7 +56,7 @@ packages:
     path: .
     type: external-action
     external: true
-    contentDigest: sha256:5fb508882756b5d3f2a10531e09acd2006b2cd00e71c2e22361149a2105acec6
+    contentDigest: sha256:7903b0a83562cd93df4d70181e610d9a4d6aedf76c83197208a6fdc13614d6f1
     dependencies: []
-    requested: v4
-    resolved: f40ffcd9367d9f12939873eb1018b921a783ffaa
+    requested: v6
+    resolved: b0f76dfb45f55f8421693e4803ac7bb65143bd34
