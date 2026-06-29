@@ -31,4 +31,4 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - run: pnpm publish --access public --no-git-checks
+      - run: pnpm stage publish --access public --no-git-checks
