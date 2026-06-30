@@ -152,5 +152,7 @@ export interface OperationObject {
 }
 
 export type PathItemObject = {
+  parameters?: unknown[]
+} & {
   [K in HttpMethod]?: OperationObject
 }

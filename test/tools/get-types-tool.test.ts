@@ -559,6 +559,60 @@ describe('getTypesTool', () => {
       }
     })
 
+    it('collects schemas from path-level parameters', () => {
+      const spec = createMockParsedSpec({
+        schemas: {
+          CursorToken: {
+            type: 'object',
+            properties: {
+              value: { type: 'string' },
+            },
+          },
+        },
+        rawSpec: {
+          paths: {
+            '/users': {
+              parameters: [
+                {
+                  name: 'cursor',
+                  in: 'query',
+                  schema: { $ref: '#/components/schemas/CursorToken' },
+                },
+              ],
+              get: {
+                operationId: 'listUsers',
+                responses: {
+                  200: {
+                    description: 'OK',
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+
+      const result = getTypesTool(spec, {
+        method: 'get',
+        path: '/users',
+      })
+
+      expect('code' in result).toBe(true)
+      if ('code' in result) {
+        expect(result.code).toBe(
+          [
+            '// Generated from endpoint: listUsers GET /users',
+            '// Includes schemas: CursorToken',
+            '',
+            'export interface CursorToken {',
+            '  value?: string',
+            '}',
+            '',
+          ].join('\n'),
+        )
+      }
+    })
+
     it('collects schemas from responses', () => {
       const spec = createMockParsedSpec({
         schemas: {
