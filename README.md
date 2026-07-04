@@ -104,6 +104,36 @@ Both `apifable.config.json` and `.apifable/auth.json` support `${ENV_VAR}` synta
 }
 ```
 
+#### Remote API Example: Xquik
+
+Xquik publishes an OpenAPI 3.1 spec for X/Twitter automation at
+`https://xquik.com/openapi.json`. Configure it as a remote spec and keep the API
+key in `.apifable/auth.json`.
+
+`apifable.config.json`:
+
+```json
+{
+  "spec": {
+    "path": "openapi/xquik.json",
+    "url": "https://xquik.com/openapi.json"
+  }
+}
+```
+
+`.apifable/auth.json`:
+
+```json
+{
+  "headers": {
+    "x-api-key": "${XQUIK_API_KEY}"
+  }
+}
+```
+
+Then refresh the local spec and ask apifable to inspect tags such as `Tweets`,
+`Trends`, or `Users`.
+
 #### Headers Priority (highest to lowest)
 
 1. `.apifable/auth.json` headers (overrides same-named keys)
