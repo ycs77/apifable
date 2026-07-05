@@ -43,7 +43,7 @@ function buildNextSteps(mode: SpecSetupMode, specPath: string): string {
   const stepOne =
     mode === 'manual-file'
       ? [
-          `${c.bold(c.cyan('1.'))} ${c.bold('Place your OpenAPI spec file')}`,
+          `${c.bold(c.cyan('1.'))} ${c.bold('Add your spec file')}`,
           `   Place your OpenAPI spec file at ${c.cyan(specPath)}.`,
         ]
       : [

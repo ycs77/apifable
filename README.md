@@ -49,16 +49,37 @@ Use this mode if your OpenAPI spec already lives in the project, or if you want 
 
 init will ask for the local file path, such as `openapi.yaml`.
 
+This generates the following `apifable.config.json`:
+
+```json
+{
+  "spec": {
+    "path": "openapi.yaml"
+  }
+}
+```
+
 You then need to place your OpenAPI spec at that path manually. When the backend API changes, you also need to update that file manually.
 
 #### 2. Remote URL
 
 Use this mode if your OpenAPI spec is available from a stable remote URL, such as the OpenAPI spec endpoint provided by your backend API docs.
 
-init will first ask for the remote URL, such as `https://api.example.com/openapi.yaml`, and then ask for the local output path, such as `./openapi.yaml`.
+init will first ask for the remote URL, such as `https://api.example.com/openapi.yaml` (supports `yaml` and `json` files), and then ask for the local output path, such as `openapi.yaml`.
+
+This generates the following `apifable.config.json`:
+
+```json
+{
+  "spec": {
+    "path": "openapi.yaml",
+    "url": "https://api.example.com/openapi.yaml"
+  }
+}
+```
 
 > [!NOTE]
-> In this mode, `init` also adds the downloaded local spec path to `.gitignore` automatically, because the file is intended to be refreshed from the remote source.
+> In this mode, `init` also adds the downloaded local spec path to `.gitignore` automatically, because the file is intended to be refreshed from the remote source. Of course, you can decide for yourself whether to commit it to version control.
 
 You can then run the following command to download the OpenAPI spec from the remote URL to your local path (`spec.url` → `spec.path`). Whenever the spec changes, just run it again to refresh:
 

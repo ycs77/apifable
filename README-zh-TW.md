@@ -49,16 +49,37 @@ npx apifable@latest init
 
 init 會要求你輸入本地檔案路徑，例如 `openapi.yaml`。
 
+這時 `apifable.config.json` 會產生以下內容：
+
+```json
+{
+  "spec": {
+    "path": "openapi.yaml"
+  }
+}
+```
+
 接著你需要手動將 OpenAPI 規格書放到該路徑。當後端 API 更新時，也需要手動更新這個檔案。
 
 #### 2. Remote URL (遠端 URL)
 
 如果你的 OpenAPI 規格書可以透過固定 URL 取得，比如後端 API Docs 提供的 OpenAPI Spec URL，就適合使用這個方式。
 
-init 會先要求你輸入遠端 URL，例如 `https://api.example.com/openapi.yaml`，再輸入下載到本地的路徑，例如 `./openapi.yaml`。
+init 會先要求你輸入遠端 URL，例如 `https://api.example.com/openapi.yaml` (支援 `yaml` 和 `json` 檔)，再輸入下載到本地的路徑，例如 `openapi.yaml`。
+
+這時 `apifable.config.json` 會產生以下內容：
+
+```json
+{
+  "spec": {
+    "path": "openapi.yaml",
+    "url": "https://api.example.com/openapi.yaml"
+  }
+}
+```
 
 > [!NOTE]
-> 在這個模式下，`init` 也會自動把下載後的本地 spec 路徑加入 `.gitignore`，因為這個檔案預期會由遠端來源重新抓取與更新。
+> 在這個模式下，`init` 也會自動把下載後的本地 spec 路徑加入 `.gitignore`，因為這個檔案預期會由遠端來源重新抓取與更新。當然，你也可以自行決定是否要提交到版本控制。
 
 之後你可以執行以下指令，將 OpenAPI 規格書從遠端下載到本地（`spec.url` → `spec.path`）。每次需要更新規格書時，只要重新執行即可：
 
