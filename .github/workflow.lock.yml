@@ -34,10 +34,10 @@ packages:
     path: .
     type: external-action
     external: true
-    contentDigest: sha256:11b63452f6e43ffb5ab8bfdaaafb8a915b354318e3ad9bce4eb0686b9e380f90
+    contentDigest: sha256:d59219cb79590abdb877deaa14e3b65a00c05318bf5a6f3b989b9162b5d08c35
     dependencies: []
     requested: v6
-    resolved: df4cb1c069e1874edd31b4311f1884172cec0e10
+    resolved: d23441a48e516b6c34aea4fa41551a30e30af803
   github:actions/setup-node:
     source: github
     owner: actions
@@ -48,7 +48,7 @@ packages:
     contentDigest: sha256:ad45f1922115116fb4706651d0a9262332bc4e4f11eb2021e09789dd1af18085
     dependencies: []
     requested: v6
-    resolved: 48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
+    resolved: 249970729cb0ef3589644e2896645e5dc5ba9c38
   github:pnpm/action-setup:
     source: github
     owner: pnpm
