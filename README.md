@@ -300,10 +300,6 @@ If you think this package has helped you, please consider [Becoming a sponsor](h
 
 [MIT LICENSE](LICENSE)
 
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=ycs77/apifable&type=date)](https://www.star-history.com/#ycs77/apifable&type=date)
-
 [ico-version]: https://img.shields.io/npm/v/apifable?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square
 [ico-github-action]: https://img.shields.io/github/actions/workflow/status/ycs77/apifable/ci.yml?branch=main&label=tests&style=flat-square
