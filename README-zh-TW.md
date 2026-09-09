@@ -197,14 +197,12 @@ npx apifable@latest fetch
 將以下內容加入專案的 `AGENTS.md`，幫助 AI 代理更有效地使用 apifable：
 
 ```markdown
-## API 整合 (apifable)
+## API Integration
 
-- 撰寫串接程式碼前，務必先用 `get_endpoint` 確認正確的路徑、方法與參數，不要憑假設。
-- 呈現 apifable 工具回傳 endpoint 列表的資料時，依序顯示 `Method` (Uppercase)、`Path`、`Summary` 欄位。所有值必須原樣保留，包含 `[ 32 - 001 ]` 等摘要前綴。不得省略、重命名、改寫或新增額外欄位。
-- 儲存產生的型別時，放在 `src/types/` 下並依領域命名 (例如 `src/types/auth.ts`、`src/types/user.ts`)，不要使用 OpenAPI tag 名稱。
+- **Apifable-first:** MUST use Apifable MCP tools to obtain OpenAPI metadata, endpoint details and TypeScript types; MUST NOT read `openapi.yaml` directly.
 ```
 
-以上為建議的指引範例，你可以根據專案需求調整 endpoint 列表顯示的欄位和 types 的存放路徑。
+以上為建議的指引範例，你可以根據專案需求調整內容。
 
 ## MCP Tools 參考
 

@@ -197,14 +197,12 @@ Related APIs:
 Add the following to your project's `AGENTS.md` to help AI agents use apifable more effectively:
 
 ```markdown
-## API Integration (apifable)
+## API Integration
 
-- Always use `get_endpoint` to verify the exact path, method, and parameters before writing integration code. Never assume.
-- When presenting endpoint list data from apifable tools, display exactly these columns in order: `Method` (Uppercase), `Path`, `Summary`. Keep all values verbatim, including summary prefixes like `[ 32 - 001 ]`. Do not omit, rename, paraphrase, or add extra columns.
-- When saving generated types, store them under `src/types/` and name files by domain (e.g., `src/types/auth.ts`, `src/types/user.ts`), not by OpenAPI tag names.
+- **Apifable-first:** MUST use Apifable MCP tools to obtain OpenAPI metadata, endpoint details and TypeScript types; MUST NOT read `openapi.yaml` directly.
 ```
 
-The above is a recommended starting point. Feel free to adjust the endpoint list columns and the types folder path to match your project.
+The above is a recommended starting point. Feel free to adjust the prompt as needed.
 
 ## MCP Tools Reference
 
