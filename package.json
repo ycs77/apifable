@@ -71,7 +71,7 @@
     "*.{js,jsx,ts,tsx,mjs,cjs}": "pnpm lint"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=22"
   },
   "packageManager": "pnpm@12.4.1"
 }
