@@ -1,6 +1,6 @@
 {
   "name": "apifable",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "MCP server that helps AI agents explore OpenAPI specs, search endpoints, and generate TypeScript types.",
   "keywords": [
     "agent",
