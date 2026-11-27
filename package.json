@@ -21,7 +21,7 @@
     "url": "git+https://github.com/ycs77/apifable.git"
   },
   "bin": {
-    "apifable": "./bin/apifable.js"
+    "apifable": "./bin/apifable.mjs"
   },
   "files": [
     "dist"
@@ -29,7 +29,7 @@
   "type": "module",
   "scripts": {
     "build": "tsdown",
-    "inspect": "npx -y @modelcontextprotocol/inspector node bin/apifable.js mcp",
+    "inspect": "npx -y @modelcontextprotocol/inspector node bin/apifable.mjs mcp",
     "lint": "oxlint",
     "fmt": "oxfmt",
     "typecheck": "tsc",
