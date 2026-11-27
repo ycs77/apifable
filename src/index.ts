@@ -88,6 +88,12 @@ cli
       {
         description:
           'Get general information about the OpenAPI spec: title, version, description, servers, security schemes, and available tags with endpoint counts. Start here to understand an unfamiliar API. Then use list_endpoints_by_tag or search_endpoints to explore specific areas.',
+        annotations: {
+          readOnlyHint: true,
+          destructiveHint: false,
+          idempotentHint: true,
+          openWorldHint: false,
+        },
       },
       () => {
         const result = getSpecInfo(spec)
@@ -100,6 +106,12 @@ cli
       {
         description:
           'List all endpoints belonging to a specific tag. Use get_spec_info first to see available tags. Supports pagination via limit and offset. Then use get_endpoint to inspect a specific endpoint in detail.',
+        annotations: {
+          readOnlyHint: true,
+          destructiveHint: false,
+          idempotentHint: true,
+          openWorldHint: false,
+        },
         inputSchema: z.object({
           tag: z.string().describe('The tag name to filter endpoints by'),
           limit: z
@@ -132,6 +144,12 @@ cli
       {
         description:
           'Search endpoints by keyword across operationId, path, summary, and description. Results are ranked by relevance. If no exact matches are found, automatically falls back to fuzzy search. The response includes a matchType field ("exact" or "fuzzy"); fuzzy results also include a score field per result. After finding the target endpoint, use get_endpoint for full details or get_types for TypeScript types.',
+        annotations: {
+          readOnlyHint: true,
+          destructiveHint: false,
+          idempotentHint: true,
+          openWorldHint: false,
+        },
         inputSchema: z.object({
           query: z.string().min(1).describe('Search keyword'),
           tag: z.string().optional().describe('Optional tag to filter results'),
@@ -155,6 +173,12 @@ cli
       {
         description:
           'Get full details of a specific endpoint including parameters, request body, responses, and security requirements. Supported internal component $refs are resolved inline. Provide either "method" + "path" or "operationId". Use get_types to get TypeScript type declarations for the endpoint.',
+        annotations: {
+          readOnlyHint: true,
+          destructiveHint: false,
+          idempotentHint: true,
+          openWorldHint: false,
+        },
         inputSchema: z.object({
           method: z.string().optional().describe('HTTP method (e.g. get, post, put, delete)'),
           path: z.string().optional().describe('Endpoint path (e.g. /users/{id})'),
@@ -176,6 +200,12 @@ cli
       {
         description:
           'Search schemas by keyword across schema name and description. Results are ranked by relevance. If no exact matches are found, automatically falls back to fuzzy search. Empty results may include a guidance message suggesting next steps. Use get_schema to inspect a specific schema in detail.',
+        annotations: {
+          readOnlyHint: true,
+          destructiveHint: false,
+          idempotentHint: true,
+          openWorldHint: false,
+        },
         inputSchema: z.object({
           query: z.string().min(1).describe('Search keyword'),
           limit: z
@@ -198,6 +228,12 @@ cli
       {
         description:
           'Get a specific schema from components/schemas by name. Supported internal component $refs are resolved inline. Use get_types to convert schemas to TypeScript type declarations.',
+        annotations: {
+          readOnlyHint: true,
+          destructiveHint: false,
+          idempotentHint: true,
+          openWorldHint: false,
+        },
         inputSchema: z.object({
           name: z.string().describe('Schema name (e.g. User, CreateOrderRequest)'),
         }),
@@ -217,6 +253,12 @@ cli
       {
         description:
           'Generate self-contained TypeScript type declarations for specified schemas or for all schemas used by a specific endpoint. Endpoint mode follows supported internal component $refs before collecting schema dependencies. Provide exactly one of: "schemas" (array of schema names), "method" + "path" (endpoint), or "operationId". Transitive dependencies are included automatically.',
+        annotations: {
+          readOnlyHint: true,
+          destructiveHint: false,
+          idempotentHint: true,
+          openWorldHint: false,
+        },
         inputSchema: z.object({
           schemas: z
             .array(z.string())
