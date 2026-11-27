@@ -6,25 +6,25 @@ entries:
     output: .github/workflows/ci.yml
     dependencies:
       - package: github:actions/checkout
-        requested: v6
+        requested: v7
         foundAt: .github/workflows/src/ci.yml#jobs.code-check.steps[0].uses
       - package: github:pnpm/action-setup
         requested: v6
         foundAt: .github/workflows/src/ci.yml#jobs.code-check.steps[1].uses
       - package: github:actions/setup-node
-        requested: v6
+        requested: v7
         foundAt: .github/workflows/src/ci.yml#jobs.code-check.steps[2].uses
   .github/workflows/src/release.yml:
     output: .github/workflows/release.yml
     dependencies:
       - package: github:actions/checkout
-        requested: v6
+        requested: v7
         foundAt: .github/workflows/src/release.yml#jobs.release.steps[0].uses
       - package: github:pnpm/action-setup
         requested: v6
         foundAt: .github/workflows/src/release.yml#jobs.release.steps[1].uses
       - package: github:actions/setup-node
-        requested: v6
+        requested: v7
         foundAt: .github/workflows/src/release.yml#jobs.release.steps[2].uses
 packages:
   github:actions/checkout:
@@ -36,8 +36,8 @@ packages:
     external: true
     contentDigest: sha256:d59219cb79590abdb877deaa14e3b65a00c05318bf5a6f3b989b9162b5d08c35
     dependencies: []
-    requested: v6
-    resolved: d23441a48e516b6c34aea4fa41551a30e30af803
+    requested: v7
+    resolved: 3d3c42e5aac5ba805825da76410c181273ba90b1
   github:actions/setup-node:
     source: github
     owner: actions
@@ -45,10 +45,10 @@ packages:
     path: .
     type: external-action
     external: true
-    contentDigest: sha256:ad45f1922115116fb4706651d0a9262332bc4e4f11eb2021e09789dd1af18085
+    contentDigest: sha256:84cd55863dbadfb83ed786c0bb4336553c2f4ceb52e102fccec01848f1977387
     dependencies: []
-    requested: v6
-    resolved: 249970729cb0ef3589644e2896645e5dc5ba9c38
+    requested: v7
+    resolved: 949feb2413d6458794dcd2491c4babbbce0c15c1
   github:pnpm/action-setup:
     source: github
     owner: pnpm
@@ -56,7 +56,7 @@ packages:
     path: .
     type: external-action
     external: true
-    contentDigest: sha256:7903b0a83562cd93df4d70181e610d9a4d6aedf76c83197208a6fdc13614d6f1
+    contentDigest: sha256:9e252c0620f3de7d239b01455c8b50b3424e347d7547d991abf71694686bf82c
     dependencies: []
     requested: v6
-    resolved: b0f76dfb45f55f8421693e4803ac7bb65143bd34
+    resolved: f53f5227a9e83886ab598c617f3c170fab62f0d3
